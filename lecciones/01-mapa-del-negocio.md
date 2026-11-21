@@ -39,21 +39,19 @@ se buscan en cualquier libro o curso.
 
 ### 2.1 Procure-to-Pay (P2P): de la necesidad al pago al proveedor
 
-```
-Necesidad
-  → Búsqueda de proveedores
-  → Solicitud de cotización (RFQ)
-  → Cotizaciones recibidas
-  → Evaluación y selección
-  → Negociación
-  → Orden de compra (OC / PO)
-  → Proforma invoice (PI) del proveedor
-  → Pago de anticipo
-  → Producción e inspección
-  → Pago de saldo
-  → Recepción de la mercadería
-  → Factura y cierre
-```
+1. Necesidad
+2. Búsqueda de proveedores
+3. Solicitud de cotización (RFQ)
+4. Cotizaciones recibidas
+5. Evaluación y selección
+6. Negociación
+7. Orden de compra (OC / PO)
+8. Proforma invoice (PI) del proveedor
+9. Pago de anticipo
+10. Producción e inspección
+11. Pago de saldo
+12. Recepción de la mercadería
+13. Factura y cierre
 
 Términos estándar que conviene usar desde hoy:
 
@@ -74,18 +72,16 @@ factura 1.000 m y embarcó 950, el calce lo detecta.
 
 En las empresas que importan, el P2P tiene un tramo propio:
 
-```
-Mercadería lista
-  → Reserva de espacio (booking) con el forwarder
-  → Carga y zarpe
-  → Bill of Lading (BL): el título de la carga
-  → Tránsito marítimo
-  → Llegada a puerto chileno
-  → Agente de aduana tramita la Declaración de Ingreso (DIN)
-  → Pago de derechos e IVA
-  → Retiro del puerto
-  → Transporte a bodega (por ejemplo, a Punta Arenas)
-```
+1. Mercadería lista
+2. Reserva de espacio (booking) con el forwarder
+3. Carga y zarpe
+4. Bill of Lading (BL): el título de la carga
+5. Tránsito marítimo
+6. Llegada a puerto chileno
+7. Agente de aduana tramita la Declaración de Ingreso (DIN)
+8. Pago de derechos e IVA
+9. Retiro del puerto
+10. Transporte a bodega (por ejemplo, a Punta Arenas)
 
 De aquí sale el **landed cost**: el costo real del producto puesto en tu bodega, con todo incluido.
 Es la única forma justa de comparar proveedores, porque un precio bajo en China puede terminar
@@ -99,17 +95,15 @@ siendo caro en Punta Arenas.
 
 ### 2.3 Order-to-Cash (O2C): del interés del cliente al cobro
 
-```
-Prospecto
-  → Contacto y calificación
-  → Cotización al cliente
-  → Negociación
-  → Pedido / orden de compra del cliente
-  → Despacho
-  → Factura (documento tributario electrónico del SII)
-  → Cobro
-  → Conciliación del pago
-```
+1. Prospecto
+2. Contacto y calificación
+3. Cotización al cliente
+4. Negociación
+5. Pedido / orden de compra del cliente
+6. Despacho
+7. Factura (documento tributario electrónico del SII)
+8. Cobro
+9. Conciliación del pago
 
 En GESI tienes varias versiones de este ciclo:
 
@@ -251,27 +245,26 @@ adhesivas, pero funciona igual en papel o en el celular.
 
 ### Ejemplo con la tubería de Lvzhou
 
-```
-Necesidad de tubería detectada
-→ Proveedores candidatos identificados
-→ RFQ enviada                 (comando: Nico envía RFQ)
-→ Cotización recibida         (política: aplicar filtro)
-   🔴 llega en formato distinto, hay que pasarla a mano
-→ Cotización evaluada
-→ Proveedor seleccionado      ← evento pivote
-→ OC emitida
-→ PI recibida
-→ Anticipo pagado
-→ Producción terminada
-→ Inspección aprobada
-→ Saldo pagado
-→ Carga embarcada             (sistema externo: naviera)
-→ BL recibido
-→ Carga arribada
-→ DIN aceptada                (sistema externo: Aduana)
-→ Mercadería internada        ← evento pivote
-→ Mercadería en bodega
-```
+| # | Evento | Notas |
+|---|---|---|
+| 1 | Necesidad de tubería detectada | |
+| 2 | Proveedores candidatos identificados | |
+| 3 | RFQ enviada | Comando: Nico envía RFQ |
+| 4 | Cotización recibida | Política: aplicar filtro. 🔴 Llega en formato distinto, hay que pasarla a mano |
+| 5 | Cotización evaluada | |
+| 6 | Proveedor seleccionado | ⭐ Evento pivote |
+| 7 | OC emitida | |
+| 8 | PI recibida | |
+| 9 | Anticipo pagado | |
+| 10 | Producción terminada | |
+| 11 | Inspección aprobada | |
+| 12 | Saldo pagado | |
+| 13 | Carga embarcada | Sistema externo: naviera |
+| 14 | BL recibido | |
+| 15 | Carga arribada | |
+| 16 | DIN aceptada | Sistema externo: Aduana |
+| 17 | Mercadería internada | ⭐ Evento pivote |
+| 18 | Mercadería en bodega | |
 
 **Conexión con el agente:** los **eventos** serán los cambios de estado de tus datos (lección 2),
 las **políticas** serán reglas del agente y los **puntos calientes** serán su lista de prioridades.

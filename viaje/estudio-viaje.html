@@ -35,6 +35,7 @@ blockquote{border-left:3px solid #0b4f6c;margin:8px 0;padding:4px 10px;backgroun
 hr{border:none;border-top:1px solid #ccc;margin:14px 0}
 nav#TOC{page-break-after:always} nav#TOC ul{padding-left:16px}
 pre,pre code{white-space:pre !important}
+pre code{font-size:inherit !important}
 </style>
 </head>
 <body>
@@ -209,15 +210,54 @@ agente prepara, tú decides.</p>
 <h2 id="el-ciclo-paso-a-paso">El ciclo, paso a paso</h2>
 <p>Le dices: <em>“Llegó la cotización de Lvzhou, compárala con las
 otras.”</em></p>
-<pre><code>1. PIENSA     &quot;Necesito leer la cotización y traer las anteriores.&quot;
-2. ACTÚA      usa la herramienta leer_documento(cotizacion_lvzhou.pdf)
-3. OBSERVA    obtiene precio FOB, MOQ, plazo, incoterm
-4. PIENSA     &quot;Falta el landed cost para compararlas en igualdad.&quot;
-5. ACTÚA      usa calcular_landed_cost(...)
-6. OBSERVA    obtiene el costo puesto en bodega
-7. ACTÚA      usa buscar_cotizaciones(producto=&quot;tubería preaislada&quot;)
-8. PIENSA     &quot;Tengo todo. Aplico filtro y puntaje.&quot;
-9. RESPONDE   tabla comparativa + recomendación → TÚ apruebas</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>Paso</th>
+<th>Qué hace el agente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Piensa</td>
+<td>“Necesito leer la cotización y traer las anteriores.”</td>
+</tr>
+<tr class="even">
+<td>2. Actúa</td>
+<td>Usa <code>leer_documento(cotizacion_lvzhou.pdf)</code></td>
+</tr>
+<tr class="odd">
+<td>3. Observa</td>
+<td>Obtiene precio FOB, MOQ, plazo, incoterm</td>
+</tr>
+<tr class="even">
+<td>4. Piensa</td>
+<td>“Falta el landed cost para compararlas en igualdad.”</td>
+</tr>
+<tr class="odd">
+<td>5. Actúa</td>
+<td>Usa <code>calcular_landed_cost(...)</code></td>
+</tr>
+<tr class="even">
+<td>6. Observa</td>
+<td>Obtiene el costo puesto en bodega</td>
+</tr>
+<tr class="odd">
+<td>7. Actúa</td>
+<td>Usa
+<code>buscar_cotizaciones(producto=&quot;tubería preaislada&quot;)</code></td>
+</tr>
+<tr class="even">
+<td>8. Piensa</td>
+<td>“Tengo todo. Aplico filtro y puntaje.”</td>
+</tr>
+<tr class="odd">
+<td>9. Responde</td>
+<td>Tabla comparativa + recomendación → <strong>tú
+apruebas</strong></td>
+</tr>
+</tbody>
+</table>
 <p>Nadie le dijo el orden de los pasos: <strong>el modelo los
 decide</strong>. Eso es lo que lo hace un agente y no un programa
 tradicional, donde cada paso está escrito de antemano.</p>
@@ -318,19 +358,21 @@ ellos. Tienen nombre en inglés porque así se buscan en cualquier libro o
 curso.</p>
 <h3 id="procure-to-pay-p2p-de-la-necesidad-al-pago-al-proveedor">2.1
 Procure-to-Pay (P2P): de la necesidad al pago al proveedor</h3>
-<pre><code>Necesidad
-  → Búsqueda de proveedores
-  → Solicitud de cotización (RFQ)
-  → Cotizaciones recibidas
-  → Evaluación y selección
-  → Negociación
-  → Orden de compra (OC / PO)
-  → Proforma invoice (PI) del proveedor
-  → Pago de anticipo
-  → Producción e inspección
-  → Pago de saldo
-  → Recepción de la mercadería
-  → Factura y cierre</code></pre>
+<ol type="1">
+<li>Necesidad</li>
+<li>Búsqueda de proveedores</li>
+<li>Solicitud de cotización (RFQ)</li>
+<li>Cotizaciones recibidas</li>
+<li>Evaluación y selección</li>
+<li>Negociación</li>
+<li>Orden de compra (OC / PO)</li>
+<li>Proforma invoice (PI) del proveedor</li>
+<li>Pago de anticipo</li>
+<li>Producción e inspección</li>
+<li>Pago de saldo</li>
+<li>Recepción de la mercadería</li>
+<li>Factura y cierre</li>
+</ol>
 <p>Términos estándar que conviene usar desde hoy:</p>
 <table>
 <colgroup>
@@ -387,16 +429,18 @@ el proveedor factura 1.000 m y embarcó 950, el calce lo detecta.</p>
 <h3 id="ciclo-de-importación-del-embarque-a-la-bodega">2.2 Ciclo de
 importación: del embarque a la bodega</h3>
 <p>En las empresas que importan, el P2P tiene un tramo propio:</p>
-<pre><code>Mercadería lista
-  → Reserva de espacio (booking) con el forwarder
-  → Carga y zarpe
-  → Bill of Lading (BL): el título de la carga
-  → Tránsito marítimo
-  → Llegada a puerto chileno
-  → Agente de aduana tramita la Declaración de Ingreso (DIN)
-  → Pago de derechos e IVA
-  → Retiro del puerto
-  → Transporte a bodega (por ejemplo, a Punta Arenas)</code></pre>
+<ol type="1">
+<li>Mercadería lista</li>
+<li>Reserva de espacio (booking) con el forwarder</li>
+<li>Carga y zarpe</li>
+<li>Bill of Lading (BL): el título de la carga</li>
+<li>Tránsito marítimo</li>
+<li>Llegada a puerto chileno</li>
+<li>Agente de aduana tramita la Declaración de Ingreso (DIN)</li>
+<li>Pago de derechos e IVA</li>
+<li>Retiro del puerto</li>
+<li>Transporte a bodega (por ejemplo, a Punta Arenas)</li>
+</ol>
 <p>De aquí sale el <strong>landed cost</strong>: el costo real del
 producto puesto en tu bodega, con todo incluido. Es la única forma justa
 de comparar proveedores, porque un precio bajo en China puede terminar
@@ -412,15 +456,17 @@ lección 3.</p>
 </blockquote>
 <h3 id="order-to-cash-o2c-del-interés-del-cliente-al-cobro">2.3
 Order-to-Cash (O2C): del interés del cliente al cobro</h3>
-<pre><code>Prospecto
-  → Contacto y calificación
-  → Cotización al cliente
-  → Negociación
-  → Pedido / orden de compra del cliente
-  → Despacho
-  → Factura (documento tributario electrónico del SII)
-  → Cobro
-  → Conciliación del pago</code></pre>
+<ol type="1">
+<li>Prospecto</li>
+<li>Contacto y calificación</li>
+<li>Cotización al cliente</li>
+<li>Negociación</li>
+<li>Pedido / orden de compra del cliente</li>
+<li>Despacho</li>
+<li>Factura (documento tributario electrónico del SII)</li>
+<li>Cobro</li>
+<li>Conciliación del pago</li>
+</ol>
 <p>En GESI tienes varias versiones de este ciclo:</p>
 <ul>
 <li><strong>Tubería preaislada:</strong> salmoneras y ferreterías de
@@ -726,25 +772,113 @@ agente.</strong></li>
 </ol>
 <h3 id="ejemplo-con-la-tubería-de-lvzhou">Ejemplo con la tubería de
 Lvzhou</h3>
-<pre><code>Necesidad de tubería detectada
-→ Proveedores candidatos identificados
-→ RFQ enviada                 (comando: Nico envía RFQ)
-→ Cotización recibida         (política: aplicar filtro)
-   🔴 llega en formato distinto, hay que pasarla a mano
-→ Cotización evaluada
-→ Proveedor seleccionado      ← evento pivote
-→ OC emitida
-→ PI recibida
-→ Anticipo pagado
-→ Producción terminada
-→ Inspección aprobada
-→ Saldo pagado
-→ Carga embarcada             (sistema externo: naviera)
-→ BL recibido
-→ Carga arribada
-→ DIN aceptada                (sistema externo: Aduana)
-→ Mercadería internada        ← evento pivote
-→ Mercadería en bodega</code></pre>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Evento</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Necesidad de tubería detectada</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Proveedores candidatos identificados</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>RFQ enviada</td>
+<td>Comando: Nico envía RFQ</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Cotización recibida</td>
+<td>Política: aplicar filtro. 🔴 Llega en formato distinto, hay que
+pasarla a mano</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Cotización evaluada</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Proveedor seleccionado</td>
+<td>⭐ Evento pivote</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>OC emitida</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>PI recibida</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Anticipo pagado</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Producción terminada</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>Inspección aprobada</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>Saldo pagado</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>Carga embarcada</td>
+<td>Sistema externo: naviera</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>BL recibido</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td>Carga arribada</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>DIN aceptada</td>
+<td>Sistema externo: Aduana</td>
+</tr>
+<tr class="odd">
+<td>17</td>
+<td>Mercadería internada</td>
+<td>⭐ Evento pivote</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td>Mercadería en bodega</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p><strong>Conexión con el agente:</strong> los <strong>eventos</strong>
 serán los cambios de estado de tus datos (lección 2), las
 <strong>políticas</strong> serán reglas del agente y los <strong>puntos
@@ -1011,12 +1145,12 @@ en columnas).</li>
 <p>Cada entidad tiene una <strong>clave primaria</strong>: un ID único
 que no cambia nunca. Las demás entidades se refieren a ella con ese ID,
 que en ellas se llama <strong>clave foránea</strong>.</p>
-<pre><code>Proveedor                    Cotización
-─────────                    ──────────
-id: 7  ◀──────────────────── proveedor_id: 7
-nombre: Lvzhou               fecha: 2026-11-03
-país: China                  incoterm: FOB
-                             lugar: Ningbo</code></pre>
+<pre><code>Proveedor          Cotización
+─────────          ──────────
+id: 7 ◀─────────── proveedor_id: 7
+nombre: Lvzhou     fecha: 2026-11-03
+país: China        incoterm: FOB
+                   lugar: Ningbo</code></pre>
 <p>La cotización no guarda el nombre “Lvzhou”: guarda el <strong>número
 7</strong>. Así no importa cómo se escriba el nombre: la relación no se
 rompe. <strong>Esta es probablemente la pieza que más faltó en tu
@@ -1057,22 +1191,27 @@ proveedores: la tabla intermedia es la línea de cotización</td>
 </table>
 <h3 id="un-primer-modelo-de-abastecimiento">2.3 Un primer modelo de
 Abastecimiento</h3>
-<pre><code>Proveedor 1───N Contacto
+<pre><code>Proveedor ──1:N── Contacto
     │
-    1
+   1:N
+    ▼
+Solicitud de cotización (RFQ)
     │
-    N
-SolicitudCotización (RFQ) 1───N Cotización
-                                   │
-                                   1
-                                   │
-                                   N
-                           LíneaCotización N───1 Producto
-                                   │
-                         (la línea elegida)
-                                   │
-                                   ▼
-                             OrdenCompra 1───N Embarque</code></pre>
+   1:N
+    ▼
+Cotización
+    │
+   1:N
+    ▼
+LíneaCotización ──N:1── Producto
+    │
+ (la línea elegida)
+    ▼
+OrdenCompra
+    │
+   1:N
+    ▼
+Embarque</code></pre>
 <p>Ejemplos de atributos:</p>
 <ul>
 <li><strong>Proveedor:</strong> id, nombre legal, país, plataforma

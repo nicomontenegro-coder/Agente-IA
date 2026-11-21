@@ -112,12 +112,12 @@ Cada entidad tiene una **clave primaria**: un ID único que no cambia nunca.
 Las demás entidades se refieren a ella con ese ID, que en ellas se llama **clave foránea**.
 
 ```
-Proveedor                    Cotización
-─────────                    ──────────
-id: 7  ◀──────────────────── proveedor_id: 7
-nombre: Lvzhou               fecha: 2026-11-03
-país: China                  incoterm: FOB
-                             lugar: Ningbo
+Proveedor          Cotización
+─────────          ──────────
+id: 7 ◀─────────── proveedor_id: 7
+nombre: Lvzhou     fecha: 2026-11-03
+país: China        incoterm: FOB
+                   lugar: Ningbo
 ```
 
 La cotización no guarda el nombre "Lvzhou": guarda el **número 7**.
@@ -135,22 +135,27 @@ Así no importa cómo se escriba el nombre: la relación no se rompe.
 ### 2.3 Un primer modelo de Abastecimiento
 
 ```
-Proveedor 1───N Contacto
+Proveedor ──1:N── Contacto
     │
-    1
+   1:N
+    ▼
+Solicitud de cotización (RFQ)
     │
-    N
-SolicitudCotización (RFQ) 1───N Cotización
-                                   │
-                                   1
-                                   │
-                                   N
-                           LíneaCotización N───1 Producto
-                                   │
-                         (la línea elegida)
-                                   │
-                                   ▼
-                             OrdenCompra 1───N Embarque
+   1:N
+    ▼
+Cotización
+    │
+   1:N
+    ▼
+LíneaCotización ──N:1── Producto
+    │
+ (la línea elegida)
+    ▼
+OrdenCompra
+    │
+   1:N
+    ▼
+Embarque
 ```
 
 Ejemplos de atributos:

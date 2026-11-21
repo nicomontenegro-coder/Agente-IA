@@ -24,17 +24,17 @@ Y una sexta, que es tu rol: **el jefe que aprueba**. El agente prepara, tú deci
 
 Le dices: *"Llegó la cotización de Lvzhou, compárala con las otras."*
 
-```
-1. PIENSA     "Necesito leer la cotización y traer las anteriores."
-2. ACTÚA      usa la herramienta leer_documento(cotizacion_lvzhou.pdf)
-3. OBSERVA    obtiene precio FOB, MOQ, plazo, incoterm
-4. PIENSA     "Falta el landed cost para compararlas en igualdad."
-5. ACTÚA      usa calcular_landed_cost(...)
-6. OBSERVA    obtiene el costo puesto en bodega
-7. ACTÚA      usa buscar_cotizaciones(producto="tubería preaislada")
-8. PIENSA     "Tengo todo. Aplico filtro y puntaje."
-9. RESPONDE   tabla comparativa + recomendación → TÚ apruebas
-```
+| Paso | Qué hace el agente |
+|---|---|
+| 1. Piensa | "Necesito leer la cotización y traer las anteriores." |
+| 2. Actúa | Usa `leer_documento(cotizacion_lvzhou.pdf)` |
+| 3. Observa | Obtiene precio FOB, MOQ, plazo, incoterm |
+| 4. Piensa | "Falta el landed cost para compararlas en igualdad." |
+| 5. Actúa | Usa `calcular_landed_cost(...)` |
+| 6. Observa | Obtiene el costo puesto en bodega |
+| 7. Actúa | Usa `buscar_cotizaciones(producto="tubería preaislada")` |
+| 8. Piensa | "Tengo todo. Aplico filtro y puntaje." |
+| 9. Responde | Tabla comparativa + recomendación → **tú apruebas** |
 
 Nadie le dijo el orden de los pasos: **el modelo los decide**. Eso es lo que lo hace un agente
 y no un programa tradicional, donde cada paso está escrito de antemano.
