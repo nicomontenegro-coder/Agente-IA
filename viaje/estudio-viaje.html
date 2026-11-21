@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Agente GESI ��� Estudio de viaje</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">body{font-family:"DejaVu Sans",sans-serif;font-size:10.5pt;line-height:1.5;color:#1a1a1a;margin:0}
+h1{font-size:17pt;color:#0b4f6c;border-bottom:2px solid #0b4f6c;padding-bottom:4px;margin-top:0;page-break-before:always}
+h1:first-of-type{page-break-before:avoid}
+h2{font-size:13pt;color:#0b4f6c;margin-top:18px}
+h3{font-size:11pt;color:#333}
+table{border-collapse:collapse;width:100%;font-size:8.5pt;margin:8px 0;page-break-inside:avoid}
+th,td{border:1px solid #bbb;padding:3px 4px;vertical-align:top}
+th{background:#e6f0f4}
+pre{background:#f4f4f4;border:1px solid #ddd;padding:6px;font-size:7pt;line-height:1.25;overflow:hidden;white-space:pre;page-break-inside:avoid}
+code{font-family:"DejaVu Sans Mono",monospace;font-size:8.5pt}
+blockquote{border-left:3px solid #0b4f6c;margin:8px 0;padding:4px 10px;background:#eef5f8}
+hr{border:none;border-top:1px solid #ccc;margin:14px 0}
+nav#TOC{page-break-after:always} nav#TOC ul{padding-left:16px}
+pre,pre code{white-space:pre !important}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Agente GESI ��� Estudio de viaje</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#agente-gesi-paquete-de-estudio-para-el-viaje" id="toc-agente-gesi-paquete-de-estudio-para-el-viaje">Agente GESI —
+Paquete de estudio para el viaje</a></li>
+<li><a href="#lección-0-qué-es-un-agente" id="toc-lección-0-qué-es-un-agente">Lección 0 — Qué es un
+agente</a></li>
+<li><a href="#lección-1-mapa-del-negocio-con-estándares" id="toc-lección-1-mapa-del-negocio-con-estándares">Lección 1 — Mapa del
+negocio con estándares</a></li>
+<li><a href="#lección-2-del-mapa-al-modelo" id="toc-lección-2-del-mapa-al-modelo">Lección 2 — Del mapa al
+modelo</a></li>
+<li><a href="#lección-3-método-de-trabajo" id="toc-lección-3-método-de-trabajo">Lección 3 — Método de
+trabajo</a></li>
+<li><a href="#cuaderno-de-ejercicios" id="toc-cuaderno-de-ejercicios">Cuaderno de ejercicios</a></li>
+<li><a href="#autoevaluación-de-práctica" id="toc-autoevaluación-de-práctica">Autoevaluación de práctica</a></li>
+<li><a href="#respuestas-de-la-autoevaluación" id="toc-respuestas-de-la-autoevaluación">Respuestas de la
+autoevaluación</a></li>
+<li><a href="#soluciones-del-ejercicio-3.1" id="toc-soluciones-del-ejercicio-3.1">Soluciones del ejercicio
+3.1</a></li>
+</ul>
+</nav>
+<h1 id="agente-gesi-paquete-de-estudio-para-el-viaje">Agente GESI —
+Paquete de estudio para el viaje</h1>
+<p><strong>Lecciones 0 a 3 · Parte 0: Diseño</strong></p>
+<p>Este paquete funciona sin internet. Contiene:</p>
+<ol type="1">
+<li>Lección 0 — Qué es un agente</li>
+<li>Lección 1 — Mapa del negocio con estándares</li>
+<li>Lección 2 — Del mapa al modelo</li>
+<li>Lección 3 — Método de trabajo</li>
+<li>Cuaderno de ejercicios</li>
+<li>Autoevaluación de práctica, con respuestas</li>
+</ol>
+<h2 id="plan-sugerido-para-unas-8-horas">Plan sugerido para unas 8
+horas</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tramo</th>
+<th>Duración</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>30 min</td>
+<td>Lección 0 + ejercicios 0.1 a 0.3</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>60 min</td>
+<td>Lección 1, lectura</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>60 min</td>
+<td>Ejercicio 1.1: Event Storming de tu P2P (el más valioso del
+paquete)</td>
+</tr>
+<tr class="even">
+<td>—</td>
+<td>30 min</td>
+<td>Descanso</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>45 min</td>
+<td>Ejercicios 1.2 a 1.6</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>60 min</td>
+<td>Lección 2 + ejercicios 2.1 (glosario) y 2.3</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>45 min</td>
+<td>Ejercicios 2.2, 2.4 a 2.6</td>
+</tr>
+<tr class="even">
+<td>—</td>
+<td>30 min</td>
+<td>Descanso</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>45 min</td>
+<td>Lección 3 + ejercicios 3.1 a 3.6</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>30 min</td>
+<td>Autoevaluación de práctica y revisión de respuestas</td>
+</tr>
+</tbody>
+</table>
+<p>No hace falta completarlo todo. Si el tiempo se acorta, prioriza el
+<strong>ejercicio 1.1</strong> (Event Storming) y el <strong>ejercicio
+2.1</strong> (glosario): son la base del Agente GESI.</p>
+<h2 id="al-volver">Al volver</h2>
+<ol type="1">
+<li>Pega tus respuestas en Claude y pide <strong>“revisa mis ejercicios
+del viaje”</strong>.</li>
+<li>Toma las evaluaciones oficiales: <strong>“evalúame la lección
+0”</strong>, y así sucesivamente.</li>
+</ol>
+<h1 id="lección-0-qué-es-un-agente">Lección 0 — Qué es un agente</h1>
+<h2 id="la-idea-en-una-frase">La idea en una frase</h2>
+<p>Un <strong>agente</strong> es un modelo de IA que, en lugar de solo
+responder, <strong>persigue un objetivo usando herramientas</strong>,
+mira el resultado de cada paso y decide el siguiente, hasta terminar o
+necesitar que intervengas.</p>
+<h2 id="la-analogía-tu-asistente-de-importaciones">La analogía: tu
+asistente de importaciones</h2>
+<p>Imagina que contratas a un asistente para GESI. Para que trabaje bien
+necesita cinco cosas, y un agente de IA necesita exactamente las
+mismas:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Asistente humano</th>
+<th>Pieza del agente</th>
+<th>En el Agente GESI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Su cabeza: entiende, razona, decide</td>
+<td><strong>Modelo</strong> (Claude)</td>
+<td>Entiende una cotización en inglés con unidades raras</td>
+</tr>
+<tr class="even">
+<td>El manual de la empresa</td>
+<td><strong>Instrucciones del sistema y skills</strong></td>
+<td>Filtro eliminatorio, puntaje, formato de solicitud</td>
+</tr>
+<tr class="odd">
+<td>Su escritorio: calculadora, correo, carpetas</td>
+<td><strong>Herramientas</strong></td>
+<td>Calcular landed cost, guardar cotización, buscar proveedor</td>
+</tr>
+<tr class="even">
+<td>El archivador de la empresa</td>
+<td><strong>Datos / memoria</strong></td>
+<td>Base con proveedores, cotizaciones, importaciones</td>
+</tr>
+<tr class="odd">
+<td>Su forma de trabajar: hacer, revisar, corregir</td>
+<td><strong>El ciclo del agente</strong></td>
+<td>Pensar → usar herramienta → ver resultado → repetir</td>
+</tr>
+</tbody>
+</table>
+<p>Y una sexta, que es tu rol: <strong>el jefe que aprueba</strong>. El
+agente prepara, tú decides.</p>
+<h2 id="el-ciclo-paso-a-paso">El ciclo, paso a paso</h2>
+<p>Le dices: <em>“Llegó la cotización de Lvzhou, compárala con las
+otras.”</em></p>
+<pre><code>1. PIENSA     &quot;Necesito leer la cotización y traer las anteriores.&quot;
+2. ACTÚA      usa la herramienta leer_documento(cotizacion_lvzhou.pdf)
+3. OBSERVA    obtiene precio FOB, MOQ, plazo, incoterm
+4. PIENSA     &quot;Falta el landed cost para compararlas en igualdad.&quot;
+5. ACTÚA      usa calcular_landed_cost(...)
+6. OBSERVA    obtiene el costo puesto en bodega
+7. ACTÚA      usa buscar_cotizaciones(producto=&quot;tubería preaislada&quot;)
+8. PIENSA     &quot;Tengo todo. Aplico filtro y puntaje.&quot;
+9. RESPONDE   tabla comparativa + recomendación → TÚ apruebas</code></pre>
+<p>Nadie le dijo el orden de los pasos: <strong>el modelo los
+decide</strong>. Eso es lo que lo hace un agente y no un programa
+tradicional, donde cada paso está escrito de antemano.</p>
+<h2 id="agente-vs.-lo-que-ya-conoces">Agente vs. lo que ya conoces</h2>
+<ul>
+<li><strong>Claude en el chat:</strong> solo tiene lo que le pegas y te
+devuelve texto. Tú haces el trabajo con esa respuesta.</li>
+<li><strong>Una automatización clásica (Zapier, macros):</strong> pasos
+fijos. Si la cotización llega en otro formato, falla.</li>
+<li><strong>Un agente:</strong> decide los pasos, se adapta al formato y
+usa tus herramientas y tus datos.</li>
+</ul>
+<h2 id="la-lección-de-tu-primera-app">La lección de tu primera app</h2>
+<p>Tu app se desordenó porque eran muchas piezas que no conversaban
+entre sí. Es el error más común, y el Agente GESI se diseña al revés
+desde el principio:</p>
+<ol type="1">
+<li><strong>Una sola base de datos</strong> como fuente de verdad.
+Ninguna pieza guarda datos por su cuenta.</li>
+<li><strong>Un solo cerebro</strong> (el agente) que conoce todas las
+herramientas.</li>
+<li><strong>Módulos que crecen de a uno:</strong> primero cotizaciones;
+después Mercado Libre y el comercial de tubería. Cada uno funciona solo
+antes de sumar el siguiente.</li>
+</ol>
+<h2 id="el-diseño-del-agente-gesi">El diseño del Agente GESI</h2>
+<pre><code>   Tú (terminal; después correo y WhatsApp)
+                    │
+           ┌────────▼────────┐
+           │   Agente GESI   │
+           │ modelo + reglas │
+           └────────┬────────┘
+                    │ usa herramientas
+   ┌────────────────┼────────────────┐
+   ▼                ▼                ▼
+ leer_          calcular_       registrar /
+ documento      landed_cost     buscar ...
+   └────────────────┼────────────────┘
+                    ▼
+           ┌─────────────────┐
+           │  Base de datos  │
+           │ proveedores,    │
+           │ cotizaciones,   │
+           │ productos,      │
+           │ importaciones   │
+           └─────────────────┘</code></pre>
+<h2 id="para-pensar-antes-de-la-lección-1">Para pensar antes de la
+lección 1</h2>
+<p>Reúne estos materiales; los usaremos a lo largo del curso:</p>
+<ol type="1">
+<li>Dos o tres cotizaciones reales (PDF, Excel o capturas de
+WhatsApp).</li>
+<li>Tu filtro eliminatorio: qué descarta a un proveedor de
+inmediato.</li>
+<li>Tu puntaje: criterios y peso de cada uno.</li>
+<li>Tu cálculo de landed cost (la planilla o la fórmula).</li>
+<li>El formato con que pides cotizaciones.</li>
+</ol>
+<h1 id="lección-1-mapa-del-negocio-con-estándares">Lección 1 — Mapa del
+negocio con estándares</h1>
+<h2 id="por-qué-empezamos-aquí">Por qué empezamos aquí</h2>
+<p>Tu primera app se desordenó porque se construyeron piezas sin un
+plano. En esta lección haremos ese plano, pero sin inventarlo: usaremos
+los modelos que las empresas del mundo ya probaron.</p>
+<p>Al terminar sabrás:</p>
+<ul>
+<li>Qué es un proceso de negocio y cuáles son los ciclos estándar.</li>
+<li>Cómo se ven los procesos de GESI dentro de esos ciclos.</li>
+<li>Qué son SCOR, BPMN e Incoterms, y para qué sirve cada uno en el
+agente.</li>
+<li>Cómo armar el mapa con la técnica Event Storming.</li>
+<li>Cómo medir tu punto de partida (línea base) y definir qué será un
+éxito.</li>
+</ul>
+<hr />
+<h2 id="qué-es-un-proceso-de-negocio">1. Qué es un proceso de
+negocio</h2>
+<p>Un <strong>proceso</strong> es una serie de actividades que parte con
+un disparador y termina con un resultado que le importa a alguien.</p>
+<ul>
+<li><strong>Disparador:</strong> “necesito tubería para la temporada de
+invierno”.</li>
+<li><strong>Actividades:</strong> buscar proveedores, pedir
+cotizaciones, comparar, negociar, comprar, importar.</li>
+<li><strong>Resultado:</strong> tubería en bodega en Punta Arenas a un
+costo conocido.</li>
+</ul>
+<p>La clave: un proceso <strong>cruza áreas y herramientas</strong>. La
+cotización llega por WhatsApp, se compara en Excel, el pago sale del
+banco y el contenedor se sigue por correo con el forwarder. Si cada
+herramienta guarda su propia versión, el proceso se rompe en cada cruce.
+Eso es lo que le pasó a tu app.</p>
+<hr />
+<h2 id="los-tres-ciclos-estándar">2. Los tres ciclos estándar</h2>
+<p>Casi todas las empresas comerciales funcionan con los mismos ciclos.
+Los ERP del mundo (SAP, Odoo, Oracle) están construidos alrededor de
+ellos. Tienen nombre en inglés porque así se buscan en cualquier libro o
+curso.</p>
+<h3 id="procure-to-pay-p2p-de-la-necesidad-al-pago-al-proveedor">2.1
+Procure-to-Pay (P2P): de la necesidad al pago al proveedor</h3>
+<pre><code>Necesidad
+  → Búsqueda de proveedores
+  → Solicitud de cotización (RFQ)
+  → Cotizaciones recibidas
+  → Evaluación y selección
+  → Negociación
+  → Orden de compra (OC / PO)
+  → Proforma invoice (PI) del proveedor
+  → Pago de anticipo
+  → Producción e inspección
+  → Pago de saldo
+  → Recepción de la mercadería
+  → Factura y cierre</code></pre>
+<p>Términos estándar que conviene usar desde hoy:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Término</th>
+<th>Sigla</th>
+<th>Qué es en GESI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Request for Quotation</td>
+<td>RFQ</td>
+<td>El mensaje en que pides precio a Lvzhou o a Ikon</td>
+</tr>
+<tr class="even">
+<td>Quotation</td>
+<td>—</td>
+<td>La respuesta con precios, MOQ, plazo e incoterm</td>
+</tr>
+<tr class="odd">
+<td>Purchase Order</td>
+<td>PO / OC</td>
+<td>Tu compromiso de compra formal</td>
+</tr>
+<tr class="even">
+<td>Proforma Invoice</td>
+<td>PI</td>
+<td>El documento del proveedor que confirma el pedido y contra el que
+pagas</td>
+</tr>
+<tr class="odd">
+<td>Minimum Order Quantity</td>
+<td>MOQ</td>
+<td>La cantidad mínima que acepta el proveedor</td>
+</tr>
+<tr class="even">
+<td>Lead time</td>
+<td>—</td>
+<td>Tiempo desde que pagas el anticipo hasta que la mercadería está
+lista</td>
+</tr>
+</tbody>
+</table>
+<p>Un control clásico de este ciclo es el <strong>three-way
+match</strong> (calce de tres vías): antes de pagar el saldo se compara
+que <strong>la OC, lo recibido y la factura</strong> digan lo mismo. Si
+el proveedor factura 1.000 m y embarcó 950, el calce lo detecta.</p>
+<h3 id="ciclo-de-importación-del-embarque-a-la-bodega">2.2 Ciclo de
+importación: del embarque a la bodega</h3>
+<p>En las empresas que importan, el P2P tiene un tramo propio:</p>
+<pre><code>Mercadería lista
+  → Reserva de espacio (booking) con el forwarder
+  → Carga y zarpe
+  → Bill of Lading (BL): el título de la carga
+  → Tránsito marítimo
+  → Llegada a puerto chileno
+  → Agente de aduana tramita la Declaración de Ingreso (DIN)
+  → Pago de derechos e IVA
+  → Retiro del puerto
+  → Transporte a bodega (por ejemplo, a Punta Arenas)</code></pre>
+<p>De aquí sale el <strong>landed cost</strong>: el costo real del
+producto puesto en tu bodega, con todo incluido. Es la única forma justa
+de comparar proveedores, porque un precio bajo en China puede terminar
+siendo caro en Punta Arenas.</p>
+<blockquote>
+<p>Dato útil para Chile: el arancel general es 6 % sobre el valor CIF,
+pero Chile tiene tratados con China, Turquía, Vietnam y la Unión Europea
+(Polonia). Con certificado de origen el arancel puede bajar, muchas
+veces a 0 %. Hay que verificarlo por producto. El IVA de importación (19
+%) en general es <strong>crédito fiscal</strong> para una empresa, así
+que normalmente no se suma al landed cost. Lo veremos con números en la
+lección 3.</p>
+</blockquote>
+<h3 id="order-to-cash-o2c-del-interés-del-cliente-al-cobro">2.3
+Order-to-Cash (O2C): del interés del cliente al cobro</h3>
+<pre><code>Prospecto
+  → Contacto y calificación
+  → Cotización al cliente
+  → Negociación
+  → Pedido / orden de compra del cliente
+  → Despacho
+  → Factura (documento tributario electrónico del SII)
+  → Cobro
+  → Conciliación del pago</code></pre>
+<p>En GESI tienes varias versiones de este ciclo:</p>
+<ul>
+<li><strong>Tubería preaislada:</strong> salmoneras y ferreterías de
+Punta Arenas y Puerto Natales. Ciclo B2B clásico.</li>
+<li><strong>Lámparas GW3:</strong> contratos anuales con Perú. O2C con
+un cliente extranjero, en el que además la mercadería viaja directo de
+China a Perú (triangulación), así que tu P2P y tu O2C se tocan en el
+mismo embarque.</li>
+<li><strong>Mercado Libre:</strong> publicación → venta → despacho →
+liquidación de Mercado Libre (que te paga descontando comisión y
+envío).</li>
+</ul>
+<h3 id="lo-que-une-los-ciclos">2.4 Lo que une los ciclos</h3>
+<p>Los ciclos no están aislados:</p>
+<ul>
+<li>Una <strong>venta</strong> a una salmonera (O2C) puede disparar una
+<strong>compra</strong> a Lvzhou (P2P).</li>
+<li>El <strong>landed cost</strong> (importación) define el
+<strong>precio mínimo</strong> de venta (O2C).</li>
+<li>El <strong>stock</strong> une lo que entra (P2P) con lo que sale
+(O2C).</li>
+</ul>
+<p>Estos puntos de unión son exactamente donde tu primera app “no
+conversaba”. En la lección 2 los convertiremos en relaciones
+explícitas.</p>
+<hr />
+<h2 id="scor-el-modelo-de-referencia-de-la-cadena-de-suministro">3.
+SCOR: el modelo de referencia de la cadena de suministro</h2>
+<p><strong>SCOR</strong> (Supply Chain Operations Reference) es
+mantenido por la asociación ASCM. Su versión actual (SCOR Digital
+Standard) organiza una cadena de suministro en siete procesos:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Proceso SCOR</th>
+<th>Significa</th>
+<th>En GESI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Orchestrate</td>
+<td>Dirigir y coordinar la cadena</td>
+<td>Tus decisiones de qué líneas de negocio impulsar</td>
+</tr>
+<tr class="even">
+<td>Plan</td>
+<td>Planificar demanda y abastecimiento</td>
+<td>Cuánta tubería traer para el invierno</td>
+</tr>
+<tr class="odd">
+<td>Order</td>
+<td>Recibir y gestionar pedidos de clientes</td>
+<td>Pedidos de salmoneras, ventas en Mercado Libre</td>
+</tr>
+<tr class="even">
+<td>Source</td>
+<td>Abastecerse de proveedores</td>
+<td>Todo tu trabajo con Lvzhou, Ikon y Alibaba</td>
+</tr>
+<tr class="odd">
+<td>Transform</td>
+<td>Transformar o producir</td>
+<td>Poco en GESI: etiquetado con marca propia (OEM)</td>
+</tr>
+<tr class="even">
+<td>Fulfill</td>
+<td>Entregar al cliente</td>
+<td>Despachos a Punta Arenas, envíos de Mercado Libre</td>
+</tr>
+<tr class="odd">
+<td>Return</td>
+<td>Devoluciones</td>
+<td>Devoluciones de Mercado Libre, reclamos de calidad</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Para qué te sirve:</strong></p>
+<ol type="1">
+<li><strong>Lista de chequeo:</strong> si un proceso SCOR no aparece en
+tu mapa, probablemente lo estás haciendo “en la cabeza”. Por ejemplo,
+¿dónde está tu proceso de devoluciones?</li>
+<li><strong>Métricas estándar:</strong> SCOR define cómo medir. Dos que
+te sirven desde ya:
+<ul>
+<li><strong>Pedido perfecto:</strong> porcentaje de pedidos entregados
+completos, a tiempo, sin daños y con la documentación correcta.</li>
+<li><strong>Tiempo de ciclo:</strong> días desde que pides la cotización
+hasta que la mercadería está en bodega.</li>
+</ul></li>
+</ol>
+<p>No necesitas certificarte en SCOR. Úsalo como checklist y como
+diccionario de métricas.</p>
+<hr />
+<h2 id="bpmn-la-forma-estándar-de-dibujar-procesos">4. BPMN: la forma
+estándar de dibujar procesos</h2>
+<p><strong>BPMN 2.0</strong> (Business Process Model and Notation) es un
+estándar de la organización OMG. Cualquier consultor, programador o
+herramienta de procesos lo entiende. Solo necesitas cinco símbolos:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Símbolo</th>
+<th>Forma</th>
+<th>Significa</th>
+<th>Ejemplo GESI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Evento</td>
+<td>Círculo</td>
+<td>Algo que pasa</td>
+<td>“Llegó cotización”</td>
+</tr>
+<tr class="even">
+<td>Actividad</td>
+<td>Rectángulo redondeado</td>
+<td>Algo que alguien hace</td>
+<td>“Calcular landed cost”</td>
+</tr>
+<tr class="odd">
+<td>Compuerta</td>
+<td>Rombo</td>
+<td>Una decisión o bifurcación</td>
+<td>“¿Pasa el filtro eliminatorio?”</td>
+</tr>
+<tr class="even">
+<td>Flujo</td>
+<td>Flecha</td>
+<td>El orden</td>
+<td>De una actividad a la siguiente</td>
+</tr>
+<tr class="odd">
+<td>Carril</td>
+<td>Franja horizontal</td>
+<td>Quién lo hace</td>
+<td>Tú, el proveedor, el forwarder, el agente de IA</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo en texto de la evaluación de una cotización:</p>
+<pre><code>(Cotización recibida)
+   → [Revisar formato]
+   → &lt;¿Formato GESI?&gt;
+        no → [Pedir reenvío] → fin
+        sí → [Aplicar filtro]
+   → &lt;¿Pasa filtro?&gt;
+        no → [Descartar] → fin
+        sí → [Puntaje + landed cost]
+   → [Agregar a comparación]
+   → (Cotización evaluada)</code></pre>
+<p>Los <strong>carriles</strong> son especialmente útiles para el
+agente: dibujar un carril “Agente GESI” y otro “Nico” deja a la vista
+qué hará el agente y qué tendrás que aprobar tú.</p>
+<hr />
+<h2 id="incoterms-2020-las-reglas-del-precio">5. Incoterms 2020: las
+reglas del precio</h2>
+<p>Los <strong>Incoterms</strong> son reglas de la Cámara de Comercio
+Internacional (ICC). La versión vigente es 2020 y tiene 11 términos.
+Definen <strong>quién paga qué costo, quién asume el riesgo y hasta
+dónde</strong>. Ojo: no definen quién es dueño de la mercadería ni cómo
+se paga.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Grupo</th>
+<th>Términos</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>E</td>
+<td>EXW</td>
+<td>Retiras en la fábrica; tú pagas todo desde ahí</td>
+</tr>
+<tr class="even">
+<td>F</td>
+<td>FCA, FAS, FOB</td>
+<td>El vendedor entrega en el país de origen; tú pagas el flete
+principal</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>CFR, CIF, CPT, CIP</td>
+<td>El vendedor paga el flete principal, pero el riesgo pasa a ti en
+origen</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>DAP, DPU, DDP</td>
+<td>El vendedor entrega en destino</td>
+</tr>
+</tbody>
+</table>
+<p>FAS, FOB, CFR y CIF son solo para transporte marítimo. Para
+contenedores, la ICC recomienda FCA, CPT o CIP, aunque en la práctica
+FOB y CIF siguen siendo muy usados con China.</p>
+<p><strong>Por qué importa para el agente:</strong></p>
+<p>Un precio sin incoterm y sin lugar <strong>no se puede
+comparar</strong>. “US$ 18/m FOB Ningbo” y “US$ 21/m CIF San Antonio” no
+se comparan entre sí: hay que llevarlos al mismo punto, que es el landed
+cost en tu bodega.</p>
+<p>Por eso, en el modelo de datos de GESI, un precio siempre se guardará
+como <strong>monto + moneda + incoterm + lugar</strong>. Nunca solo el
+número. Este es uno de los errores más comunes de los sistemas caseros y
+el agente tiene que evitarlo desde el diseño.</p>
+<hr />
+<h2 id="event-storming-cómo-construir-el-mapa">6. Event Storming: cómo
+construir el mapa</h2>
+<p><strong>Event Storming</strong> es una técnica creada por Alberto
+Brandolini. Se usa en talleres con notas adhesivas, pero funciona igual
+en papel o en el celular.</p>
+<h3 id="las-piezas">Las piezas</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Color tradicional</th>
+<th>Pieza</th>
+<th>Cómo se escribe</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Naranja</td>
+<td><strong>Evento</strong></td>
+<td>En pasado, lo que ocurrió</td>
+<td>“Cotización recibida”</td>
+</tr>
+<tr class="even">
+<td>Azul</td>
+<td><strong>Comando</strong></td>
+<td>Una orden o acción</td>
+<td>“Solicitar cotización”</td>
+</tr>
+<tr class="odd">
+<td>Amarillo</td>
+<td><strong>Actor</strong></td>
+<td>Quién da el comando</td>
+<td>Nico, proveedor, agente</td>
+</tr>
+<tr class="even">
+<td>Lila</td>
+<td><strong>Política</strong></td>
+<td>“Cuando X, entonces Y”</td>
+<td>“Cuando llega una cotización, se aplica el filtro”</td>
+</tr>
+<tr class="odd">
+<td>Rosado</td>
+<td><strong>Sistema externo</strong></td>
+<td>Algo fuera de tu control</td>
+<td>WhatsApp, Aduana, Mercado Libre</td>
+</tr>
+<tr class="even">
+<td>Rojo</td>
+<td><strong>Punto caliente</strong></td>
+<td>Un problema o una duda</td>
+<td>“Aquí pierdo 30 minutos copiando datos”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="los-pasos">Los pasos</h3>
+<ol type="1">
+<li><strong>Lluvia de eventos.</strong> Anota todos los eventos de tu
+negocio que se te ocurran, sin orden. Solo eventos, en pasado. Apunta a
+30 o más.</li>
+<li><strong>Línea de tiempo.</strong> Ordénalos de izquierda a derecha
+según cuándo ocurren.</li>
+<li><strong>Eventos pivote.</strong> Marca los que cambian de etapa. Por
+ejemplo, “OC emitida” separa la búsqueda de la compra, y “Mercadería
+internada” separa la importación de la venta.</li>
+<li><strong>Comandos y actores.</strong> Antes de cada evento, anota qué
+acción lo causa y quién la hace.</li>
+<li><strong>Políticas.</strong> Anota las reglas automáticas. Muchas
+serán tareas del agente.</li>
+<li><strong>Puntos calientes.</strong> Marca en rojo donde se te va el
+tiempo o donde hay errores. <strong>Ahí está el valor del
+agente.</strong></li>
+</ol>
+<h3 id="ejemplo-con-la-tubería-de-lvzhou">Ejemplo con la tubería de
+Lvzhou</h3>
+<pre><code>Necesidad de tubería detectada
+→ Proveedores candidatos identificados
+→ RFQ enviada                 (comando: Nico envía RFQ)
+→ Cotización recibida         (política: aplicar filtro)
+   🔴 llega en formato distinto, hay que pasarla a mano
+→ Cotización evaluada
+→ Proveedor seleccionado      ← evento pivote
+→ OC emitida
+→ PI recibida
+→ Anticipo pagado
+→ Producción terminada
+→ Inspección aprobada
+→ Saldo pagado
+→ Carga embarcada             (sistema externo: naviera)
+→ BL recibido
+→ Carga arribada
+→ DIN aceptada                (sistema externo: Aduana)
+→ Mercadería internada        ← evento pivote
+→ Mercadería en bodega</code></pre>
+<p><strong>Conexión con el agente:</strong> los <strong>eventos</strong>
+serán los cambios de estado de tus datos (lección 2), las
+<strong>políticas</strong> serán reglas del agente y los <strong>puntos
+calientes</strong> serán su lista de prioridades.</p>
+<hr />
+<h2 id="línea-base-y-criterios-de-éxito">7. Línea base y criterios de
+éxito</h2>
+<p>Antes de construir algo para ahorrar tiempo hay que saber
+<strong>cuánto tiempo toma hoy</strong>. Si no, nunca sabrás si el
+agente sirve.</p>
+<h3 id="la-línea-base">La línea base</h3>
+<p>Durante una semana normal, anota para cada tarea repetitiva:</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tarea</th>
+<th>Veces por semana</th>
+<th>Minutos cada vez</th>
+<th>Errores o retrabajos</th>
+<th>Comentario</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Redactar RFQ</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Responder mensajes de proveedores</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Pasar cotizaciones a la matriz</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Calcular landed cost</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Revisar Mercado Libre</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Seguimiento a prospectos</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>No tiene que ser perfecto. Una estimación honesta anotada en el
+momento vale más que un recuerdo al final de la semana.</p>
+<h3 id="criterios-de-éxito">Criterios de éxito</h3>
+<p>Un buen criterio de éxito es <strong>medible</strong> y tiene
+<strong>plazo</strong>. Ejemplos:</p>
+<ul>
+<li>❌ “Que el agente me ayude con las cotizaciones.”</li>
+<li>✅ “En la semana de uso real (lección 19), el tiempo para pasar una
+cotización a la matriz baja de 20 a 5 minutos, con cero errores de
+landed cost.”</li>
+<li>✅ “Apruebo sin editar al menos el 70 % de los borradores de
+RFQ.”</li>
+</ul>
+<hr />
+<h2 id="resumen">Resumen</h2>
+<ul>
+<li>Tu negocio ya calza en ciclos estándar: <strong>P2P</strong>,
+<strong>importación</strong> y <strong>O2C</strong>.</li>
+<li><strong>SCOR</strong> sirve como checklist de procesos y como fuente
+de métricas.</li>
+<li><strong>BPMN</strong> es el idioma estándar para dibujar procesos, y
+sus carriles muestran qué hace el agente y qué apruebas tú.</li>
+<li><strong>Incoterms</strong>: un precio sin incoterm y lugar no se
+puede comparar.</li>
+<li><strong>Event Storming</strong> construye el mapa con eventos en
+pasado; los puntos calientes muestran dónde aporta el agente.</li>
+<li><strong>Línea base y criterios de éxito</strong>: sin medir antes,
+no hay cómo saber si el agente sirve.</li>
+</ul>
+<h1 id="lección-2-del-mapa-al-modelo">Lección 2 — Del mapa al
+modelo</h1>
+<h2 id="por-qué-esta-lección">Por qué esta lección</h2>
+<p>En la lección 1 dibujamos <strong>cómo fluye</strong> el negocio.
+Ahora definimos <strong>qué cosas existen</strong> en él, cómo se
+llaman, cómo se relacionan y por qué etapas pasan. Esto es el
+<strong>núcleo</strong> del sistema: lo que tú tienes que entender,
+aunque Claude escriba el código.</p>
+<p>Al terminar sabrás:</p>
+<ul>
+<li>Qué es Domain-Driven Design (DDD) y sus dos ideas clave: lenguaje
+común y contextos delimitados.</li>
+<li>La diferencia entre entidades y objetos de valor.</li>
+<li>Cómo hacer un modelo entidad-relación con identificadores y
+relaciones.</li>
+<li>Qué es una máquina de estados y cómo sale directo del Event
+Storming.</li>
+</ul>
+<hr />
+<h2 id="domain-driven-design-ddd">1. Domain-Driven Design (DDD)</h2>
+<p><strong>DDD</strong> es un enfoque que propuso Eric Evans en 2003. Su
+idea central: <strong>el software debe reflejar el negocio tal como lo
+entienden las personas que lo hacen</strong>. El “dominio” es tu
+negocio: importaciones, proveedores, contenedores, clientes.</p>
+<h3 id="lenguaje-común-lenguaje-ubicuo">1.1 Lenguaje común (lenguaje
+ubicuo)</h3>
+<p>Cada concepto tiene <strong>un solo nombre y una sola
+definición</strong>, y ese nombre se usa en todas partes: cuando hablas,
+en el código, en la base de datos y en las instrucciones del agente.</p>
+<p>El problema que resuelve:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Lo que pasa sin lenguaje común</th>
+<th>Consecuencia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>“Lvzhou”, “LVZHOU Co.”, “proveedor tubería”</td>
+<td>El sistema cree que son tres proveedores</td>
+</tr>
+<tr class="even">
+<td>“Precio” a veces es FOB y a veces es landed cost</td>
+<td>Se comparan peras con manzanas</td>
+</tr>
+<tr class="odd">
+<td>“Cliente” a veces incluye prospectos y a veces no</td>
+<td>Los informes no cuadran</td>
+</tr>
+</tbody>
+</table>
+<p>El lenguaje común se escribe en un <strong>glosario</strong>.
+Ejemplo:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Término</th>
+<th>Definición GESI</th>
+<th>No confundir con</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Proveedor</td>
+<td>Empresa que fabrica o vende productos que GESI compra</td>
+<td>Contacto (la persona con quien hablas)</td>
+</tr>
+<tr class="even">
+<td>Cotización</td>
+<td>Respuesta formal de un proveedor a una RFQ, con precio, incoterm,
+MOQ y plazo</td>
+<td>Precio de lista o conversación informal</td>
+</tr>
+<tr class="odd">
+<td>Landed cost</td>
+<td>Costo unitario puesto en bodega GESI, sin IVA</td>
+<td>Precio FOB</td>
+</tr>
+<tr class="even">
+<td>Prospecto</td>
+<td>Posible cliente que aún no ha comprado</td>
+<td>Cliente</td>
+</tr>
+</tbody>
+</table>
+<p>El glosario es también parte de las instrucciones del agente: si el
+agente usa el mismo glosario que tú, se entienden.</p>
+<h3 id="contextos-delimitados">1.2 Contextos delimitados</h3>
+<p>Una misma palabra puede significar cosas distintas en distintas áreas
+del negocio, y eso está bien, siempre que <strong>cada área tenga
+límites claros</strong>. Cada área con su propio significado es un
+<strong>contexto delimitado</strong> (bounded context).</p>
+<p>Ejemplo con “producto”:</p>
+<ul>
+<li>En <strong>Abastecimiento</strong>, producto es lo que vende Lvzhou:
+código del proveedor, especificación, MOQ.</li>
+<li>En <strong>Mercado Libre</strong>, producto es una publicación:
+título, fotos, precio de venta, SKU.</li>
+<li>En <strong>Importación</strong>, producto es carga: peso, volumen,
+código arancelario.</li>
+</ul>
+<p>Es el mismo tubo, pero cada contexto necesita datos distintos. El
+error de tu primera app, probablemente, fue meter todo en un mismo lugar
+sin límites, o separar sin definir cómo se conectan.</p>
+<p>Los contextos de GESI podrían ser:</p>
+<pre><code>┌──────────────┐   ┌──────────────┐
+│Abastecimiento│──▶│  Importación │
+│ RFQ, cotiz., │   │ embarques,   │
+│ OC, proveed. │   │ aduana,costos│
+└──────────────┘   └──────┬───────┘
+                          │ landed cost
+              ┌───────────┴──────────┐
+              ▼                      ▼
+      ┌──────────────┐      ┌──────────────┐
+      │ Ventas B2B   │      │Mercado Libre │
+      │ prospectos,  │      │ SKUs, public.│
+      │ clientes     │      │ ventas       │
+      └──────────────┘      └──────────────┘</code></pre>
+<p>Las flechas son los <strong>contratos</strong>: qué dato pasa de un
+contexto a otro. Por ejemplo, Importación le entrega a Ventas el landed
+cost de cada producto. Cuando el contrato está escrito, las piezas
+conversan.</p>
+<h3 id="entidades-y-objetos-de-valor">1.3 Entidades y objetos de
+valor</h3>
+<ul>
+<li><strong>Entidad:</strong> algo que tiene <strong>identidad
+propia</strong> y la mantiene aunque cambien sus datos. Lvzhou sigue
+siendo Lvzhou aunque cambie de correo o de dirección. Se identifica con
+un <strong>ID único</strong>. Ejemplos: Proveedor, Cotización, Cliente,
+Embarque.</li>
+<li><strong>Objeto de valor:</strong> algo definido <strong>solo por sus
+datos</strong>, sin identidad. “US$ 18,50” es igual a cualquier otro
+“US$ 18,50”. Ejemplos: Dinero (monto + moneda), Condición de entrega
+(incoterm + lugar), Dimensiones (largo × ancho × alto).</li>
+</ul>
+<p>Por qué importa: los objetos de valor evitan errores. Si “Dinero”
+siempre lleva su moneda, es imposible sumar por accidente dólares con
+liras turcas.</p>
+<hr />
+<h2 id="modelo-entidad-relación">2. Modelo entidad-relación</h2>
+<p>El <strong>modelo entidad-relación (ER)</strong> es la forma estándar
+de pasar el dominio a una base de datos. Tiene tres piezas:</p>
+<ol type="1">
+<li><strong>Entidades:</strong> las “cosas” (se convertirán en
+tablas).</li>
+<li><strong>Atributos:</strong> los datos de cada cosa (se convertirán
+en columnas).</li>
+<li><strong>Relaciones:</strong> cómo se conectan las cosas.</li>
+</ol>
+<h3 id="identificadores">2.1 Identificadores</h3>
+<p>Cada entidad tiene una <strong>clave primaria</strong>: un ID único
+que no cambia nunca. Las demás entidades se refieren a ella con ese ID,
+que en ellas se llama <strong>clave foránea</strong>.</p>
+<pre><code>Proveedor                    Cotización
+─────────                    ──────────
+id: 7  ◀──────────────────── proveedor_id: 7
+nombre: Lvzhou               fecha: 2026-11-03
+país: China                  incoterm: FOB
+                             lugar: Ningbo</code></pre>
+<p>La cotización no guarda el nombre “Lvzhou”: guarda el <strong>número
+7</strong>. Así no importa cómo se escriba el nombre: la relación no se
+rompe. <strong>Esta es probablemente la pieza que más faltó en tu
+primera app.</strong></p>
+<h3 id="tipos-de-relación-cardinalidad">2.2 Tipos de relación
+(cardinalidad)</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th>Significa</th>
+<th>Ejemplo GESI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 a N (uno a muchos)</td>
+<td>Uno tiene muchos</td>
+<td>Un proveedor tiene muchas cotizaciones</td>
+</tr>
+<tr class="even">
+<td>N a 1</td>
+<td>Muchos apuntan a uno</td>
+<td>Muchas cotizaciones son de un proveedor</td>
+</tr>
+<tr class="odd">
+<td>N a M (muchos a muchos)</td>
+<td>Muchos con muchos, mediante una tabla intermedia</td>
+<td>Un proveedor ofrece muchos productos y un producto lo ofrecen muchos
+proveedores: la tabla intermedia es la línea de cotización</td>
+</tr>
+</tbody>
+</table>
+<h3 id="un-primer-modelo-de-abastecimiento">2.3 Un primer modelo de
+Abastecimiento</h3>
+<pre><code>Proveedor 1───N Contacto
+    │
+    1
+    │
+    N
+SolicitudCotización (RFQ) 1───N Cotización
+                                   │
+                                   1
+                                   │
+                                   N
+                           LíneaCotización N───1 Producto
+                                   │
+                         (la línea elegida)
+                                   │
+                                   ▼
+                             OrdenCompra 1───N Embarque</code></pre>
+<p>Ejemplos de atributos:</p>
+<ul>
+<li><strong>Proveedor:</strong> id, nombre legal, país, plataforma
+(Alibaba, 1688, directo), estado.</li>
+<li><strong>Cotización:</strong> id, rfq_id, proveedor_id, fecha,
+moneda, incoterm, lugar, validez, cumple_formato.</li>
+<li><strong>LíneaCotización:</strong> id, cotización_id, producto_id,
+precio_unitario, MOQ, lead_time_días.</li>
+</ul>
+<h3 id="normalización-cada-dato-en-un-solo-lugar">2.4 Normalización:
+cada dato en un solo lugar</h3>
+<p>La regla práctica de la <strong>normalización</strong> es:
+<strong>cada dato vive en un solo lugar</strong>.</p>
+<ul>
+<li>❌ El país del proveedor escrito en cada cotización: si te equivocas
+en una, quedan inconsistentes.</li>
+<li>✅ El país vive en Proveedor y la cotización apunta al
+proveedor.</li>
+</ul>
+<p>Hay excepciones razonables. El precio de una cotización
+<strong>sí</strong> se copia a la OC, porque la OC es un compromiso que
+no debe cambiar aunque después llegue otra cotización. La regla es:
+<strong>se copia lo que debe quedar congelado en el tiempo</strong>.</p>
+<hr />
+<h2 id="máquinas-de-estado">3. Máquinas de estado</h2>
+<p>Cada entidad importante pasa por <strong>etapas</strong>. Una
+<strong>máquina de estados</strong> define:</p>
+<ul>
+<li><strong>Estados:</strong> las etapas posibles.</li>
+<li><strong>Transiciones:</strong> de qué estado se puede pasar a
+cuál.</li>
+<li><strong>Eventos:</strong> lo que provoca cada transición (¡los
+mismos eventos del Event Storming!).</li>
+<li><strong>Guardas:</strong> condiciones que deben cumplirse. Por
+ejemplo: “solo se puede seleccionar una cotización que esté
+evaluada”.</li>
+</ul>
+<h3 id="ejemplo-cotización">Ejemplo: Cotización</h3>
+<pre><code>        RFQ enviada
+            │
+            ▼
+      ┌──────────┐ plazo vencido ┌──────────┐
+      │SOLICITADA├──────────────▶│SIN RESP. │
+      └────┬─────┘               └──────────┘
+           │ cotización recibida
+           ▼
+      ┌──────────┐ formato malo  ┌──────────┐
+      │ RECIBIDA ├──────────────▶│INCOMPLETA│
+      └────┬─────┘◀──────────────┤          │
+           │       reenvío ok    └──────────┘
+           │ filtro + puntaje
+           ▼
+      ┌──────────┐
+      │ EVALUADA │
+      └──┬────┬──┘
+         │    │
+         ▼    ▼
+ SELECCIONADA DESCARTADA</code></pre>
+<h3 id="ejemplo-importación-resumido">Ejemplo: Importación
+(resumido)</h3>
+<pre><code>OC emitida → Anticipo pagado → En producción
+→ Inspeccionada → Embarcada → En tránsito
+→ En aduana → Internada → En bodega</code></pre>
+<h3 id="para-qué-sirven">Para qué sirven</h3>
+<ol type="1">
+<li><strong>Evitan estados imposibles:</strong> una importación no puede
+estar “en bodega” sin haber pasado por “internada”.</li>
+<li><strong>Hacen visible el trabajo pendiente:</strong> “¿qué
+cotizaciones están en SOLICITADA hace más de 5 días?” es justo el
+control de “quién respondió y quién no” que pediste para el agente de
+proveedores.</li>
+<li><strong>Le dan reglas claras al agente:</strong> el agente solo
+puede mover un estado por una transición permitida.</li>
+</ol>
+<hr />
+<h2 id="cómo-se-conecta-todo">4. Cómo se conecta todo</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Lección 1 (Event Storming)</th>
+<th>Lección 2 (modelo)</th>
+<th>Agente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Evento “Cotización recibida”</td>
+<td>Transición SOLICITADA → RECIBIDA</td>
+<td>Herramienta <code>registrar_cotizacion</code></td>
+</tr>
+<tr class="even">
+<td>Política “cuando llega, aplicar filtro”</td>
+<td>Guarda: solo RECIBIDA puede pasar a EVALUADA</td>
+<td>Regla en las instrucciones del agente</td>
+</tr>
+<tr class="odd">
+<td>Punto caliente “paso datos a mano”</td>
+<td>Entidad LíneaCotización bien definida</td>
+<td>Herramienta <code>leer_documento</code></td>
+</tr>
+<tr class="even">
+<td>Actor “Nico aprueba”</td>
+<td>Estado SELECCIONADA requiere aprobación</td>
+<td>Control humano (lección 18)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="resumen-1">Resumen</h2>
+<ul>
+<li><strong>DDD</strong>: el software refleja el negocio.
+<strong>Lenguaje común</strong> en un glosario y <strong>contextos
+delimitados</strong> con contratos claros entre ellos.</li>
+<li><strong>Entidades</strong> con ID único; <strong>objetos de
+valor</strong> como Dinero (monto + moneda) y Condición de entrega
+(incoterm + lugar).</li>
+<li><strong>Modelo ER</strong>: las relaciones se hacen por
+<strong>ID</strong>, no por nombre. Cada dato en un solo lugar, salvo lo
+que debe quedar congelado (como el precio de una OC).</li>
+<li><strong>Máquinas de estado</strong>: estados, transiciones, eventos
+y guardas. Los eventos salen del Event Storming.</li>
+</ul>
+<h1 id="lección-3-método-de-trabajo">Lección 3 — Método de trabajo</h1>
+<h2 id="por-qué-esta-lección-1">Por qué esta lección</h2>
+<p>Con IA se puede escribir mucho código muy rápido. El riesgo es que
+también se pueden acumular errores muy rápido, como pasó con tu primera
+app. Esta lección explica el método que usaremos en todo el curso para
+construir rápido <strong>sin perder el control</strong>. Las reglas
+completas están en <code>METODO.md</code>; aquí está el porqué de cada
+una.</p>
+<p>Al terminar sabrás:</p>
+<ul>
+<li>Por qué se verifica en dos capas: el código y el agente.</li>
+<li>Qué es una prueba automática y cómo se escribe antes que el
+código.</li>
+<li>Qué es una eval y en qué se diferencia de una prueba.</li>
+<li>Qué es núcleo y qué es hoja, y por qué cambia cuánto revisas.</li>
+<li>Qué son los hooks y por qué una regla impuesta vale más que una
+pedida.</li>
+</ul>
+<hr />
+<h2 id="dos-capas-de-verificación">1. Dos capas de verificación</h2>
+<p>Un agente tiene dos formas muy distintas de fallar:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Capa</th>
+<th>Pregunta</th>
+<th>Ejemplo de falla</th>
+<th>Cómo se verifica</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Código</strong></td>
+<td>¿El programa hace lo que dijimos?</td>
+<td>La fórmula de landed cost suma el IVA cuando no debía</td>
+<td><strong>Pruebas</strong> automáticas</td>
+</tr>
+<tr class="even">
+<td><strong>Agente</strong></td>
+<td>¿El modelo decide bien?</td>
+<td>El agente lee “MOQ 500 rolls” como 500 metros</td>
+<td><strong>Evals</strong> con casos reales</td>
+</tr>
+</tbody>
+</table>
+<p>El código es <strong>determinista</strong>: con la misma entrada da
+siempre la misma salida. El modelo es <strong>probabilístico</strong>:
+puede responder distinto ante la misma entrada, y puede equivocarse
+aunque el código esté perfecto. Por eso se necesitan las dos capas.</p>
+<hr />
+<h2 id="pruebas-el-contrato-del-código">2. Pruebas: el contrato del
+código</h2>
+<p>Una <strong>prueba</strong> es un pequeño programa que dice: <em>“con
+esta entrada, el resultado debe ser este”</em>. Se ejecuta en un segundo
+y avisa si algo se rompió.</p>
+<h3 id="un-ejemplo-con-números-ficticio">Un ejemplo con números
+(ficticio)</h3>
+<p>Contenedor de tubería desde Ningbo, 1.000 metros:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Concepto</th>
+<th>Monto (US$)</th>
+<th>Cómo se calcula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FOB</td>
+<td>20.000</td>
+<td>Precio del proveedor</td>
+</tr>
+<tr class="even">
+<td>Flete marítimo</td>
+<td>3.500</td>
+<td>Cotización del forwarder</td>
+</tr>
+<tr class="odd">
+<td>Seguro</td>
+<td>120</td>
+<td>Póliza</td>
+</tr>
+<tr class="even">
+<td><strong>CIF</strong></td>
+<td><strong>23.620</strong></td>
+<td>FOB + flete + seguro</td>
+</tr>
+<tr class="odd">
+<td>Arancel (0 % con TLC China)</td>
+<td>0</td>
+<td>0 % × CIF</td>
+</tr>
+<tr class="even">
+<td>IVA importación (19 %)</td>
+<td>4.487,80</td>
+<td>19 % × (CIF + arancel). <strong>Crédito fiscal: no va al
+costo</strong></td>
+</tr>
+<tr class="odd">
+<td>Agente de aduana</td>
+<td>450</td>
+<td>Honorarios</td>
+</tr>
+<tr class="even">
+<td>Puerto y almacenaje</td>
+<td>600</td>
+<td>Gastos locales</td>
+</tr>
+<tr class="odd">
+<td>Transporte a Punta Arenas</td>
+<td>2.800</td>
+<td>Camión o barcaza</td>
+</tr>
+<tr class="even">
+<td><strong>Landed cost total</strong></td>
+<td><strong>27.470</strong></td>
+<td>CIF + arancel + gastos locales (sin IVA)</td>
+</tr>
+<tr class="odd">
+<td><strong>Landed cost por metro</strong></td>
+<td><strong>27,47</strong></td>
+<td>Total ÷ 1.000</td>
+</tr>
+</tbody>
+</table>
+<p>Las pruebas que escribiríamos <strong>antes</strong> de programar la
+calculadora:</p>
+<ol type="1">
+<li>Con estos datos, el landed cost por metro debe ser
+<strong>27,47</strong>.</li>
+<li>Si el arancel es 6 % (sin certificado de origen), se agregan
+1.417,20 y el total debe ser <strong>28.887,20</strong>.</li>
+<li>El IVA <strong>nunca</strong> debe sumarse al landed cost.</li>
+<li>Si falta la moneda de algún monto, la calculadora debe
+<strong>rechazar</strong> el cálculo, no adivinar.</li>
+<li>Si la cantidad es 0, debe dar error, no dividir por cero.</li>
+</ol>
+<h3 id="por-qué-escribir-la-prueba-primero">Por qué escribir la prueba
+primero</h3>
+<ul>
+<li>Te obliga a definir <strong>qué significa “correcto”</strong> antes
+de que exista el código.</li>
+<li>Claude tiene <strong>cómo comprobarse</strong>: programa hasta que
+las pruebas pasen.</li>
+<li>Si algún día cambias la fórmula, las pruebas avisan si rompiste algo
+que funcionaba.</li>
+</ul>
+<p>Fíjate que las pruebas 3, 4 y 5 son <strong>reglas de
+negocio</strong>. Las pruebas son también tu manual de reglas, escrito
+de forma que una máquina lo puede revisar.</p>
+<hr />
+<h2 id="evals-el-examen-del-agente">3. Evals: el examen del agente</h2>
+<p>Una <strong>eval</strong> es como una prueba, pero para el
+comportamiento del agente. Se arma así:</p>
+<ol type="1">
+<li>Juntas casos reales: por ejemplo, 10 cotizaciones que ya revisaste
+tú a mano.</li>
+<li>Para cada una anotas el <strong>resultado correcto</strong>: precio,
+MOQ, incoterm, si cumple el formato.</li>
+<li>Le das las 10 al agente y comparas su resultado con el tuyo.</li>
+<li>Obtienes una <strong>tasa de acierto</strong>: por ejemplo, 9 de 10
+campos bien leídos en promedio.</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th>Prueba (código)</th>
+<th>Eval (agente)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pasa o falla</td>
+<td>Da un porcentaje de acierto</td>
+</tr>
+<tr class="even">
+<td>Siempre da lo mismo</td>
+<td>Puede variar un poco entre ejecuciones</td>
+</tr>
+<tr class="odd">
+<td>Se escribe con números inventados</td>
+<td>Se arma con casos reales</td>
+</tr>
+<tr class="even">
+<td>Verifica fórmulas y reglas</td>
+<td>Verifica lectura, juicio y redacción</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regla de oro:</strong> cada vez que el agente se equivoque en
+el trabajo real, ese caso se agrega a las evals. Así el agente mejora
+con el uso, y los errores no se repiten.</p>
+<hr />
+<h2 id="núcleo-y-hojas">4. Núcleo y hojas</h2>
+<p>No todo el código merece la misma revisión. La idea viene de la
+charla de Anthropic sobre programar con IA en producción:</p>
+<ul>
+<li><strong>Núcleo:</strong> las piezas de las que dependen otras. Un
+error ahí se propaga a todo. En GESI: el modelo de datos, la fórmula de
+landed cost, el filtro eliminatorio, el puntaje. <strong>Tú lo entiendes
+y lo revisas.</strong></li>
+<li><strong>Hojas:</strong> piezas de las que nada depende. Un error ahí
+queda aislado y se nota fácil. En GESI: el formato visual de un informe
+o el texto de un mensaje de ayuda. <strong>Claude puede escribirlas con
+más libertad</strong>, y basta con mirar el resultado.</li>
+</ul>
+<p>Por eso las lecciones 1 y 2 van antes de programar: el mapa y el
+modelo son el núcleo del núcleo.</p>
+<hr />
+<h2 id="contexto-tú-eres-el-jefe-de-producto">5. Contexto: tú eres el
+jefe de producto</h2>
+<p>Cuando le pides algo a Claude, trátalo como a un programador muy
+capaz que <strong>acaba de llegar</strong> a GESI y no sabe nada del
+negocio. Antes de pedir código, dale:</p>
+<ol type="1">
+<li><strong>Qué</strong> se va a construir.</li>
+<li><strong>Para qué</strong>: el problema real que resuelve.</li>
+<li><strong>Con qué datos</strong> y en qué formato llegan.</li>
+<li><strong>Cómo sabremos que está bien</strong>: las pruebas o el caso
+real para comparar.</li>
+<li><strong>Qué no debe hacer</strong>: por ejemplo, nunca enviar
+mensajes sin aprobación.</li>
+</ol>
+<p>❌ “Haz un lector de cotizaciones.”</p>
+<p>✅ “Necesito leer cotizaciones de proveedores chinos que llegan en
+PDF o como texto de WhatsApp, para cargarlas en la tabla
+LíneaCotización. Deben salir: precio unitario, moneda, incoterm, lugar,
+MOQ y lead time. Si falta un dato, debe quedar vacío y marcado, nunca
+inventado. Está bien cuando acierte en las 10 cotizaciones de
+<code>pruebas/evals/cotizaciones/</code>.”</p>
+<hr />
+<h2 id="hooks-lo-importante-se-impone">6. Hooks: lo importante se
+impone</h2>
+<p>Un <strong>hook</strong> es un comando que Claude Code ejecuta
+<strong>automáticamente</strong> en ciertos momentos. Los dos que
+usaremos:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hook</th>
+<th>Cuándo corre</th>
+<th>Para qué en GESI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>De arranque</strong> (SessionStart)</td>
+<td>Al iniciar una sesión</td>
+<td>Instalar dependencias, para que las pruebas puedan correr</td>
+</tr>
+<tr class="even">
+<td><strong>De término</strong> (Stop)</td>
+<td>Cuando Claude cree haber terminado</td>
+<td>Correr las pruebas; si fallan, Claude debe seguir trabajando</td>
+</tr>
+</tbody>
+</table>
+<p>La diferencia clave:</p>
+<ul>
+<li>El <code>CLAUDE.md</code> es un <strong>consejo</strong>. Claude
+normalmente lo sigue, pero puede saltárselo.</li>
+<li>Un hook es una <strong>regla</strong>. Corre siempre, se acuerde
+Claude o no.</li>
+</ul>
+<p>Ya lo viviste: en tu primera app, las sesiones arrancaban sin
+dependencias y aparecían miles de errores falsos. El hook de arranque lo
+resolvió. Y como dice tu regla 3, el hook debe ser
+<strong>barato</strong>: si no se tocó código, no corre las pruebas, y
+no bloquea dos veces seguidas para no quedar en un bucle.</p>
+<hr />
+<h2 id="mirar-el-resultado-y-exigir-evidencia">7. Mirar el resultado y
+exigir evidencia</h2>
+<p>Las pruebas verifican números, no la experiencia. Antes de dar algo
+por terminado:</p>
+<ul>
+<li><strong>Abrir el resultado:</strong> el Excel generado, el borrador
+del mensaje, la pantalla.</li>
+<li><strong>Compararlo con un caso real:</strong> ¿la tabla comparativa
+de Lvzhou y la competencia se parece a la que harías tú?</li>
+</ul>
+<p><strong>Terminado</strong> significa tres cosas juntas:</p>
+<ol type="1">
+<li>Las pruebas pasan.</li>
+<li>Las evals no empeoraron.</li>
+<li>Alguien miró el resultado y se ve bien.</li>
+</ol>
+<p>Si Claude dice “listo” sin evidencia, la respuesta correcta es:
+<em>“muéstrame cómo lo verificaste”</em>.</p>
+<hr />
+<h2 id="orden-y-memoria-entre-sesiones">8. Orden y memoria entre
+sesiones</h2>
+<p>Cada sesión de Claude parte sin recordar las anteriores. Para que el
+trabajo no se pierda:</p>
+<ul>
+<li><strong>Commits frecuentes</strong> en Git: cada paso que funciona
+queda guardado y se puede volver atrás.</li>
+<li><strong>Revisar en el orden del flujo de datos</strong>, siguiendo
+el mapa de la lección 1, y <strong>anotar con fecha</strong> lo
+encontrado en vez de arreglar a mitad de la revisión.</li>
+<li><strong>CLAUDE.md corto</strong>, con lo esencial. Lo temático va en
+<em>skills</em> que se cargan cuando se necesitan.</li>
+<li><strong>Permisos explícitos:</strong> lo que sirve para verificar
+corre sin preguntar; lo destructivo (borrar la base, leer secretos,
+desplegar a mano) está prohibido.</li>
+</ul>
+<hr />
+<h2 id="resumen-2">Resumen</h2>
+<ul>
+<li>Se verifica en <strong>dos capas</strong>: pruebas para el código,
+evals para el agente.</li>
+<li><strong>Pruebas primero</strong>: definen qué es “correcto” y le dan
+a Claude cómo comprobarse.</li>
+<li><strong>Evals</strong> con casos reales; cada error real se vuelve
+un caso nuevo.</li>
+<li><strong>Núcleo</strong> lo revisas tú; <strong>hojas</strong> pueden
+ser más libres.</li>
+<li>Tú eres el <strong>jefe de producto</strong>: contexto, objetivo y
+criterio de terminado antes del código.</li>
+<li><strong>Hooks</strong>: lo importante se impone, no se pide.</li>
+<li><strong>Terminado</strong> = pruebas pasan + evals sin retroceso +
+resultado revisado.</li>
+</ul>
+<h1 id="cuaderno-de-ejercicios">Cuaderno de ejercicios</h1>
+<p>Responde en papel o en la app de notas del celular. Al volver, pega
+tus respuestas en Claude y pide: <strong>“revisa mis ejercicios del
+viaje”</strong>. Después podrás tomar las evaluaciones oficiales.</p>
+<hr />
+<h2 id="ejercicios-de-la-lección-0-qué-es-un-agente">Ejercicios de la
+Lección 0 — Qué es un agente</h2>
+<p><strong>0.1</strong> Con tus palabras, ¿qué diferencia a un agente de
+Claude en el chat y de una automatización tipo Zapier? Usa un ejemplo de
+GESI.</p>
+<p><strong>0.2</strong> Escribe el ciclo <em>piensa → actúa →
+observa</em> para esta instrucción: <em>“Avísame qué prospectos de
+tubería no han respondido en 7 días y prepárales un mensaje.”</em> ¿Qué
+herramientas necesitaría el agente? ¿En qué paso apruebas tú?</p>
+<p><strong>0.3</strong> Nombra una tarea de tu trabajo que
+<strong>no</strong> conviene darle a un agente y explica por qué.</p>
+<hr />
+<h2 id="ejercicios-de-la-lección-1-mapa-del-negocio">Ejercicios de la
+Lección 1 — Mapa del negocio</h2>
+<p><strong>1.1 — Event Storming del P2P (el ejercicio principal, unos 60
+minutos)</strong> Elige una línea: tubería de Lvzhou o cerco de
+Ikon.</p>
+<ol type="1">
+<li>Escribe al menos <strong>25 eventos en pasado</strong>, sin
+orden.</li>
+<li>Ordénalos en una línea de tiempo.</li>
+<li>Marca con ⭐ los <strong>eventos pivote</strong>.</li>
+<li>Agrega a 5 eventos su <strong>comando</strong> y su
+<strong>actor</strong>.</li>
+<li>Escribe al menos 3 <strong>políticas</strong> (“cuando X, entonces
+Y”).</li>
+<li>Marca con 🔴 al menos 4 <strong>puntos calientes</strong>, y estima
+cuántos minutos por semana te cuesta cada uno.</li>
+</ol>
+<p><strong>1.2 — O2C</strong> Haz una versión corta (10 a 15 eventos)
+del ciclo de venta de tubería a una salmonera. ¿Dónde se toca con el
+P2P?</p>
+<p><strong>1.3 — SCOR</strong> Revisa los 7 procesos SCOR. ¿Cuál haces
+“en la cabeza”, sin registro? ¿Qué riesgo tiene eso?</p>
+<p><strong>1.4 — Incoterms</strong> Dos cotizaciones para el mismo tubo:
+A) US$ 18/m FOB Ningbo; B) US$ 21/m CIF San Antonio. ¿Por qué no puedes
+decir que A es más barata? ¿Qué datos te faltan para compararlas?</p>
+<p><strong>1.5 — BPMN</strong> Dibuja con los 5 símbolos el proceso
+“llega un mensaje de un proveedor por WhatsApp”, con dos carriles:
+<em>Agente GESI</em> y <em>Nico</em>. ¿Qué decide el agente solo y qué
+apruebas tú?</p>
+<p><strong>1.6 — Línea base</strong> Copia la tabla de línea base de la
+lección y llénala con tu <strong>estimación</strong> de una semana
+normal. Luego escribe 3 <strong>criterios de éxito</strong> medibles y
+con plazo.</p>
+<hr />
+<h2 id="ejercicios-de-la-lección-2-del-mapa-al-modelo">Ejercicios de la
+Lección 2 — Del mapa al modelo</h2>
+<p><strong>2.1 — Glosario GESI</strong> Escribe al menos 15 términos con
+su definición GESI y con qué <strong>no</strong> confundirlo. Incluye
+como mínimo: proveedor, contacto, producto, SKU, RFQ, cotización, OC,
+PI, embarque, landed cost, prospecto, cliente, MOQ, lead time,
+incoterm.</p>
+<p><strong>2.2 — Contextos</strong> ¿Qué significa “cliente” en Ventas
+B2B, en Mercado Libre y en la triangulación de lámparas GW3? ¿Conviene
+que sea una sola entidad o varias? Justifica.</p>
+<p><strong>2.3 — Entidad u objeto de valor</strong> Clasifica: Proveedor
+· US$ 18,50 · FOB Ningbo · Contenedor 40’ HC · Embarque de noviembre ·
+Dirección de bodega · Contacto de Lvzhou · Medidas del rollo.</p>
+<p><strong>2.4 — Modelo ER</strong> Dibuja el modelo de <strong>Ventas
+B2B</strong>: Prospecto, Cliente, Contacto, CotizaciónCliente, Pedido,
+Producto. Marca claves primarias, foráneas y el tipo de cada
+relación.</p>
+<p><strong>2.5 — Máquina de estados</strong> Diseña los estados de un
+<strong>Prospecto</strong> de tubería, desde que lo identificas hasta
+que compra o se descarta. Indica el evento que provoca cada transición y
+al menos una guarda.</p>
+<p><strong>2.6 — Normalización</strong> En tu primera app, ¿qué dato
+estaba repetido en varios lugares? ¿Qué problema causó? ¿Cómo se
+resolvería con IDs?</p>
+<hr />
+<h2 id="ejercicios-de-la-lección-3-método-de-trabajo">Ejercicios de la
+Lección 3 — Método de trabajo</h2>
+<p><strong>3.1 — Pruebas primero</strong> Con el ejemplo de landed cost
+de la lección, calcula a mano: a) El landed cost por metro si el flete
+sube a US$ 4.200. b) El landed cost total si además no hay certificado
+de origen (arancel 6 %). Escribe ambos como pruebas: <em>“con esta
+entrada, el resultado debe ser…”</em>.</p>
+<p><strong>3.2 — Más pruebas</strong> Escribe 3 pruebas más para la
+calculadora que representen <strong>reglas de negocio</strong> de
+GESI.</p>
+<p><strong>3.3 — Eval</strong> Diseña la eval para el lector de
+cotizaciones: ¿qué casos reales juntarías, qué campos revisarías y desde
+qué tasa de acierto lo considerarías usable?</p>
+<p><strong>3.4 — Núcleo u hoja</strong> Clasifica y justifica: fórmula
+de landed cost · color de la tabla en Excel · filtro eliminatorio ·
+texto de saludo de una RFQ · estados de la importación · nombre del
+archivo de un informe.</p>
+<p><strong>3.5 — Contexto</strong> Escribe el pedido completo (los 5
+puntos) que le harías a Claude para construir el <strong>redactor de
+RFQ</strong>.</p>
+<p><strong>3.6 — Tu experiencia</strong> ¿Cuál de tus 7 reglas de la
+primera app te habría ahorrado más problemas si la hubieras aplicado
+desde el día 1? ¿Por qué?</p>
+<hr />
+<h1 id="autoevaluación-de-práctica">Autoevaluación de práctica</h1>
+<p>Preguntas para repasar durante el viaje. Las respuestas están al
+final. Las evaluaciones oficiales tendrán preguntas nuevas, generadas al
+momento.</p>
+<h3 id="lección-0">Lección 0</h3>
+<ol type="1">
+<li>¿Cuáles son las 5 piezas de un agente?</li>
+<li>Verdadero o falso: en un agente, el programador escribe de antemano
+el orden de los pasos.</li>
+<li>¿Qué rol cumples tú en el Agente GESI?</li>
+</ol>
+<h3 id="lección-1">Lección 1</h3>
+<ol start="4" type="1">
+<li>¿Qué significan P2P y O2C?</li>
+<li>¿Qué es el three-way match y qué compara?</li>
+<li>Verdadero o falso: los Incoterms definen quién es dueño de la
+mercadería.</li>
+<li>¿Por qué un precio siempre debe guardarse con incoterm y lugar?</li>
+<li>En Event Storming, ¿en qué tiempo verbal se escriben los eventos y
+qué son los puntos calientes?</li>
+<li>Nombra los 7 procesos de SCOR.</li>
+<li>¿Por qué hay que medir la línea base antes de construir el
+agente?</li>
+</ol>
+<h3 id="lección-2">Lección 2</h3>
+<ol start="11" type="1">
+<li>¿Qué es el lenguaje común (ubicuo) en DDD?</li>
+<li>¿Qué es un contexto delimitado? Da un ejemplo con “producto”.</li>
+<li>¿Diferencia entre entidad y objeto de valor?</li>
+<li>¿Por qué la cotización guarda <code>proveedor_id</code> en vez del
+nombre del proveedor?</li>
+<li>¿Cuándo está bien copiar un dato en vez de referenciarlo?</li>
+<li>¿Qué es una guarda en una máquina de estados?</li>
+</ol>
+<h3 id="lección-3">Lección 3</h3>
+<ol start="17" type="1">
+<li>¿Cuáles son las dos capas de verificación y con qué se verifica cada
+una?</li>
+<li>¿Por qué el IVA de importación normalmente no se suma al landed
+cost?</li>
+<li>¿Diferencia entre CLAUDE.md y un hook?</li>
+<li>¿Qué tres cosas deben cumplirse para dar algo por terminado?</li>
+</ol>
+<hr />
+<h1 id="respuestas-de-la-autoevaluación">Respuestas de la
+autoevaluación</h1>
+<ol type="1">
+<li>Modelo, instrucciones/skills, herramientas, datos/memoria y el ciclo
+del agente (más el control humano: tú apruebas).</li>
+<li><strong>Falso.</strong> El modelo decide los pasos según el objetivo
+y lo que observa. Eso lo distingue de un programa tradicional.</li>
+<li>El jefe que aprueba: el agente prepara y tú decides los envíos a
+terceros y los cambios importantes.</li>
+<li>P2P: Procure-to-Pay, de la necesidad de compra al pago al proveedor.
+O2C: Order-to-Cash, del interés del cliente al cobro.</li>
+<li>Un control antes de pagar: compara que la <strong>orden de
+compra</strong>, lo <strong>recibido</strong> y la
+<strong>factura</strong> coincidan.</li>
+<li><strong>Falso.</strong> Definen costos, riesgos y obligaciones de
+entrega, no la propiedad ni la forma de pago.</li>
+<li>Porque el mismo número significa costos distintos según quién paga
+flete, seguro y gastos. Sin incoterm y lugar no se puede comparar ni
+calcular el landed cost.</li>
+<li>En <strong>pasado</strong> (“cotización recibida”). Los puntos
+calientes son problemas o dudas: donde se pierde tiempo o hay errores, y
+por eso donde más aporta el agente.</li>
+<li>Orchestrate, Plan, Order, Source, Transform, Fulfill, Return.</li>
+<li>Porque sin saber cuánto toma hoy una tarea es imposible demostrar si
+el agente ahorra tiempo o evita errores.</li>
+<li>Que cada concepto tenga un solo nombre y una sola definición, usados
+igual en la conversación, el código, la base de datos y el agente.</li>
+<li>Un área del negocio con límites claros donde cada término tiene un
+significado preciso. “Producto” en Abastecimiento es lo que vende el
+proveedor (código, MOQ); en Mercado Libre es una publicación (título,
+fotos, precio de venta).</li>
+<li>La entidad tiene identidad propia que se mantiene aunque cambien sus
+datos (Proveedor). El objeto de valor se define solo por sus datos (US$
+18,50; FOB Ningbo).</li>
+<li>Porque el ID no cambia nunca y el nombre se puede escribir de muchas
+formas. Con el ID la relación no se rompe.</li>
+<li>Cuando el dato debe quedar <strong>congelado en el tiempo</strong>.
+Por ejemplo, el precio en una OC, que es un compromiso aunque después
+llegue otra cotización.</li>
+<li>Una condición que debe cumplirse para permitir una transición. Por
+ejemplo: solo se puede seleccionar una cotización que esté
+evaluada.</li>
+<li><strong>Código</strong>, que se verifica con pruebas automáticas.
+<strong>Agente</strong>, que se verifica con evals sobre casos
+reales.</li>
+<li>Porque para una empresa con giro el IVA de importación normalmente
+es <strong>crédito fiscal</strong>: se recupera, así que no es un costo
+del producto.</li>
+<li>CLAUDE.md es un consejo que Claude puede saltarse; un hook es una
+regla que se ejecuta siempre, automáticamente.</li>
+<li>Las pruebas pasan, las evals no empeoran y alguien miró el resultado
+y se ve bien.</li>
+</ol>
+<hr />
+<h1 id="soluciones-del-ejercicio-3.1">Soluciones del ejercicio 3.1</h1>
+<ol type="a">
+<li><p>CIF = 20.000 + 4.200 + 120 = 24.320. Total = 24.320 + 0 + 450 +
+600 + 2.800 = <strong>28.170</strong>. Por metro =
+<strong>28,17</strong>.</p></li>
+<li><p>Arancel 6 % × 24.320 = 1.459,20. Total = 28.170 + 1.459,20 =
+<strong>29.629,20</strong>. Por metro = <strong>29,63</strong>
+(redondeado).</p></li>
+</ol>
+</body>
+</html>

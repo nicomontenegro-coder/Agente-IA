@@ -15,6 +15,7 @@ evaluaciones/   sistema de evaluación y registro de tu progreso
 agente/         el código del agente, que crece lección a lección
 pruebas/        pruebas del código y casos de prueba (evals) del agente
 datos/          base de datos y archivos de ejemplo
+viaje/          paquetes de estudio offline (PDF, EPUB, HTML)
 METODO.md       cómo trabajamos: reglas para construir con IA sin perder el control
 CLAUDE.md       instrucciones para que Claude actúe como tutor y evaluador
 ```
@@ -34,9 +35,9 @@ Detalle: [evaluaciones/SISTEMA.md](evaluaciones/SISTEMA.md).
 | # | Lección | Conceptos | Lo que queda hecho |
 |---|---|---|---|
 | 0 | [Qué es un agente](lecciones/00-que-es-un-agente.md) | Modelo, herramientas, ciclo, control humano | Diseño general del Agente GESI |
-| 1 | Mapa del negocio con estándares | Procure-to-Pay, Order-to-Cash, ciclo de importación, SCOR, BPMN, Incoterms, Event Storming, línea base, criterios de éxito | Mapa de procesos de GESI y medición del tiempo actual |
-| 2 | Del mapa al modelo | DDD (lenguaje común, contextos delimitados), modelo entidad-relación, máquinas de estado | Glosario GESI, diagrama de entidades y estados |
-| 3 | Método de trabajo | Verificar en dos capas, pruebas primero, núcleo vs. hojas, hooks, evals | Tu versión comentada de [METODO.md](METODO.md) |
+| 1 | [Mapa del negocio con estándares](lecciones/01-mapa-del-negocio.md) | Procure-to-Pay, Order-to-Cash, ciclo de importación, SCOR, BPMN, Incoterms, Event Storming, línea base, criterios de éxito | Mapa de procesos de GESI y medición del tiempo actual |
+| 2 | [Del mapa al modelo](lecciones/02-del-mapa-al-modelo.md) | DDD (lenguaje común, contextos delimitados), modelo entidad-relación, máquinas de estado | Glosario GESI, diagrama de entidades y estados |
+| 3 | [Método de trabajo](lecciones/03-metodo-de-trabajo.md) | Verificar en dos capas, pruebas primero, núcleo vs. hojas, hooks, evals | Tu versión comentada de [METODO.md](METODO.md) |
 
 ### Parte 1 — Herramientas del programador
 | # | Lección | Conceptos | Lo que queda hecho |

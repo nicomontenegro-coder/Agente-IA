@@ -58,17 +58,26 @@ y el Agente GESI se diseña al revés desde el principio:
 ## El diseño del Agente GESI
 
 ```
-          Tú (terminal → después correo y WhatsApp)
-                          │
-                 ┌────────▼────────┐
-                 │   Agente GESI   │  modelo + instrucciones GESI
-                 └────────┬────────┘
-         ┌────────────────┼────────────────┐
-   leer_documento   calcular_landed_cost   registrar / buscar ...
-         └────────────────┼────────────────┘
-                 ┌────────▼────────┐
-                 │  Base de datos  │  proveedores · cotizaciones · productos · importaciones
-                 └─────────────────┘
+   Tú (terminal; después correo y WhatsApp)
+                    │
+           ┌────────▼────────┐
+           │   Agente GESI   │
+           │ modelo + reglas │
+           └────────┬────────┘
+                    │ usa herramientas
+   ┌────────────────┼────────────────┐
+   ▼                ▼                ▼
+ leer_          calcular_       registrar /
+ documento      landed_cost     buscar ...
+   └────────────────┼────────────────┘
+                    ▼
+           ┌─────────────────┐
+           │  Base de datos  │
+           │ proveedores,    │
+           │ cotizaciones,   │
+           │ productos,      │
+           │ importaciones   │
+           └─────────────────┘
 ```
 
 ## Para pensar antes de la lección 1
