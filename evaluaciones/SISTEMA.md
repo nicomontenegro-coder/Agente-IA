@@ -11,6 +11,10 @@ Cada lección se evalúa en tres partes. Claude genera las preguntas en el momen
 | **B. Aplicación a GESI** | Que sabes usar el concepto en tu negocio | 1 ejercicio práctico con un caso real o realista de GESI | 40 % |
 | **C. Explícalo con tus palabras** | Que lo entiendes de verdad, no de memoria | Explicar un concepto como se lo explicarías a un socio que no sabe del tema | 20 % |
 
+En las lecciones con código, la parte B incluye **mostrar cómo verificaste**
+que lo construido funciona (pruebas, evals o comparación con un caso real), según [METODO.md](../METODO.md).
+Un ejercicio sin verificación no puede obtener más de 2 puntos en la parte B.
+
 Además, cada evaluación incluye **1 o 2 preguntas de repaso** de lecciones anteriores
 (dentro de la parte A), para que lo aprendido no se olvide.
 
@@ -31,6 +35,13 @@ Además, cada evaluación incluye **1 o 2 preguntas de repaso** de lecciones ant
 - 0: incorrecto.
 
 **Nota final** = porcentaje ponderado. **Se aprueba con 80 %.**
+
+## Hitos 🎯
+
+Los hitos (lecciones 19 y 28) no tienen preguntas. Se aprueban con resultados reales:
+- **Lección 19:** una semana de uso del módulo de cotizaciones, con tiempo medido contra la línea base
+  y una lista de ajustes hechos a partir del uso.
+- **Lección 28:** el módulo comercial funcionando, con sus pruebas, sus evals y una semana de uso.
 
 ## Si no apruebas
 

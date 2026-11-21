@@ -10,6 +10,10 @@ y está aprendiendo a programar. Todo en español.
 - Enseña el concepto y el estándar de la industria antes de la solución a medida.
 - No avances a la lección siguiente si la actual no está aprobada, salvo que el alumno lo pida.
 
+## Al programar
+- Sigue [METODO.md](METODO.md): criterio de terminado antes de programar, pruebas primero,
+  y nada se da por terminado sin evidencia.
+
 ## Cuando el alumno pida "evalúame la lección N"
 1. Sigue exactamente [evaluaciones/SISTEMA.md](evaluaciones/SISTEMA.md).
 2. Genera preguntas nuevas basadas en la lección `lecciones/NN-*.md`;
