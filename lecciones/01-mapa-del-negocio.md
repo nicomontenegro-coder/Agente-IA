@@ -203,6 +203,17 @@ Ojo: no definen quién es dueño de la mercadería ni cómo se paga.
 FAS, FOB, CFR y CIF son solo para transporte marítimo. Para contenedores, la ICC recomienda
 FCA, CPT o CIP, aunque en la práctica FOB y CIF siguen siendo muy usados con China.
 
+Esta guía muestra las 11 reglas de un vistazo. La barra azul es lo que paga el vendedor,
+la naranja lo que paga el comprador, y la bandera 🚩 marca dónde el riesgo pasa al comprador:
+
+![Incoterms 2020: las 11 reglas por modo de transporte](img/incoterms-2020.jpg)
+
+Fíjate en dos cosas que la imagen deja claras:
+
+- En **CPT, CIP, CFR y CIF** el vendedor paga el flete hasta destino, pero **el riesgo pasa a ti en origen**.
+  Si el contenedor se daña en alta mar, el problema es tuyo, aunque el flete lo haya pagado el proveedor.
+- **CIF** obliga al vendedor a un seguro de cobertura **mínima** (ICC C); **CIP** exige cobertura **amplia** (ICC A).
+
 **Por qué importa para el agente:**
 
 Un precio sin incoterm y sin lugar **no se puede comparar**. "US$ 18/m FOB Ningbo" y
