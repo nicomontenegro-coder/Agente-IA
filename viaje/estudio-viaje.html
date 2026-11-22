@@ -272,6 +272,58 @@ calcular, buscar en la base).</li>
 herramienta, incluidos los errores y los datos que faltan, y lo suma a
 lo que sabe. Es lo que le permite decidir el paso siguiente.</li>
 </ul>
+<p><strong>La regla de escritura:</strong> cada <em>actúa</em> usa
+<strong>una sola herramienta</strong>, y después de cada <em>actúa</em>
+viene un <em>observa</em>. Así se escribe el ciclo cuando diseñes un
+agente:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Paso</th>
+<th>Ejemplo con un correo de un cliente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Piensa</td>
+<td>“Tengo que saber quién es el cliente.”</td>
+</tr>
+<tr class="even">
+<td>Actúa</td>
+<td><code>buscar_cliente(nombre=&quot;Salmonera Fiordo Austral&quot;)</code></td>
+</tr>
+<tr class="odd">
+<td>Observa</td>
+<td>Lo encontré, pero no tiene RUT registrado.</td>
+</tr>
+<tr class="even">
+<td>Piensa</td>
+<td>“Sigo, pero anoto que falta el RUT. Ahora necesito qué pide.”</td>
+</tr>
+<tr class="odd">
+<td>Actúa</td>
+<td><code>leer_documento(correo)</code></td>
+</tr>
+<tr class="even">
+<td>Observa</td>
+<td>Pide 300 m, entrega en Puerto Natales, para marzo. <strong>No dice
+el diámetro.</strong></td>
+</tr>
+<tr class="odd">
+<td>Piensa</td>
+<td>“Sin diámetro no puedo cotizar. Hay que preguntarlo.”</td>
+</tr>
+<tr class="even">
+<td>Responde</td>
+<td>Te propone un borrador de respuesta pidiendo el diámetro →
+<strong>tú apruebas</strong></td>
+</tr>
+</tbody>
+</table>
 <p>Si el agente no observara, trabajaría a ciegas: no sabría si la
 herramienta funcionó, no notaría que la cotización viene sin incoterm o
 que el MOQ cambió, y no podría corregir el rumbo. Seguiría un plan fijo,

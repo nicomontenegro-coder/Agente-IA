@@ -46,6 +46,20 @@ y no un programa tradicional, donde cada paso está escrito de antemano.
 - **Observa:** lee el **resultado** de esa herramienta, incluidos los errores y los datos que faltan,
   y lo suma a lo que sabe. Es lo que le permite decidir el paso siguiente.
 
+**La regla de escritura:** cada *actúa* usa **una sola herramienta**, y después de cada *actúa*
+viene un *observa*. Así se escribe el ciclo cuando diseñes un agente:
+
+| Paso | Ejemplo con un correo de un cliente |
+|---|---|
+| Piensa | "Tengo que saber quién es el cliente." |
+| Actúa | `buscar_cliente(nombre="Salmonera Fiordo Austral")` |
+| Observa | Lo encontré, pero no tiene RUT registrado. |
+| Piensa | "Sigo, pero anoto que falta el RUT. Ahora necesito qué pide." |
+| Actúa | `leer_documento(correo)` |
+| Observa | Pide 300 m, entrega en Puerto Natales, para marzo. **No dice el diámetro.** |
+| Piensa | "Sin diámetro no puedo cotizar. Hay que preguntarlo." |
+| Responde | Te propone un borrador de respuesta pidiendo el diámetro → **tú apruebas** |
+
 Si el agente no observara, trabajaría a ciegas: no sabría si la herramienta funcionó, no notaría que la
 cotización viene sin incoterm o que el MOQ cambió, y no podría corregir el rumbo. Seguiría un plan
 fijo, como una macro.

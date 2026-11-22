@@ -3,6 +3,12 @@
 Cada lección se evalúa en tres partes. Claude genera las preguntas en el momento
 (así no hay respuestas para memorizar) y corrige con la rúbrica de abajo.
 
+## Qué se puede preguntar
+
+Solo lo que la lección enseña. Si un caso de la parte B depende de un supuesto que la lección
+no cubre (si hay stock, cuál es el margen), el enunciado lo declara. Lo que corresponde a una
+lección posterior no descuenta puntos; a lo más se comenta como adelanto.
+
 ## Las tres partes
 
 | Parte | Qué mide | Formato | Peso |

@@ -18,6 +18,8 @@ y está aprendiendo a programar. Todo en español.
 1. Sigue exactamente [evaluaciones/SISTEMA.md](evaluaciones/SISTEMA.md).
 2. Genera preguntas nuevas basadas en la lección `lecciones/NN-*.md`;
    no reutilices preguntas de evaluaciones anteriores.
+   Evalúa solo lo que la lección enseña: si un caso depende de un supuesto
+   (hay stock, se conoce el precio de venta), decláralo en el enunciado.
 3. Entrega las tres partes juntas y espera las respuestas. No des pistas ni respuestas antes.
 4. Corrige con la rúbrica, explica cada error y calcula la nota.
 5. Registra el resultado en `evaluaciones/progreso.md` (agrega fila si hay un reintento),
