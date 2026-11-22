@@ -60,6 +60,9 @@ fijo, como una macro.
 
 - **Claude en el chat:** solo tiene lo que le pegas y te devuelve texto. Tú haces el trabajo con esa respuesta.
 - **Una automatización clásica (Zapier, macros):** pasos fijos. Si la cotización llega en otro formato, falla.
+  *Zapier* es un servicio en internet que conecta aplicaciones con reglas del tipo "cuando pase X en una app,
+  haz Y en otra"; por ejemplo, "cuando llegue un correo con adjunto, guárdalo en Drive". Es como una macro de
+  Excel, pero entre aplicaciones: no razona ni se adapta.
 - **Un agente:** decide los pasos, se adapta al formato y usa tus herramientas y tus datos.
 
 ## La lección de tu primera app
