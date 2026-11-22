@@ -9,6 +9,12 @@ Solo lo que la lección enseña. Si un caso de la parte B depende de un supuesto
 no cubre (si hay stock, cuál es el margen), el enunciado lo declara. Lo que corresponde a una
 lección posterior no descuenta puntos; a lo más se comenta como adelanto.
 
+Cada caso práctico (parte B) trae un **bloque de contexto** antes de la pregunta:
+
+- **Situación:** qué pasó y qué datos ya están registrados (en Importa o en la conversación).
+- **Supuestos:** lo que se da por hecho (hay o no hay stock, margen objetivo, tiempos de importación).
+- **Qué se espera:** el formato de la respuesta, por ejemplo el ciclo con una herramienta por cada «actúa».
+
 ## Las tres partes
 
 | Parte | Qué mide | Formato | Peso |
