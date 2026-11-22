@@ -63,21 +63,7 @@ probablemente, fue meter todo en un mismo lugar sin límites, o separar sin defi
 
 Los contextos de GESI podrían ser:
 
-```
-┌──────────────┐   ┌──────────────┐
-│Abastecimiento│──▶│  Importación │
-│ RFQ, cotiz., │   │ embarques,   │
-│ OC, proveed. │   │ aduana,costos│
-└──────────────┘   └──────┬───────┘
-                          │ landed cost
-              ┌───────────┴──────────┐
-              ▼                      ▼
-      ┌──────────────┐      ┌──────────────┐
-      │ Ventas B2B   │      │Mercado Libre │
-      │ prospectos,  │      │ SKUs, public.│
-      │ clientes     │      │ ventas       │
-      └──────────────┘      └──────────────┘
-```
+![Los contextos de GESI y sus contratos](img/contextos-gesi.png)
 
 Las flechas son los **contratos**: qué dato pasa de un contexto a otro.
 Por ejemplo, Importación le entrega a Ventas el landed cost de cada producto.
@@ -111,14 +97,7 @@ Tiene tres piezas:
 Cada entidad tiene una **clave primaria**: un ID único que no cambia nunca.
 Las demás entidades se refieren a ella con ese ID, que en ellas se llama **clave foránea**.
 
-```
-Proveedor          Cotización
-─────────          ──────────
-id: 7 ◀─────────── proveedor_id: 7
-nombre: Lvzhou     fecha: 2026-11-03
-país: China        incoterm: FOB
-                   lugar: Ningbo
-```
+![Las relaciones se hacen por ID](img/ids-proveedor-cotizacion.png)
 
 La cotización no guarda el nombre "Lvzhou": guarda el **número 7**.
 Así no importa cómo se escriba el nombre: la relación no se rompe.
@@ -134,29 +113,7 @@ Así no importa cómo se escriba el nombre: la relación no se rompe.
 
 ### 2.3 Un primer modelo de Abastecimiento
 
-```
-Proveedor ──1:N── Contacto
-    │
-   1:N
-    ▼
-Solicitud de cotización (RFQ)
-    │
-   1:N
-    ▼
-Cotización
-    │
-   1:N
-    ▼
-LíneaCotización ──N:1── Producto
-    │
- (la línea elegida)
-    ▼
-OrdenCompra
-    │
-   1:N
-    ▼
-Embarque
-```
+![Modelo entidad-relación de Abastecimiento](img/modelo-abastecimiento.png)
 
 Ejemplos de atributos:
 
@@ -189,36 +146,11 @@ Cada entidad importante pasa por **etapas**. Una **máquina de estados** define:
 
 ### Ejemplo: Cotización
 
-```
-        RFQ enviada
-            │
-            ▼
-      ┌──────────┐ plazo vencido ┌──────────┐
-      │SOLICITADA├──────────────▶│SIN RESP. │
-      └────┬─────┘               └──────────┘
-           │ cotización recibida
-           ▼
-      ┌──────────┐ formato malo  ┌──────────┐
-      │ RECIBIDA ├──────────────▶│INCOMPLETA│
-      └────┬─────┘◀──────────────┤          │
-           │       reenvío ok    └──────────┘
-           │ filtro + puntaje
-           ▼
-      ┌──────────┐
-      │ EVALUADA │
-      └──┬────┬──┘
-         │    │
-         ▼    ▼
- SELECCIONADA DESCARTADA
-```
+![Máquina de estados de una cotización](img/estados-cotizacion.png)
 
 ### Ejemplo: Importación (resumido)
 
-```
-OC emitida → Anticipo pagado → En producción
-→ Inspeccionada → Embarcada → En tránsito
-→ En aduana → Internada → En bodega
-```
+![Máquina de estados de una importación](img/estados-importacion.png)
 
 ### Para qué sirven
 

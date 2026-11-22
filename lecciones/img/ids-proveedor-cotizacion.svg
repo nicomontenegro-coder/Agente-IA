@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="1100" height="420" fill="#ffffff"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="550.0" y="30.0">Las relaciones se hacen por ID, no por nombre</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="550.0" y="56.0">La cotización guarda el número del proveedor</tspan></text>
+<rect x="80" y="100" width="340" height="44" rx="8" fill="#0f766e" stroke="#0f766e" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="250.0" y="122.0">Proveedor</tspan></text>
+<rect x="80" y="144" width="340" height="40" fill="#fef3c7" stroke="#0f766e" stroke-width="1.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="96" y="164.0">id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="260" y="164.0">7</tspan></text>
+<rect x="80" y="184" width="340" height="40" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="96" y="204.0">nombre</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="260" y="204.0">Lvzhou</tspan></text>
+<rect x="80" y="224" width="340" height="40" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="96" y="244.0">país</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="260" y="244.0">China</tspan></text>
+<rect x="680" y="100" width="340" height="44" rx="8" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="850.0" y="122.0">Cotización</tspan></text>
+<rect x="680" y="144" width="340" height="40" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="696" y="164.0">id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="860" y="164.0">31</tspan></text>
+<rect x="680" y="184" width="340" height="40" fill="#fef3c7" stroke="#1d4ed8" stroke-width="1.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="696" y="204.0">proveedor_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="860" y="204.0">7</tspan></text>
+<rect x="680" y="224" width="340" height="40" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="696" y="244.0">incoterm</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="860" y="244.0">FOB</tspan></text>
+<rect x="680" y="264" width="340" height="40" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="696" y="284.0">lugar</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="860" y="284.0">Ningbo</tspan></text>
+<rect x="680" y="304" width="340" height="40" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="696" y="324.0">fecha</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="860" y="324.0">03-11-2026</tspan></text>
+<path d="M678,204 L422,164" fill="none" stroke="#b45309" stroke-width="1.7" marker-end="url(#punta)"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="550.0" y="158.0">apunta al proveedor 7</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="550" y="380.0">Aunque escribas "Lvzhou", "LVZHOU Co." o "proveedor tubería", la relación no se rompe: el 7 no cambia.</tspan></text>
+</svg>

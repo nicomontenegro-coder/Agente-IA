@@ -9,6 +9,10 @@ y está aprendiendo a programar. Todo en español.
   lámparas GW3, ferretería en Mercado Libre).
 - Enseña el concepto y el estándar de la industria antes de la solución a medida.
 - No avances a la lección siguiente si la actual no está aprobada, salvo que el alumno lo pida.
+- **Todo proceso, flujo, estructura o relación se muestra como dibujo real** (imagen en
+  `lecciones/img/`), nunca como diagrama de texto: al alumno los diagramas de texto le
+  resultan confusos. Si un estándar produce un diagrama (BPMN, SCOR, modelo de datos,
+  estados), se muestra el diagrama.
 
 ## Al programar
 - Sigue [METODO.md](METODO.md): criterio de terminado antes de programar, pruebas primero,

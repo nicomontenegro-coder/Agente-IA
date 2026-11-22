@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="330" viewBox="0 0 1300 330">
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="1300" height="330" fill="#ffffff"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="650.0" y="30.0">Máquina de estados: Importación</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="650.0" y="56.0">Una importación avanza siempre en este orden: no puede estar "en bodega" sin haber sido "internada"</tspan></text>
+<rect x="60" y="100" width="190" height="52" rx="26" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="155.0" y="126.0">OC emitida</tspan></text>
+<path d="M250,126 L303,126" fill="none" stroke="#1f2937" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="305" y="100" width="190" height="52" rx="26" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="400.0" y="126.0">Anticipo pagado</tspan></text>
+<path d="M495,126 L548,126" fill="none" stroke="#1f2937" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="550" y="100" width="190" height="52" rx="26" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="645.0" y="126.0">En producción</tspan></text>
+<path d="M740,126 L793,126" fill="none" stroke="#1f2937" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="795" y="100" width="190" height="52" rx="26" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="890.0" y="126.0">Inspeccionada</tspan></text>
+<path d="M985,126 L1038,126" fill="none" stroke="#1f2937" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="1040" y="100" width="190" height="52" rx="26" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="1135.0" y="126.0">Embarcada</tspan></text>
+<rect x="180" y="220" width="190" height="52" rx="26" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="275.0" y="246.0">En tránsito</tspan></text>
+<path d="M370,246 L423,246" fill="none" stroke="#1f2937" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="425" y="220" width="190" height="52" rx="26" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="520.0" y="246.0">En aduana</tspan></text>
+<path d="M615,246 L668,246" fill="none" stroke="#1f2937" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="670" y="220" width="190" height="52" rx="26" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="765.0" y="246.0">Internada</tspan></text>
+<path d="M860,246 L913,246" fill="none" stroke="#1f2937" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="915" y="220" width="190" height="52" rx="26" fill="#ecfdf5" stroke="#047857" stroke-width="2"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="1010.0" y="246.0">En bodega</tspan></text>
+<path d="M1135,152 L1135,185 L275,185 L275,218" fill="none" stroke="#1f2937" stroke-width="1.7" marker-end="url(#punta)"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="520" viewBox="0 0 1300 520">
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="1300" height="520" fill="#ffffff"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="650.0" y="30.0">Cómo mide SCOR: métricas por niveles</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="650.0" y="56.0">De arriba hacia abajo: de "cómo vamos" a "dónde está el problema"</tspan></text>
+<polygon points="250,90 350,90 420,210 180,210" fill="#1e3a8a"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="300" y="138.0">Nivel 1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="300" y="162.0">Cómo va la cadena</tspan></text>
+<path d="M440,150.0 L640,150.0" fill="none" stroke="#1e3a8a" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="645" y="108" width="620" height="84" rx="10" fill="#f8fafc" stroke="#1e3a8a" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="955.0" y="150.0">Pedido perfecto: 8 de 10 despachos → 80 %</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="955" y="204.0">Pocas métricas, para el dueño</tspan></text>
+<polygon points="180,222 420,222 490,342 110,342" fill="#2563eb"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="300" y="270.0">Nivel 2</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="300" y="294.0">Por qué va así</tspan></text>
+<path d="M510,282.0 L640,282.0" fill="none" stroke="#2563eb" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="645" y="240" width="620" height="84" rx="10" fill="#f8fafc" stroke="#2563eb" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="955.0" y="282.0">De los 2 que fallaron: 1 llegó tarde · 1 con factura mal emitida</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="955" y="336.0">Separa el problema por tipo</tspan></text>
+<polygon points="110,354 490,354 560,474 40,474" fill="#60a5fa"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="300" y="402.0">Nivel 3</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="300" y="426.0">Dónde actuar</tspan></text>
+<path d="M580,414.0 L640,414.0" fill="none" stroke="#60a5fa" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="645" y="372" width="620" height="84" rx="10" fill="#f8fafc" stroke="#60a5fa" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="955.0" y="414.0">El atraso fue en aduana: 6 días esperando el certificado de origen</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="955" y="468.0">Apunta al paso exacto</tspan></text>
+</svg>

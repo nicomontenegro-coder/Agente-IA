@@ -53,6 +53,12 @@ Casi todas las empresas comerciales funcionan con los mismos ciclos. Los ERP del
 (SAP, Odoo, Oracle) están construidos alrededor de ellos. Tienen nombre en inglés porque así
 se buscan en cualquier libro o curso.
 
+Así se ven los tres ciclos de GESI y los puntos donde uno alimenta al otro:
+
+![Los tres ciclos de GESI y dónde se tocan](img/ciclos-gesi.png)
+
+El detalle de cada ciclo, paso a paso:
+
 ### 2.1 Procure-to-Pay (P2P): de la necesidad al pago al proveedor
 
 1. Necesidad
@@ -148,6 +154,8 @@ En la lección 2 los convertiremos en relaciones explícitas.
 **SCOR** (Supply Chain Operations Reference) es mantenido por la asociación ASCM.
 Su versión actual (SCOR Digital Standard) organiza una cadena de suministro en siete procesos:
 
+![SCOR: los 7 procesos de una cadena de suministro](img/scor-procesos.png)
+
 | Proceso SCOR | Significa | En GESI |
 |---|---|---|
 | Orchestrate | Dirigir y coordinar la cadena | Tus decisiones de qué líneas de negocio impulsar |
@@ -177,6 +185,8 @@ Las métricas están ordenadas en **niveles**:
 
 - **Nivel 1 (estratégico):** pocas métricas que dicen *cómo va* la cadena.
 - **Niveles 2 y 3 (diagnóstico):** métricas más finas que explican *por qué* va así.
+
+![Cómo mide SCOR: métricas por niveles](img/scor-metricas.png)
 
 Y se agrupan por **atributos de desempeño**: confiabilidad, capacidad de respuesta, agilidad,
 costos y uso del capital (más sustentabilidad, en la versión actual).
@@ -229,6 +239,27 @@ Así se ve el proceso de evaluar una cotización dibujado en BPMN:
 
 Los **carriles** son lo más útil para el agente: dejan a la vista qué hace el agente solo y qué
 tienes que aprobar tú.
+
+### Un diagrama por proceso, por niveles
+
+Cada proceso importante tiene su propio diagrama, y se dibujan **por niveles**, de lo general a lo
+particular, como un mapa con zoom:
+
+- **Nivel 1:** el mapa general de GESI, con los grandes procesos como cajas.
+- **Nivel 2:** cada caja se abre en su propio BPMN, con carriles y decisiones.
+- **Nivel 3:** el detalle de un paso complejo, solo cuando hace falta.
+
+Las cajas que se abren llevan un **[+]**: en BPMN se llaman **subprocesos**.
+
+![Los procesos se dibujan por niveles](img/niveles-bpmn.png)
+
+**No todo proceso necesita diagrama.** Conviene dibujarlo si se repite seguido, si participan varios
+actores, si ahí se pierde tiempo o hay errores, o si el agente va a participar en él. Para GESI, con
+5 a 8 diagramas se cubre lo importante.
+
+**El BPMN y la máquina de estados se complementan:** el diagrama "Buscar proveedor" dice *qué se hace*;
+las etapas de homologación de Importa (Identificado → Contactado → Cotizado → Muestra → Homologado) dicen
+*en qué etapa queda* cada proveedor. Lo verás en la Lección 2.
 
 ---
 

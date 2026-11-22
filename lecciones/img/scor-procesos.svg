@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="620" viewBox="0 0 1300 620">
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="1300" height="620" fill="#ffffff"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="650.0" y="30.0">SCOR: los 7 procesos de una cadena de suministro</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="650.0" y="56.0">No es una secuencia: son áreas que funcionan al mismo tiempo</tspan></text>
+<rect x="60" y="80" width="1180" height="54" rx="8" fill="#1e3a8a" stroke="#1e3a8a" stroke-width="1.6"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="650" y="100.0">ORCHESTRATE (dirigir)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#dbeafe"><tspan x="650" y="120.0">Qué líneas de negocio impulsar · reglas y riesgos de toda la cadena</tspan></text>
+<rect x="60" y="146" width="1180" height="54" rx="8" fill="#3b82f6" stroke="#3b82f6" stroke-width="1.6"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="650" y="166.0">PLAN (planificar)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#eff6ff"><tspan x="650" y="186.0">Cuánta tubería traer para el invierno · cuándo pedir el próximo contenedor</tspan></text>
+<rect x="60" y="250" width="150" height="100" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="135.0" y="285.0">Proveedores</tspan><tspan x="135.0" y="300.0">Lvzhou, Ikon,</tspan><tspan x="135.0" y="315.0">Alibaba</tspan></text>
+<rect x="270" y="240" width="230" height="120" rx="12" fill="#ccfbf1" stroke="#0f766e" stroke-width="2.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#0f766e"><tspan x="385" y="266.0">SOURCE</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#0f766e"><tspan x="385" y="286.0">(abastecer)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="385" y="314.8">Buscar, cotizar,</tspan><tspan x="385" y="329.2">comprar, importar</tspan></text>
+<rect x="560" y="240" width="230" height="120" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#7c3aed"><tspan x="675" y="266.0">TRANSFORM</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#7c3aed"><tspan x="675" y="286.0">(transformar)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="675" y="314.8">Etiquetado con</tspan><tspan x="675" y="329.2">marca propia (OEM)</tspan></text>
+<rect x="850" y="240" width="230" height="120" rx="12" fill="#ffedd5" stroke="#c2410c" stroke-width="2.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#c2410c"><tspan x="965" y="266.0">FULFILL</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#c2410c"><tspan x="965" y="286.0">(entregar)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="965" y="314.8">Despachos a Punta</tspan><tspan x="965" y="329.2">Arenas, envíos ML</tspan></text>
+<rect x="1110" y="250" width="150" height="100" rx="10" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="1185.0" y="285.0">Clientes</tspan><tspan x="1185.0" y="300.0">salmoneras,</tspan><tspan x="1185.0" y="315.0">ferreterías, ML</tspan></text>
+<path d="M210,300 L268,300" fill="none" stroke="#374151" stroke-width="1.7" marker-end="url(#punta)"/>
+<path d="M500,300 L558,300" fill="none" stroke="#374151" stroke-width="1.7" marker-end="url(#punta)"/>
+<path d="M790,300 L848,300" fill="none" stroke="#374151" stroke-width="1.7" marker-end="url(#punta)"/>
+<path d="M1080,300 L1108,300" fill="none" stroke="#374151" stroke-width="1.7" marker-end="url(#punta)"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="650" y="375.0">Productos → (de izquierda a derecha)</tspan></text>
+<rect x="850" y="420" width="230" height="70" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="965.0" y="447.5">ORDER (pedidos)</tspan><tspan x="965.0" y="462.5">Recibir y gestionar pedidos</tspan></text>
+<path d="M1185,350 L1185,455 L1082,455" fill="none" stroke="#b45309" stroke-width="1.7" marker-end="url(#punta)"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="1155.0" y="402.5">pedido</tspan></text>
+<path d="M965,420 L965,362" fill="none" stroke="#b45309" stroke-width="1.7" marker-end="url(#punta)"/>
+<rect x="270" y="520" width="810" height="60" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="675.0" y="550.0">RETURN (devoluciones): devoluciones de Mercado Libre, reclamos de calidad al proveedor</tspan></text>
+<path d="M1210,350 L1210,550 L1082,550" fill="none" stroke="#b91c1c" stroke-width="1.7" marker-end="url(#punta)" stroke-dasharray="6 4"/>
+<path d="M270,550 L135,550 L135,352" fill="none" stroke="#b91c1c" stroke-width="1.7" marker-end="url(#punta)" stroke-dasharray="6 4"/>
+</svg>
