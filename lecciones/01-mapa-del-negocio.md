@@ -13,6 +13,22 @@ Al terminar sabrás:
 - Cómo armar el mapa con la técnica Event Storming.
 - Cómo medir tu punto de partida (línea base) y definir qué será un éxito.
 
+### Cómo está organizada esta lección
+
+Las 7 secciones **no son una cadena de eventos**: son temas que se apoyan uno en otro.
+
+| Sección | Pregunta que responde |
+|---|---|
+| 1. Proceso de negocio | ¿Qué es un proceso? |
+| 2. Los tres ciclos estándar | ¿Cuáles son los procesos de una empresa como GESI? |
+| 3. SCOR | ¿Se me olvida algún proceso, y cómo mido si funcionan bien? |
+| 4. BPMN | ¿Cómo dibujo un proceso para que cualquiera lo entienda? |
+| 5. Incoterms | ¿Qué incluye el precio que me da un proveedor? |
+| 6. Event Storming | ¿Cómo saco de mi cabeza cómo funciona mi negocio? |
+| 7. Línea base | ¿Cuánto me cuesta hoy, para saber después si el agente sirve? |
+
+Las listas numeradas de la sección 2 sí son secuencias: muestran el orden en que ocurren las cosas.
+
 ---
 
 ## 1. Qué es un proceso de negocio
@@ -142,13 +158,39 @@ Su versión actual (SCOR Digital Standard) organiza una cadena de suministro en 
 | Fulfill | Entregar al cliente | Despachos a Punta Arenas, envíos de Mercado Libre |
 | Return | Devoluciones | Devoluciones de Mercado Libre, reclamos de calidad |
 
+Estos 7 procesos **no van en orden**: son las grandes áreas de la cadena. Un mismo día puedes estar
+cotizando (Source), despachando (Fulfill) y atendiendo una devolución (Return).
+
 **Para qué te sirve:**
 
 1. **Lista de chequeo:** si un proceso SCOR no aparece en tu mapa, probablemente lo estás haciendo
    "en la cabeza". Por ejemplo, ¿dónde está tu proceso de devoluciones?
-2. **Métricas estándar:** SCOR define cómo medir. Dos que te sirven desde ya:
-   - **Pedido perfecto:** porcentaje de pedidos entregados completos, a tiempo, sin daños y con la documentación correcta.
-   - **Tiempo de ciclo:** días desde que pides la cotización hasta que la mercadería está en bodega.
+2. **Métricas estándar:** ver abajo.
+
+### Cómo define SCOR la forma de medir
+
+SCOR no te dice "mide lo que te parezca". Trae un **diccionario de métricas** donde cada una tiene un
+**nombre, una definición exacta y una fórmula**. Así, "pedido perfecto" significa lo mismo en GESI que
+en cualquier empresa del mundo, y te puedes comparar con otras.
+
+Las métricas están ordenadas en **niveles**:
+
+- **Nivel 1 (estratégico):** pocas métricas que dicen *cómo va* la cadena.
+- **Niveles 2 y 3 (diagnóstico):** métricas más finas que explican *por qué* va así.
+
+Y se agrupan por **atributos de desempeño**: confiabilidad, capacidad de respuesta, agilidad,
+costos y uso del capital (más sustentabilidad, en la versión actual).
+
+Tres métricas de nivel 1 que le sirven a GESI desde ya, con números de ejemplo (ficticios):
+
+| Métrica | Fórmula | Ejemplo GESI |
+|---|---|---|
+| **Pedido perfecto** (confiabilidad) | Pedidos perfectos ÷ pedidos totales × 100. Perfecto = completo, a tiempo, sin daños y con la documentación correcta | De 10 despachos a salmoneras, 8 fueron perfectos → **80 %**. El nivel 2 diría por qué fallaron los otros 2: ¿atraso o factura mal emitida? |
+| **Tiempo de ciclo del pedido** (respuesta) | Días desde que el cliente pide hasta que recibe | Si hay stock en Punta Arenas: 3 días. Si hay que importar: 90 días |
+| **Ciclo de caja** (capital) | Días desde que sale tu dinero hasta que vuelve | Pagas el anticipo el día 0, la mercadería llega el día 75, la vendes el día 100 y cobras a 30 días: **130 días** con el dinero inmovilizado |
+
+El ciclo de caja es clave en importaciones: explica por qué un MOQ de 2 contenedores puede ser peor
+negocio que un precio un poco más alto con MOQ de 1.
 
 No necesitas certificarte en SCOR. Úsalo como checklist y como diccionario de métricas.
 
@@ -156,80 +198,152 @@ No necesitas certificarte en SCOR. Úsalo como checklist y como diccionario de m
 
 ## 4. BPMN: la forma estándar de dibujar procesos
 
-**BPMN 2.0** (Business Process Model and Notation) es un estándar de la organización OMG.
-Cualquier consultor, programador o herramienta de procesos lo entiende. Solo necesitas cinco símbolos:
+**BPMN 2.0** (Business Process Model and Notation) es un **estándar internacional**. Lo publica el
+**OMG** (Object Management Group), un consorcio de empresas de tecnología, y también está adoptado
+como norma **ISO/IEC 19510**.
+
+**¿Quién define qué es un evento o una compuerta?** La especificación del estándar. Cada símbolo, su
+forma y su significado están definidos de antemano: nadie los inventa. Por eso un consultor en Chile y
+un programador en Alemania leen el mismo diagrama igual. El estándar tiene muchos símbolos más, pero con
+estos cinco se dibuja casi cualquier proceso de GESI:
 
 | Símbolo | Forma | Significa | Ejemplo GESI |
 |---|---|---|---|
-| Evento | Círculo | Algo que pasa | "Llegó cotización" |
+| Evento | Círculo (borde fino: inicio; grueso: fin) | Algo que pasa | "RFQ recibida" |
 | Actividad | Rectángulo redondeado | Algo que alguien hace | "Calcular landed cost" |
-| Compuerta | Rombo | Una decisión o bifurcación | "¿Pasa el filtro eliminatorio?" |
-| Flujo | Flecha | El orden | De una actividad a la siguiente |
-| Carril | Franja horizontal | Quién lo hace | Tú, el proveedor, el forwarder, el agente de IA |
+| Compuerta | Rombo con una X | Una decisión: se sigue por un solo camino | "¿Pasa el filtro?" |
+| Flujo | Flecha | El orden de los pasos | De una actividad a la siguiente |
+| Carril | Franja con el nombre a la izquierda | Quién lo hace | Proveedor, Agente GESI, Nico |
 
-Ejemplo en texto de la evaluación de una cotización:
+Así se ve el proceso de evaluar una cotización dibujado en BPMN:
 
-```
-(Cotización recibida)
-   → [Revisar formato]
-   → <¿Formato GESI?>
-        no → [Pedir reenvío] → fin
-        sí → [Aplicar filtro]
-   → <¿Pasa filtro?>
-        no → [Descartar] → fin
-        sí → [Puntaje + landed cost]
-   → [Agregar a comparación]
-   → (Cotización evaluada)
-```
+![BPMN: evaluar una cotización de proveedor](img/bpmn-cotizacion.png)
 
-Los **carriles** son especialmente útiles para el agente: dibujar un carril "Agente GESI"
-y otro "Nico" deja a la vista qué hará el agente y qué tendrás que aprobar tú.
+**Cómo leerlo:**
+
+1. Empieza en el **círculo verde** del carril del proveedor: le llegó tu RFQ y envía su cotización.
+2. La flecha baja al carril del **agente**, que lee la cotización.
+3. En cada **rombo** el camino se divide: si la respuesta es "No", baja a una actividad que termina
+   en un **círculo rojo** (fin). Si es "Sí", sigue a la derecha.
+4. Al final, la flecha baja al carril de **Nico**: la decisión de elegir al proveedor es tuya.
+
+Los **carriles** son lo más útil para el agente: dejan a la vista qué hace el agente solo y qué
+tienes que aprobar tú.
 
 ---
 
 ## 5. Incoterms 2020: las reglas del precio
 
 Los **Incoterms** son reglas de la Cámara de Comercio Internacional (ICC). La versión vigente es 2020
-y tiene 11 términos. Definen **quién paga qué costo, quién asume el riesgo y hasta dónde**.
-Ojo: no definen quién es dueño de la mercadería ni cómo se paga.
+y tiene **11 reglas**. Cada una responde tres preguntas:
 
-| Grupo | Términos | Idea |
-|---|---|---|
-| E | EXW | Retiras en la fábrica; tú pagas todo desde ahí |
-| F | FCA, FAS, FOB | El vendedor entrega en el país de origen; tú pagas el flete principal |
-| C | CFR, CIF, CPT, CIP | El vendedor paga el flete principal, pero el riesgo pasa a ti en origen |
-| D | DAP, DPU, DDP | El vendedor entrega en destino |
+1. **¿Quién paga cada tramo?** Transporte en origen, aduana de exportación, flete principal, seguro,
+   gastos en destino, aduana de importación y aranceles.
+2. **¿Dónde pasa el riesgo** al comprador? Desde ese punto, si la carga se daña o se pierde, el problema es tuyo.
+3. **¿Quién hace los trámites** de aduana en cada país?
 
-FAS, FOB, CFR y CIF son solo para transporte marítimo. Para contenedores, la ICC recomienda
-FCA, CPT o CIP, aunque en la práctica FOB y CIF siguen siendo muy usados con China.
+Ojo: **no definen** quién es dueño de la mercadería ni cómo se paga.
 
-Esta guía muestra las 11 reglas de un vistazo. La barra azul es lo que paga el vendedor,
-la naranja lo que paga el comprador, y la bandera 🚩 marca dónde el riesgo pasa al comprador:
+Esta guía muestra las 11 reglas de un vistazo. La barra azul es lo que paga el vendedor, la naranja lo
+que paga el comprador, y la bandera 🚩 marca dónde el riesgo pasa al comprador:
 
 ![Incoterms 2020: las 11 reglas por modo de transporte](img/incoterms-2020.jpg)
 
-Fíjate en dos cosas que la imagen deja claras:
+### Las 11 reglas, una por una
 
-- En **CPT, CIP, CFR y CIF** el vendedor paga el flete hasta destino, pero **el riesgo pasa a ti en origen**.
-  Si el contenedor se daña en alta mar, el problema es tuyo, aunque el flete lo haya pagado el proveedor.
-- **CIF** obliga al vendedor a un seguro de cobertura **mínima** (ICC C); **CIP** exige cobertura **amplia** (ICC A).
+**Para cualquier medio de transporte:**
 
-**Por qué importa para el agente:**
+| Regla | El vendedor entrega… | El riesgo pasa a ti… | Flete principal | Seguro |
+|---|---|---|---|---|
+| **EXW** En fábrica | En su fábrica, sin cargar | En su fábrica | Tú | Tú, si quieres |
+| **FCA** Franco transportista | Al transportista que tú eliges, con la exportación tramitada | Al entregar al transportista | Tú | Tú, si quieres |
+| **CPT** Transporte pagado hasta | Al primer transportista, pagando el flete a destino | **En origen**, al primer transportista | Vendedor | Tú, si quieres |
+| **CIP** Transporte y seguro pagados | Igual que CPT, más seguro | **En origen** | Vendedor | Vendedor, cobertura **amplia** (ICC A) |
+| **DAP** Entregado en lugar | En el lugar convenido en destino, sin descargar | En destino | Vendedor | Vendedor, si quiere |
+| **DPU** Entregado y descargado | En el lugar convenido, descargado | En destino, tras descargar | Vendedor | Vendedor, si quiere |
+| **DDP** Entregado, derechos pagados | En destino, con la importación y los impuestos pagados | En destino | Vendedor | Vendedor, si quiere |
 
-Un precio sin incoterm y sin lugar **no se puede comparar**. "US$ 18/m FOB Ningbo" y
-"US$ 21/m CIF San Antonio" no se comparan entre sí: hay que llevarlos al mismo punto,
-que es el landed cost en tu bodega.
+**Solo para transporte marítimo:**
 
-Por eso, en el modelo de datos de GESI, un precio siempre se guardará como **monto + moneda +
-incoterm + lugar**. Nunca solo el número. Este es uno de los errores más comunes de los sistemas
-caseros y el agente tiene que evitarlo desde el diseño.
+| Regla | El vendedor entrega… | El riesgo pasa a ti… | Flete principal | Seguro |
+|---|---|---|---|---|
+| **FAS** Franco al costado | Al costado del buque, en el puerto de origen | En el puerto de origen | Tú | Tú, si quieres |
+| **FOB** Franco a bordo | Cargado a bordo del buque, en origen | Cuando la carga está a bordo | Tú | Tú, si quieres |
+| **CFR** Costo y flete | A bordo, pagando el flete hasta el puerto de destino | **En origen**, a bordo | Vendedor | Tú, si quieres |
+| **CIF** Costo, seguro y flete | Igual que CFR, más seguro | **En origen**, a bordo | Vendedor | Vendedor, cobertura **mínima** (ICC C) |
+
+Fíjate en las reglas "C" (CPT, CIP, CFR, CIF): **el vendedor paga el flete, pero el riesgo es tuyo
+desde el origen**. Si el contenedor se daña en alta mar, reclamas tú al seguro, aunque el flete lo haya
+pagado el proveedor.
+
+En la práctica con China se usan mucho FOB y CIF. Para contenedores, la ICC recomienda FCA, CPT o CIP,
+porque el contenedor se entrega en el terminal antes de subir al buque.
+
+### Lo que tienes que sumar para llegar a tu bodega
+
+| Si te cotizan… | Te falta sumar |
+|---|---|
+| **EXW** | Carga en fábrica, transporte al puerto, aduana de exportación, flete, seguro, gastos en Chile, agente de aduana, arancel, transporte a bodega |
+| **FCA** | Lo mismo que EXW, menos la carga y la aduana de exportación |
+| **FOB** | Flete, seguro, gastos en Chile, agente de aduana, arancel, transporte a bodega |
+| **CFR / CPT** | Seguro, gastos en Chile, agente de aduana, arancel, transporte a bodega |
+| **CIF / CIP** | Gastos en Chile, agente de aduana, arancel, transporte a bodega |
+| **DAP** | Descarga, agente de aduana, arancel (y transporte, si el lugar no es tu bodega) |
+| **DDP** | Nada. Raro desde China: el vendedor necesitaría un importador en Chile |
+
+### Un ejemplo: tres precios, ¿cuál es más barato? (ficticio)
+
+Tres proveedores cotizan 1.000 m de tubería. Gastos en Chile, aduana y transporte a Punta Arenas:
+US$ 3.850 en todos los casos. Arancel 0 % por el tratado con China.
+
+| | A: EXW fábrica | B: FOB Ningbo | C: CIF San Antonio |
+|---|---|---|---|
+| Precio por metro | US$ 17,00 | US$ 18,50 | US$ 21,00 |
+| Precio total | 17.000 | 18.500 | 21.000 |
+| Transporte y aduana en China | 750 | — | — |
+| Flete marítimo | 3.500 | 3.500 | — |
+| Seguro | 120 | 120 | — |
+| Gastos en Chile hasta bodega | 3.850 | 3.850 | 3.850 |
+| **Landed cost total** | **25.220** | **25.970** | **24.850** |
+| **Por metro** | **25,22** | **25,97** | **24,85** |
+
+El precio más bajo (A, US$ 17) **no** es el más barato puesto en bodega. El más caro de lista (C) termina
+siendo el más barato. Ojo con C: su seguro es de cobertura mínima, y el flete lo elige el proveedor.
+
+### Por qué importa para el agente
+
+Un precio sin incoterm y sin lugar **no se puede comparar**, como muestra el ejemplo. Por eso, en el
+modelo de datos de GESI, un precio siempre se guardará como **monto + moneda + incoterm + lugar**.
+Nunca solo el número. Es uno de los errores más comunes de los sistemas caseros, y el agente tiene que
+evitarlo desde el diseño: si una cotización llega sin incoterm, la marca y lo pide, no lo supone.
 
 ---
 
 ## 6. Event Storming: cómo construir el mapa
 
 **Event Storming** es una técnica creada por Alberto Brandolini. Se usa en talleres con notas
-adhesivas, pero funciona igual en papel o en el celular.
+adhesivas de colores, pero funciona igual en papel o en el celular.
+
+### Para qué sirve
+
+Para **sacar de tu cabeza cómo funciona de verdad tu negocio** y ponerlo en una pared donde se vea
+completo. Concretamente, sirve para cuatro cosas:
+
+1. **Descubrir el proceso real, no el que crees que tienes.** Al ordenar los eventos aparecen pasos
+   que haces de memoria y nunca anotaste ("ah, también le pido el certificado de origen").
+2. **Encontrar dónde se pierde tiempo o se cometen errores.** Son los puntos calientes, en rojo.
+3. **Ponerle nombre a cada cosa.** Si escribes "Cotización recibida", ya tienes el término para el
+   glosario de la Lección 2.
+4. **Obtener el plano del agente.** Cada pieza del mapa se convierte en una pieza del sistema
+   (ver el recuadro azul del ejemplo de abajo).
+
+**¿Por qué eventos y no actividades?** Porque un evento es un hecho que se puede comprobar: "la
+cotización se recibió" es verdadero o falso. "Gestionar proveedores" en cambio es vago. Empezar por los
+hechos evita discutir cómo se llama cada tarea.
+
+Así se ve un tramo del mapa de la tubería de Lvzhou:
+
+![Event Storming: comprar tubería a Lvzhou](img/event-storming-lvzhou.png)
 
 ### Las piezas
 
