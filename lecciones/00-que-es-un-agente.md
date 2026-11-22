@@ -39,6 +39,23 @@ Le dices: *"Llegó la cotización de Lvzhou, compárala con las otras."*
 Nadie le dijo el orden de los pasos: **el modelo los decide**. Eso es lo que lo hace un agente
 y no un programa tradicional, donde cada paso está escrito de antemano.
 
+### Qué significa cada paso
+
+- **Piensa:** decide el siguiente paso según el objetivo y lo que ya sabe.
+- **Actúa:** usa una herramienta (leer un documento, calcular, buscar en la base).
+- **Observa:** lee el **resultado** de esa herramienta, incluidos los errores y los datos que faltan,
+  y lo suma a lo que sabe. Es lo que le permite decidir el paso siguiente.
+
+Si el agente no observara, trabajaría a ciegas: no sabría si la herramienta funcionó, no notaría que la
+cotización viene sin incoterm o que el MOQ cambió, y no podría corregir el rumbo. Seguiría un plan
+fijo, como una macro.
+
+### Herramientas y skills no son lo mismo
+
+- Una **herramienta** es algo que el agente **ejecuta**: `leer_documento`, `calcular_landed_cost`.
+- Una **skill** es conocimiento que el agente **carga**: por ejemplo, cómo aplica GESI su filtro eliminatorio.
+  No hace nada por sí sola; le dice al agente cómo usar las herramientas.
+
 ## Agente vs. lo que ya conoces
 
 - **Claude en el chat:** solo tiene lo que le pegas y te devuelve texto. Tú haces el trabajo con esa respuesta.
