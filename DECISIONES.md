@@ -32,3 +32,10 @@ Claude Agent SDK existe en TypeScript. Las lecciones de programación del curso 
 - **Esta sesión (Agente-IA):** el curso, la app nueva y el agente.
 - **La sesión de Importa:** solo mantenimiento de Importa mientras siga en uso.
 - Nunca trabajan dos sesiones en el mismo repositorio al mismo tiempo. Se coordinan por GitHub.
+
+## 2026-11-23 — Mientras se construye la app nueva
+
+- La sesión de Importa publicó un módulo de RFQ ("Pedir cotización", `/pedidos`) antes de que se
+  pudiera detener. Queda en uso: sirve para emitir RFQ ahora. Sus funciones probadas se
+  reutilizan en la app nueva.
+- Las RFQ se generan solo en inglés y español: nunca en idiomas que Nico no domina.
