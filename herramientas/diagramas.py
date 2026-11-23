@@ -591,10 +591,35 @@ def estados_compra():
     s.append(flecha([(760, 654), (900, 654), (900, 738)], 'dijo que no', 0, -12))
     return guardar('estados-compra', s, W, H)
 
+def tabla_intermedia():
+    W, H = 1300, 520
+    s = lienzo(W, H, 'Cómo se guarda una relación muchos a muchos (N:M)', 'Con una tabla intermedia: cada fila une un proveedor con una familia')
+    def tabla(x, y, titulo, cols, filas, c, f, ancho=300):
+        s.append(caja(x, y, ancho, 40, [titulo], c, c, 14, 'bold', rx=8, color='#ffffff'))
+        w = ancho / len(cols)
+        for k, col in enumerate(cols):
+            s.append(f'<rect x="{x + k * w}" y="{y + 40}" width="{w}" height="32" fill="#e5e7eb" stroke="{c}" stroke-width="1"/>')
+            s.append(texto(x + k * w + w / 2, y + 56, col, 12, 'bold'))
+        for r, fila in enumerate(filas):
+            for k, v in enumerate(fila):
+                s.append(f'<rect x="{x + k * w}" y="{y + 72 + r * 32}" width="{w}" height="32" fill="{f}" stroke="{c}" stroke-width="1"/>')
+                s.append(texto(x + k * w + w / 2, y + 88 + r * 32, v, 12))
+    tabla(40, 100, 'Proveedor', ['id', 'nombre'], [['7', 'Lvzhou'], ['9', 'Hebei Pipes'], ['12', 'Ikon']], '#0f766e', '#f0fdfa')
+    tabla(500, 100, 'ProveedorFamilia (intermedia)', ['proveedor_id', 'familia_id'], [['7', '1'], ['7', '2'], ['9', '1'], ['12', '3']], '#7c3aed', '#f5f3ff')
+    tabla(960, 100, 'Familia', ['id', 'nombre'], [['1', 'Tubería PPR'], ['2', 'Fittings'], ['3', 'Cerco 3D']], '#0f766e', '#f0fdfa')
+    s.append(flecha([(498, 190), (342, 190)], 'apunta a', 0, -12, '#7c3aed'))
+    s.append(flecha([(802, 190), (958, 190)], 'apunta a', 0, -12, '#7c3aed'))
+    s.append(caja(40, 390, 1220, 100, None, '#f8fafc', '#94a3b8', rx=12))
+    s.append(texto(650, 416, 'Cómo se lee: Lvzhou (7) hace Tubería PPR (1) y Fittings (2) · Hebei Pipes (9) también hace Tubería PPR (1) · Ikon (12) hace Cerco 3D (3)', 13))
+    s.append(texto(650, 444, 'Un proveedor aparece en varias filas y una familia también: eso es "muchos a muchos".', 13, 'bold'))
+    s.append(texto(650, 470, 'Ninguna de las dos tablas principales guarda la lista de la otra: la relación vive solo en la tabla intermedia.', 12.5, color=SUAVE))
+    return guardar('tabla-intermedia', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
-              hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra()]
+              hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
+              tabla_intermedia()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)

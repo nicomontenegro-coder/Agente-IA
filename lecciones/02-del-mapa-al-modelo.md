@@ -121,6 +121,17 @@ Ejemplos de atributos:
 - **Cotización:** id, rfq_id, proveedor_id, fecha, moneda, incoterm, lugar, validez, cumple_formato.
 - **LíneaCotización:** id, cotización_id, producto_id, precio_unitario, MOQ, lead_time_días.
 
+### 2.3b Cómo se guarda una relación muchos a muchos
+
+Una relación N:M no cabe en ninguna de las dos tablas: si Proveedor guardara "sus familias", tendría
+que guardar una lista, y Familia también. La solución estándar es una **tabla intermedia**: cada fila
+une un proveedor con una familia, usando sus dos IDs.
+
+![Cómo se guarda una relación muchos a muchos](img/tabla-intermedia.png)
+
+A veces la tabla intermedia tiene datos propios. La línea de cotización es una tabla intermedia entre
+Cotización y Producto, y además guarda el precio, el MOQ y el lead time de ese producto en esa cotización.
+
 ### 2.4 Normalización: cada dato en un solo lugar
 
 La regla práctica de la **normalización** es: **cada dato vive en un solo lugar**.
