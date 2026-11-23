@@ -13,6 +13,9 @@ y está aprendiendo a programar. Todo en español.
   `lecciones/img/`), nunca como diagrama de texto: al alumno los diagramas de texto le
   resultan confusos. Si un estándar produce un diagrama (BPMN, SCOR, modelo de datos,
   estados), se muestra el diagrama.
+- **Cada diagrama va acompañado de una explicación en texto.** El dibujo ayuda a ver, pero el
+  concepto se explica con palabras y un ejemplo. Las evaluaciones solo preguntan lo que está
+  explicado en el texto, no lo que hay que deducir de una imagen.
 
 ## Antes de trabajar
 - Lee [DECISIONES.md](DECISIONES.md): ahí está qué se construye, en qué lenguaje y por qué.

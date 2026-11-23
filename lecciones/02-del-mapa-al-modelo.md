@@ -143,6 +143,17 @@ Hay excepciones razonables. El precio de una cotización **sí** se copia a la O
 es un compromiso que no debe cambiar aunque después llegue otra cotización.
 La regla es: **se copia lo que debe quedar congelado en el tiempo**.
 
+Un ejemplo de por qué. El 3 de noviembre Lvzhou cotiza a US$ 18,50/m y emites la OC. El 20 de noviembre
+Lvzhou corrige la cotización a US$ 19,20/m.
+
+| | Si la OC solo guarda el ID de la cotización | Si la OC copia el precio |
+|---|---|---|
+| Qué dice la OC el 21 de noviembre | US$ 19,20/m: cambió sola, sin que nadie firmara nada | US$ 18,50/m: lo que se acordó |
+| Qué pasa al pagar | Pagas un precio que no aceptaste | Pagas lo acordado |
+
+Por eso la OC guarda **las dos cosas**: el ID de la línea de cotización, para saber de dónde salió, y una
+**copia del precio**, para que no cambie.
+
 ---
 
 ## 3. Máquinas de estado
