@@ -15,6 +15,9 @@ Cada caso práctico (parte B) trae un **bloque de contexto** antes de la pregunt
 - **Supuestos:** lo que se da por hecho (hay o no hay stock, margen objetivo, tiempos de importación).
 - **Qué se espera:** el formato de la respuesta, por ejemplo el ciclo con una herramienta por cada «actúa».
 
+Solo se descuenta lo que el enunciado pidió con esas palabras: si dice «marca», no se exige detallar.
+Los matices que no cambian el resultado se comentan, pero no restan puntos.
+
 ## Las tres partes
 
 | Parte | Qué mide | Formato | Peso |
