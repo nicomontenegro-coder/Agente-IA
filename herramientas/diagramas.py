@@ -394,9 +394,46 @@ def estados_importacion():
     s.append(flecha([(1135, 152), (1135, 185), (275, 185), (275, 218)]))
     return guardar('estados-importacion', s, W, H)
 
+def hacia_donde_vamos():
+    W, H = 1300, 720
+    s = lienzo(W, H, 'Hacia dónde vamos', 'Una sola app con los datos, un agente encima y dos sesiones de trabajo con tareas separadas')
+    # canales
+    s.append(texto(60, 95, 'CÓMO LE HABLAS', 13, 'bold', ancla='start', color='#b45309'))
+    for i, c in enumerate(['Celular / app de Claude', 'WhatsApp', 'Outlook @gesi.cl', 'Alibaba (vía Chrome)']):
+        s.append(caja(60 + i * 250, 110, 220, 50, [c], '#fef3c7', '#b45309', 12.5))
+        s.append(flecha([(170 + i * 250, 162), (170 + i * 250, 208)], color='#b45309'))
+    # agente
+    s.append(caja(60, 210, 970, 130, None, '#eff6ff', '#2563eb', grosor=2.4, rx=16))
+    s.append(texto(545, 238, 'Agente GESI  (se construye en el curso)', 16, 'bold', color='#1d4ed8'))
+    s.append(texto(545, 272, 'Lee, propone y registra. Te pide aprobación antes de enviar o comprometer dinero.', 12.5))
+    s.append(texto(545, 302, 'Usa herramientas que llaman a las mismas funciones de Importa: no tiene datos propios.', 12.5, color=SUAVE))
+    s.append(flecha([(545, 342), (545, 398)], 'herramientas', 52, 0, '#2563eb'))
+    # importa
+    s.append(caja(60, 400, 970, 170, None, '#f5f3ff', '#7c3aed', grosor=2.4, rx=16))
+    s.append(texto(545, 428, 'Importa  (la app que ya tienes, ordenada y completada)', 16, 'bold', color='#6d28d9'))
+    mods = [('Comprar', 'RFQ · cotizaciones\nhomologación · OC'), ('Importar', 'operaciones · hitos\ngastos · BL · DIN'), ('Vender', 'embudo · ofertas\nfactura · cobro')]
+    for i, (n, d) in enumerate(mods):
+        x = 90 + i * 310
+        s.append(caja(x, 450, 290, 90, None, '#ffffff', '#7c3aed', rx=10))
+        s.append(texto(x + 145, 470, n, 14, 'bold', color='#6d28d9'))
+        s.append(texto(x + 145, 507, d.split('\n'), 12))
+    s.append(texto(545, 555, 'Una sola base de datos: la fuente de verdad de GESI', 12, 'bold', color='#6d28d9'))
+    # sesiones
+    s.append(texto(1060, 95, 'QUIÉN TRABAJA EN QUÉ', 13, 'bold', ancla='start', color=TINTA))
+    s.append(caja(1060, 210, 210, 130, ['Sesión del curso', '(esta)', 'lecciones · diseño', 'y construcción', 'del agente'], '#eff6ff', '#2563eb', 12))
+    s.append(caja(1060, 400, 210, 170, ['Sesión de Importa', '(la otra)', 'módulos de la app:', 'RFQ, factura, cobro', 'y su base de datos'], '#f5f3ff', '#7c3aed', 12))
+    s.append(flecha([(1058, 275), (1032, 275)], color='#2563eb'))
+    s.append(flecha([(1058, 485), (1032, 485)], color='#7c3aed'))
+    s.append(caja(60, 600, 1210, 90, None, '#f8fafc', '#94a3b8', rx=12))
+    s.append(texto(665, 625, 'Las dos sesiones se coordinan por GitHub, no por memoria:', 13, 'bold'))
+    s.append(texto(665, 652, 'cada una sube sus cambios a su repositorio, y la otra trae lo último antes de empezar.', 12.5))
+    s.append(texto(665, 676, 'Lo que hay que recordar queda escrito en REGLAS.md y CLAUDE.md, no en la conversación.', 12.5, color=SUAVE))
+    return guardar('hacia-donde-vamos', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
-              contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion()]
+              contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
+              hacia_donde_vamos()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
