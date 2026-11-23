@@ -1,10 +1,17 @@
 # Diseño del módulo Comprar (P2P)
 
-Estado: **borrador v2, esperando aprobación de Nico.** Es el núcleo del módulo: no se programa hasta aprobarlo.
+Estado:
+- **Proceso: confirmado por Nico (23-11-2026).** Son los 13 pasos del P2P de la Lección 1, más búsqueda con
+  certificados, muestras, negociación, documentos de embarque, inspección de carga como condición del segundo
+  pago, recepción y cierre.
+- **Modelo de datos: borrador.** Nico lo revisa después de la Lección 2. Falta agregar Muestra,
+  Documento de embarque, Recepción y Factura del proveedor.
 
 ## El proceso
 
-![BPMN del P2P](../lecciones/img/bpmn-p2p.png)
+![BPMN del P2P, parte 1](../lecciones/img/bpmn-p2p-1.png)
+
+![BPMN del P2P, parte 2](../lecciones/img/bpmn-p2p-2.png)
 
 ## Los datos
 

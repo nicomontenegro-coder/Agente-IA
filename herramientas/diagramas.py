@@ -432,48 +432,81 @@ def hacia_donde_vamos():
 
 # ───────────────────────── Diseño P2P (app nueva) ─────────────────────────
 
-def bpmn_p2p():
-    W, H = 2620, 790
-    s = lienzo(W, H, 'BPMN — Comprar (P2P), nivel 2', 'De la necesidad a la mercadería lista para embarcar · quién hace cada paso')
-    car = [('Nico', 80, 230, '#f3f7fb'), ('Agente GESI', 230, 360, '#ffffff'), ('Proveedor', 360, 490, '#f3f7fb'),
-           (['Terceros'][0], 490, 640, '#ffffff')]
-    s += pool(20, 2600, car, 'Comprar (P2P)')
-    s.append(texto(85, 600, '(banco, certificadora,', 9.5, ancla='start', color=SUAVE))
-    s.append(texto(85, 614, 'agencia de inspección)', 9.5, ancla='start', color=SUAVE))
+def enlace(cx, cy, etiqueta, lanza=True, abajo=True):
+    """Evento de enlace de BPMN: conecta dos partes de un diagrama (como "continúa en la hoja 2")."""
+    relleno = TINTA if lanza else '#ffffff'
+    s = (f'<circle cx="{cx}" cy="{cy}" r="17" fill="#ffffff" stroke="{TINTA}" stroke-width="1.6"/>'
+         f'<circle cx="{cx}" cy="{cy}" r="13" fill="#ffffff" stroke="{TINTA}" stroke-width="1.2"/>'
+         f'<path d="M{cx - 7},{cy - 3} L{cx + 1},{cy - 3} L{cx + 1},{cy - 7} L{cx + 8},{cy} L{cx + 1},{cy + 7} L{cx + 1},{cy + 3} L{cx - 7},{cy + 3} z" fill="{relleno}" stroke="{TINTA}" stroke-width="1"/>')
+    return s + (texto(cx, cy + 34, etiqueta, 11, 'bold') if abajo else texto(cx + 26, cy, etiqueta, 11, 'bold', ancla='start'))
+
+CARRILES_P2P = [('Nico', 80, 230, '#f3f7fb'), ('Agente GESI', 230, 360, '#ffffff'), ('Proveedor', 360, 490, '#f3f7fb'),
+                ('Terceros', 490, 640, '#ffffff')]
+
+def bpmn_p2p_1():
+    W, H = 1840, 770
+    s = lienzo(W, H, 'BPMN — Comprar (P2P), parte 1 de 2: de la necesidad a la orden de compra', 'Confirmado por Nico el 23-11-2026 · cada carril dice quién hace el paso')
+    s += pool(20, 1820, CARRILES_P2P, 'Comprar (P2P)')
+    s.append(texto(85, 610, ['(banco, certificadora,', 'agencia de inspección)'], 9.5, ancla='start', color=SUAVE))
     n, a, p, t = 155, 295, 425, 565
     s += [inicio(110, n, ['Necesidad', 'detectada']),
-          flecha([(126, n), (138, n)]), tarea(140, n, ['Crear RFQ', '(varios productos)']),
-          flecha([(264, n), (277, n), (277, a), (288, a)]), tarea(290, a, ['Preparar textos', 'EN / ES']),
-          flecha([(414, a), (427, a), (427, n), (438, n)]), tarea(440, n, ['Aprobar y enviar', 'a cada proveedor']),
-          flecha([(564, n), (577, n), (577, p), (588, p)]), tarea(590, p, ['Cotizar, con', 'certificados']),
-          flecha([(714, p), (727, p), (727, a), (738, a)]), tarea(740, a, ['Registrar', 'cotización']),
-          flecha([(864, a), (888, a)]), tarea(890, a, ['Evaluar', 'cotización'], w=140, h=60, sub=True, resalte=True),
-          flecha([(1030, a), (1080, a), (1080, n + 28)]), compuerta(1080, n, '¿Elegir proveedor?'),
-          flecha([(1054, n), (1020, n)], 'No', 0, -12), fin(1002, n, ['Nueva', 'RFQ']),
-          flecha([(1106, n), (1212, n)], 'Sí', 0, -12), compuerta(1240, n, '¿Certificación local?'),
-          flecha([(1240, n + 26), (1240, t - 28)], 'Sí', 16, 0), tarea(1178, t, ['Certificar con', 'muestra'], sub=True),
-          flecha([(1302, t), (1370, t), (1370, n + 26)]),
-          flecha([(1266, n), (1342, n)], 'No', 0, -12), compuerta(1370, n, ''),
-          flecha([(1396, n), (1418, n)]), tarea(1420, n, ['Emitir OC']),
-          flecha([(1544, n), (1557, n), (1557, p), (1568, p)]), tarea(1570, p, ['Enviar', 'proforma (PI)']),
-          flecha([(1694, p), (1712, p), (1712, n), (1736, n)]), compuerta(1762, n, '¿Primer embarque?'),
-          flecha([(1762, n + 26), (1762, t - 28)], 'Sí: carta de crédito', 76, -60), tarea(1700, t, ['Abrir carta', 'de crédito']),
-          flecha([(1788, n), (1838, n)], 'No: T/T', 0, -12), tarea(1840, n, ['Pagar', 'anticipo']),
-          flecha([(1964, n), (2062, n), (2062, p - 28)]),
-          flecha([(1824, t), (2062, t), (2062, p + 28)]),
-          tarea(2000, p, ['Producir']),
-          flecha([(2124, p), (2212, p), (2212, t - 28)]), tarea(2150, t, ['Inspección', 'de calidad']),
-          flecha([(2274, t), (2330, t), (2330, n + 26)]), compuerta(2330, n, '¿Inspección OK?'),
-          flecha([(2304, n), (2262, n)], 'No', 0, -12), fin(2244, n, 'Reclamo'),
-          flecha([(2356, n), (2398, n)], 'Sí', 0, -12), tarea(2400, n, ['Lista para', 'embarcar'], w=110),
-          flecha([(2510, n), (2538, n)]), fin(2556, n)]
+          flecha([(126, n), (152, n), (152, a), (168, a)]), tarea(170, a, ['Buscar', 'proveedores'], sub=True),
+          flecha([(294, a), (308, a)]), tarea(310, a, ['Preparar RFQ', 'EN / ES']),
+          flecha([(434, a), (447, a), (447, n), (468, n)]), tarea(470, n, ['Aprobar y', 'enviar RFQ']),
+          flecha([(594, n), (607, n), (607, p), (628, p)]), tarea(630, p, ['Cotizar, con', 'certificados']),
+          flecha([(754, p), (767, p), (767, a), (788, a)]), tarea(790, a, ['Evaluar', 'cotizaciones'], w=140, h=60, sub=True, resalte=True),
+          flecha([(930, a), (950, a), (950, n), (972, n)]), compuerta(1000, n, '¿Pedir muestra?'),
+          flecha([(1000, n + 26), (1000, p - 28)], 'Sí', 16, 60), tarea(938, p, ['Enviar', 'muestra']),
+          flecha([(1062, p), (1162, p), (1162, t - 28)]), tarea(1100, t, ['Ensayar y', 'certificar'], sub=True),
+          flecha([(1224, t), (1260, t), (1260, n + 26)]),
+          flecha([(1026, n), (1234, n)], 'No', 0, -12), compuerta(1260, n, ''),
+          flecha([(1286, n), (1308, n)]), tarea(1310, n, ['Negociar']),
+          flecha([(1434, n), (1474, n)]), compuerta(1500, n, '¿Hay acuerdo?'),
+          flecha([(1500, n + 26), (1500, a - 18)], 'No', 16, 0), fin(1500, a, 'Nueva RFQ', abajo=False),
+          flecha([(1526, n), (1568, n)], 'Sí', 0, -12), tarea(1570, n, ['Emitir OC']),
+          flecha([(1694, n), (1740, n)]), enlace(1760, n, ['Sigue en', 'la parte 2'])]
     s.append(texto(40, 675, 'Notas', 14, 'bold', ancla='start'))
-    notas = ['La RFQ va a varios proveedores de la familia de productos. Si uno no responde en el plazo, su invitación queda "Sin respuesta": lo vigila el agente.',
-             'Filtros eliminatorios al evaluar: sin certificados pertinentes, o no acepta carta de crédito en los primeros embarques. Más tipos de certificado (calidad, cumplimiento, gestión) suman puntaje.',
-             'Primer embarque: carta de crédito; el banco paga contra los documentos de embarque, ya en el proceso Importación. Embarques siguientes: anticipo y saldo por T/T.']
+    notas = ['Buscar proveedores [+]: por familia de productos. Filtros: sin certificados pertinentes, o no acepta carta de crédito → eliminado.',
+             'Evaluar cotizaciones [+]: formato, filtros, landed cost y puntaje (más tipos de certificado: calidad, cumplimiento, gestión → más puntaje).',
+             'Ensayar y certificar [+]: solo si el producto exige certificación local en Chile (por ejemplo, Bureau Veritas).']
     for k, tx in enumerate(notas):
-        s.append(texto(40, 705 + k * 26, '• ' + tx, 13, ancla='start'))
-    return guardar('bpmn-p2p', s, W, H)
+        s.append(texto(40, 705 + k * 24, '• ' + tx, 12.5, ancla='start'))
+    return guardar('bpmn-p2p-1', s, W, H)
+
+def bpmn_p2p_2():
+    W, H = 2100, 770
+    s = lienzo(W, H, 'BPMN — Comprar (P2P), parte 2 de 2: de la orden de compra al cierre', 'El segundo pago se libera contra la inspección de la carga y los documentos de embarque')
+    s += pool(20, 2080, CARRILES_P2P, 'Comprar (P2P)')
+    s.append(texto(85, 610, ['(banco, certificadora,', 'agencia de inspección)'], 9.5, ancla='start', color=SUAVE))
+    n, a, p, t = 155, 295, 425, 565
+    s += [enlace(110, n, ['Viene de', 'la parte 1'], lanza=False),
+          flecha([(127, n), (152, n), (152, p), (166, p)]), tarea(168, p, ['Enviar', 'proforma (PI)']),
+          flecha([(292, p), (306, p), (306, n), (334, n)]), compuerta(360, n, '¿Primer embarque?'),
+          flecha([(360, n + 26), (360, t - 28)], 'Sí', 16, 150), tarea(298, t, ['Abrir carta', 'de crédito']),
+          flecha([(386, n), (418, n)], 'No', 0, -12), tarea(420, n, ['Pagar', 'anticipo (T/T)']),
+          flecha([(544, n), (662, n), (662, p - 28)]),
+          flecha([(422, t), (662, t), (662, p + 28)]),
+          tarea(600, p, ['Producir']),
+          flecha([(724, p), (812, p), (812, t - 28)]), tarea(750, t, ['Inspeccionar', 'la carga']),
+          flecha([(874, t), (920, t), (920, n + 26)]), compuerta(920, n, '¿Inspección OK?'),
+          flecha([(894, n), (852, n)], 'No', 0, -12), fin(834, n, ['Reclamo y', 'corrección']),
+          flecha([(946, n), (1042, n), (1042, p - 28)], 'Sí', -30, -12), tarea(980, p, ['Embarcar y', 'enviar documentos'], w=124),
+          flecha([(1104, p), (1140, p), (1140, n), (1154, n)]), compuerta(1180, n, '¿Cómo se paga?'),
+          flecha([(1180, n + 26), (1180, t - 28)], 'Carta de crédito', 64, 150), tarea(1118, t, ['Banco paga contra', 'documentos']),
+          flecha([(1206, n), (1238, n)], 'T/T', 0, -12), tarea(1240, n, ['Pagar saldo']),
+          flecha([(1364, n), (1500, n), (1500, a - 30)]),
+          flecha([(1242, t), (1500, t), (1500, a + 30)]),
+          tarea(1430, a, ['Importación'], w=140, h=60, sub=True),
+          flecha([(1570, a), (1600, a), (1600, n), (1618, n)]), tarea(1620, n, ['Recibir en', 'bodega']),
+          flecha([(1744, n), (1757, n), (1757, a), (1778, a)]), tarea(1780, a, ['Calce de 3 vías', 'y cierre'], w=140),
+          flecha([(1920, a), (1964, a)]), fin(1982, a, ['Compra', 'cerrada'])]
+    s.append(texto(40, 675, 'Notas', 14, 'bold', ancla='start'))
+    notas = ['Documentos de embarque: BL, factura comercial, packing list, certificado de origen (arancel 0 % con tratado) y certificado de inspección.',
+             'Importación [+] es su propio proceso: tránsito, aduana, retiro y transporte a bodega.',
+             'Calce de 3 vías: se comparan la OC, lo recibido y la factura antes de cerrar la compra.']
+    for k, tx in enumerate(notas):
+        s.append(texto(40, 705 + k * 24, '• ' + tx, 12.5, ancla='start'))
+    return guardar('bpmn-p2p-2', s, W, H)
 
 def modelo_p2p():
     W, H = 1800, 760
@@ -522,44 +555,46 @@ def modelo_p2p():
     return guardar('modelo-p2p', s, W, H)
 
 def estados_compra():
-    W, H = 1100, 730
+    W, H = 1180, 820
     s = lienzo(W, H, 'Etapas de una Compra y de una Invitación', 'Las etapas avanzan en orden; las marcadas con ⚙ se despejan solas de lo que registras')
-    etapas = [('Necesidad', 0), ('Cotizando ⚙', 1), ('Evaluando ⚙', 1), ('Proveedor elegido', 0), ('Certificación local', 2),
-              ('OC emitida ⚙', 1), ('Pago asegurado ⚙', 1), ('En producción', 0), ('Inspeccionada', 0), ('Lista para embarcar', 3)]
+    etapas = [('Necesidad', 0), ('Buscando proveedores', 0), ('Cotizando ⚙', 1), ('Evaluando ⚙', 1), ('Muestras', 2),
+              ('Negociando', 0), ('OC emitida ⚙', 1), ('Primer pago ⚙', 1), ('En producción', 0), ('Carga inspeccionada', 0),
+              ('Embarcada ⚙', 1), ('Segundo pago ⚙', 1), ('En importación', 0), ('Recibida', 0), ('Cerrada ⚙', 3)]
     s.append(texto(40, 112, 'COMPRA', 14, 'bold', ancla='start', color='#b45309'))
     estilos = {0: ('#eff6ff', '#1d4ed8'), 1: ('#fff7ed', '#b45309'), 2: ('#f5f3ff', '#7c3aed'), 3: ('#ecfdf5', '#047857')}
     for k, (e, tipo) in enumerate(etapas):
         fila, col = divmod(k, 5)
-        x = 40 + col * 205 + (60 if fila else 0)
-        y = 130 + fila * 110
+        x = 40 + col * 222
+        y = 130 + fila * 100
         f, c = estilos[tipo]
-        s.append(caja(x, y, 175, 50, [e], f, c, 12, 'bold', rx=25, grosor=2, guion='6 4' if tipo == 2 else None))
-        if col < 4 and k < len(etapas) - 1:
-            s.append(flecha([(x + 175, y + 25), (x + 203, y + 25)]))
-    s.append(flecha([(947, 180), (947, 212), (147, 212), (147, 238)]))
-    s.append(caja(380, 330, 200, 46, ['Cancelada'], '#fef2f2', '#b91c1c', 13, 'bold', rx=23, grosor=2))
-    s.append(texto(600, 353, 'desde cualquier etapa, con motivo escrito', 12, ancla='start', color='#b91c1c'))
-    autos = ['⚙ Cotizando: al enviar la primera invitación   ·   ⚙ Evaluando: al registrar la primera cotización',
-             '⚙ OC emitida: al registrar la OC   ·   ⚙ Pago asegurado: al registrar la carta de crédito abierta o el anticipo',
-             'Borde punteado: "Certificación local" solo aparece si algún producto la exige']
+        s.append(caja(x, y, 190, 50, [e], f, c, 12, 'bold', rx=25, grosor=2, guion='6 4' if tipo == 2 else None))
+        if col < 4:
+            s.append(flecha([(x + 190, y + 25), (x + 220, y + 25)]))
+        elif k < len(etapas) - 1:
+            s.append(flecha([(x + 95, y + 50), (x + 95, y + 75), (135, y + 75), (135, y + 98)]))
+    s.append(caja(420, 430, 200, 46, ['Cancelada'], '#fef2f2', '#b91c1c', 13, 'bold', rx=23, grosor=2))
+    s.append(texto(640, 453, 'desde cualquier etapa, con motivo escrito', 12, ancla='start', color='#b91c1c'))
+    autos = ['⚙ Cotizando: al enviar la primera invitación · Evaluando: al registrar la primera cotización · OC emitida: al registrar la OC',
+             '⚙ Primer pago: carta de crédito abierta o anticipo pagado · Embarcada: al registrar el BL · Segundo pago: saldo o pago del banco',
+             '⚙ Cerrada: cuando calzan la OC, lo recibido y la factura · Borde punteado: "Muestras" solo si se pidieron']
     for k, tx in enumerate(autos):
-        s.append(texto(40, 410 + k * 24, tx, 12, ancla='start', color='#7c3aed' if k == 2 else '#b45309'))
-    s.append(f'<path d="M40,500 L1060,500" stroke="#e5e7eb" stroke-width="1.5"/>')
-    s.append(texto(40, 530, 'INVITACIÓN (una por cada proveedor invitado)', 14, 'bold', ancla='start', color='#7c3aed'))
-    s.append(texto(40, 580, ['Cada proveedor tiene su propio estado:', 'así ves de un vistazo quién respondió', 'y quién no. Que una cotización quede', 'eliminada por los filtros se ve al', 'evaluarla, no aquí.'], 12.5, ancla='start'))
-    s.append(caja(560, 540, 160, 48, ['Enviada'], '#eff6ff', '#1d4ed8', 13, 'bold', rx=24, grosor=2))
-    s.append(caja(440, 650, 160, 46, ['Respondida ⚙'], '#ecfdf5', '#047857', 12, 'bold', rx=23, grosor=2))
-    s.append(caja(620, 650, 160, 46, ['Sin respuesta ⚙'], '#f3f4f6', '#6b7280', 12, 'bold', rx=23, grosor=2))
-    s.append(caja(800, 650, 120, 46, ['Declinó'], '#fef2f2', '#b91c1c', 12, 'bold', rx=23, grosor=2))
-    s.append(flecha([(600, 588), (530, 648)], 'cotizó', -40, 0))
-    s.append(flecha([(660, 588), (690, 648)], 'pasó el plazo', 62, 0))
-    s.append(flecha([(720, 564), (860, 564), (860, 648)], 'dijo que no', 0, -12))
+        s.append(texto(40, 510 + k * 24, tx, 12, ancla='start', color='#b45309'))
+    s.append(f'<path d="M40,590 L1140,590" stroke="#e5e7eb" stroke-width="1.5"/>')
+    s.append(texto(40, 620, 'INVITACIÓN (una por cada proveedor invitado)', 14, 'bold', ancla='start', color='#7c3aed'))
+    s.append(texto(40, 670, ['Cada proveedor tiene su propio estado:', 'así ves de un vistazo quién respondió', 'y quién no.'], 12.5, ancla='start'))
+    s.append(caja(600, 630, 160, 48, ['Enviada'], '#eff6ff', '#1d4ed8', 13, 'bold', rx=24, grosor=2))
+    s.append(caja(480, 740, 160, 46, ['Respondida ⚙'], '#ecfdf5', '#047857', 12, 'bold', rx=23, grosor=2))
+    s.append(caja(660, 740, 160, 46, ['Sin respuesta ⚙'], '#f3f4f6', '#6b7280', 12, 'bold', rx=23, grosor=2))
+    s.append(caja(840, 740, 120, 46, ['Declinó'], '#fef2f2', '#b91c1c', 12, 'bold', rx=23, grosor=2))
+    s.append(flecha([(640, 678), (570, 738)], 'cotizó', -40, 0))
+    s.append(flecha([(700, 678), (730, 738)], 'pasó el plazo', 62, 0))
+    s.append(flecha([(760, 654), (900, 654), (900, 738)], 'dijo que no', 0, -12))
     return guardar('estados-compra', s, W, H)
 
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
-              hacia_donde_vamos(), bpmn_p2p(), modelo_p2p(), estados_compra()]
+              hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
