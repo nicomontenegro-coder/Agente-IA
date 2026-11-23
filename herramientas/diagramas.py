@@ -455,7 +455,7 @@ def bpmn_p2p_1():
           flecha([(434, a), (447, a), (447, n), (468, n)]), tarea(470, n, ['Aprobar y', 'enviar RFQ']),
           flecha([(594, n), (607, n), (607, p), (628, p)]), tarea(630, p, ['Cotizar, con', 'certificados']),
           flecha([(754, p), (767, p), (767, a), (788, a)]), tarea(790, a, ['Evaluar', 'cotizaciones'], w=140, h=60, sub=True, resalte=True),
-          flecha([(930, a), (950, a), (950, n), (972, n)]), compuerta(1000, n, '¿Pedir muestra?'),
+          flecha([(930, a), (950, a), (950, n), (972, n)]), compuerta(1000, n, '¿Muestra o certificación local?'),
           flecha([(1000, n + 26), (1000, p - 28)], 'Sí', 16, 60), tarea(938, p, ['Enviar', 'muestra']),
           flecha([(1062, p), (1162, p), (1162, t - 28)]), tarea(1100, t, ['Ensayar y', 'certificar'], sub=True),
           flecha([(1224, t), (1260, t), (1260, n + 26)]),
