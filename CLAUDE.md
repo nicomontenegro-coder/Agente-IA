@@ -14,6 +14,9 @@ y está aprendiendo a programar. Todo en español.
   resultan confusos. Si un estándar produce un diagrama (BPMN, SCOR, modelo de datos,
   estados), se muestra el diagrama.
 
+## Antes de trabajar
+- Lee [DECISIONES.md](DECISIONES.md): ahí está qué se construye, en qué lenguaje y por qué.
+
 ## Al programar
 - Sigue [METODO.md](METODO.md): criterio de terminado antes de programar, pruebas primero,
   y nada se da por terminado sin evidencia.
