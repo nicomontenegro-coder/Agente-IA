@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="1400" height="720" fill="#ffffff"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="700.0" y="30.0">Modelo de datos del P2P</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="700.0" y="56.0">La pieza nueva es "Compra": representa el proceso y sabe en qué paso va</tspan></text>
+<rect x="40" y="90" width="260" height="40" rx="8" fill="#0f766e" stroke="#0f766e" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="170.0" y="110.0">Producto</tspan></text>
+<rect x="40" y="130" width="260" height="114" fill="#ffffff" stroke="#0f766e" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="54" y="148.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="54" y="174.0">nombre</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="54" y="200.0">especificación</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="54" y="226.0">código HS</tspan></text>
+<rect x="400" y="90" width="260" height="40" rx="8" fill="#b45309" stroke="#b45309" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="530.0" y="110.0">Compra  (el proceso)</tspan></text>
+<rect x="400" y="130" width="260" height="166" fill="#fff7ed" stroke="#b45309" stroke-width="2.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="148.0">PK id · código GESI-CP</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="174.0">FK producto_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="200.0">cantidad</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="226.0">incoterm + lugar pedido</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="252.0">plazo de respuesta</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="278.0">etapa</tspan></text>
+<rect x="760" y="90" width="260" height="40" rx="8" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="890.0" y="110.0">OrdenCompra</tspan></text>
+<rect x="760" y="130" width="260" height="114" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="148.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="174.0">FK compra_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="200.0">FK cotización_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="226.0">precio (congelado)</tspan></text>
+<rect x="1110" y="90" width="260" height="40" rx="8" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="1240.0" y="110.0">Pago</tspan></text>
+<rect x="1110" y="130" width="260" height="114" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1124" y="148.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1124" y="174.0">FK orden_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1124" y="200.0">tipo: anticipo / saldo</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1124" y="226.0">monto · fecha</tspan></text>
+<rect x="40" y="420" width="260" height="40" rx="8" fill="#0f766e" stroke="#0f766e" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="170.0" y="440.0">Proveedor</tspan></text>
+<rect x="40" y="460" width="260" height="88" fill="#ffffff" stroke="#0f766e" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="54" y="478.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="54" y="504.0">nombre · país</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="54" y="530.0">canal: WhatsApp / Alibaba / correo</tspan></text>
+<rect x="400" y="420" width="260" height="40" rx="8" fill="#7c3aed" stroke="#7c3aed" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="530.0" y="440.0">Invitación  (RFQ a un proveedor)</tspan></text>
+<rect x="400" y="460" width="260" height="140" fill="#ffffff" stroke="#7c3aed" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="478.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="504.0">FK compra_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="530.0">FK proveedor_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="556.0">enviada el</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="414" y="582.0">estado</tspan></text>
+<rect x="760" y="420" width="260" height="40" rx="8" fill="#0f766e" stroke="#0f766e" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="890.0" y="440.0">Cotización</tspan></text>
+<rect x="760" y="460" width="260" height="140" fill="#ffffff" stroke="#0f766e" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="478.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="504.0">FK invitación_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="530.0">precio + moneda</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="556.0">incoterm + lugar</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="774" y="582.0">MOQ · lead time · validez</tspan></text>
+<path d="M300,160 L398,160" stroke="#1f2937" stroke-width="1.7"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="312" y="148.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="386" y="148.0">N</tspan></text>
+<path d="M660,160 L758,160" stroke="#1f2937" stroke-width="1.7"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="672" y="148.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="740" y="148.0">0..1</tspan></text>
+<path d="M1020,160 L1108,160" stroke="#1f2937" stroke-width="1.7"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="1032" y="148.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="1096" y="148.0">N</tspan></text>
+<path d="M530,296 L530,418" stroke="#1f2937" stroke-width="1.7"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="544" y="308.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="544" y="406.0">N</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="594.0" y="357.0">se envía a varios</tspan></text>
+<path d="M300,490 L398,490" stroke="#1f2937" stroke-width="1.7"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="312" y="478.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="386" y="478.0">N</tspan></text>
+<path d="M660,490 L758,490" stroke="#1f2937" stroke-width="1.7"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="672" y="478.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="740" y="478.0">0..1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="709.0" y="506.0">responde con</tspan></text>
+<path d="M890,418 L890,248" stroke="#1f2937" stroke-width="1.7"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="904" y="406.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="912" y="260.0">0..1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="934.0" y="333.0">la elegida</tspan></text>
+<rect x="40" y="640" width="1320" height="56" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.6"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="700" y="658.0">Naranja: el proceso · Morado: la RFQ, nueva · Verde: ya existe en Importa (se reutiliza) · Azul: lo que se crea al comprar</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="700" y="680.0">PK = clave primaria (ID de la tabla) · FK = clave foránea (ID de otra tabla) · 0..1 = puede no existir todavía</tspan></text>
+</svg>

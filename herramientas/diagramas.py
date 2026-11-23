@@ -430,10 +430,113 @@ def hacia_donde_vamos():
     s.append(texto(665, 676, 'Lo que hay que recordar queda escrito en REGLAS.md y CLAUDE.md, no en la conversación.', 12.5, color=SUAVE))
     return guardar('hacia-donde-vamos', s, W, H)
 
+# ───────────────────────── Diseño P2P (app nueva) ─────────────────────────
+
+def bpmn_p2p():
+    W, H = 2080, 640
+    s = lienzo(W, H, 'BPMN — Comprar (P2P), nivel 2', 'De la necesidad a la mercadería lista para importar · quién hace cada paso')
+    car = [('Nico', 80, 230, '#f3f7fb'), ('Agente GESI', 230, 360, '#ffffff'), ('Proveedor', 360, 490, '#f3f7fb')]
+    s += pool(20, 2060, car, 'Comprar (P2P)')
+    n, a, p = 155, 295, 425
+    s += [inicio(110, n, ['Necesidad', 'detectada']),
+          flecha([(126, n), (138, n)]), tarea(140, n, ['Crear RFQ']),
+          flecha([(264, n), (277, n), (277, a), (288, a)]), tarea(290, a, ['Preparar textos', 'EN / ZH']),
+          flecha([(414, a), (427, a), (427, n), (438, n)]), tarea(440, n, ['Aprobar y', 'enviar RFQ']),
+          flecha([(564, n), (577, n), (577, p), (588, p)]), tarea(590, p, ['Cotizar']),
+          flecha([(714, p), (727, p), (727, a), (738, a)]), tarea(740, a, ['Registrar', 'cotización']),
+          flecha([(864, a), (888, a)]), tarea(890, a, ['Evaluar', 'cotización'], w=140, h=60, sub=True, resalte=True),
+          flecha([(1030, a), (1080, a), (1080, n + 28)]), compuerta(1080, n, '¿Elegir proveedor?'),
+          flecha([(1054, n), (1020, n)], 'No', 0, -12), fin(1002, n, ['Nueva', 'RFQ']),
+          flecha([(1106, n), (1148, n)], 'Sí', 0, -12), tarea(1150, n, ['Emitir OC']),
+          flecha([(1274, n), (1287, n), (1287, p), (1298, p)]), tarea(1300, p, ['Enviar', 'proforma (PI)']),
+          flecha([(1424, p), (1437, p), (1437, n), (1448, n)]), tarea(1450, n, ['Pagar', 'anticipo']),
+          flecha([(1574, n), (1587, n), (1587, p), (1598, p)]), tarea(1600, p, ['Producir']),
+          flecha([(1724, p), (1760, p), (1760, n + 28)]), compuerta(1760, n, '¿Inspección OK?'),
+          flecha([(1734, n), (1708, n)], 'No', 0, -12), fin(1690, n, 'Reclamo'),
+          flecha([(1786, n), (1826, n)], 'Sí', 0, -12), tarea(1828, n, ['Pagar saldo']),
+          flecha([(1952, n), (1982, n)]), fin(2000, n, ['Lista para', 'importar'])]
+    s.append(texto(40, 525, 'Notas', 14, 'bold', ancla='start'))
+    notas = ['La RFQ va a varios proveedores. Si uno no responde en el plazo, su invitación queda "Sin respuesta": lo vigila el agente.',
+             '"Evaluar cotización [+]" se abre en el diagrama de la Lección 1: formato, filtro eliminatorio, landed cost y puntaje.',
+             '"Lista para importar" es donde empieza el proceso Importación. Nico aprueba todo lo que compromete dinero o se envía a terceros.']
+    for i, t in enumerate(notas):
+        s.append(texto(40, 555 + i * 26, '• ' + t, 13, ancla='start'))
+    return guardar('bpmn-p2p', s, W, H)
+
+def modelo_p2p():
+    W, H = 1400, 720
+    s = lienzo(W, H, 'Modelo de datos del P2P', 'La pieza nueva es "Compra": representa el proceso y sabe en qué paso va')
+    def ent(x, y, nombre, attrs, c='#0f766e', destacar=False):
+        borde = '#b45309' if destacar else c
+        s.append(caja(x, y, 260, 40, [nombre], borde, borde, 14, 'bold', rx=8, color='#ffffff'))
+        h = 26 * len(attrs) + 10
+        s.append(f'<rect x="{x}" y="{y + 40}" width="260" height="{h}" fill="{"#fff7ed" if destacar else "#ffffff"}" stroke="{borde}" stroke-width="{2.2 if destacar else 1.4}"/>')
+        for i, a in enumerate(attrs):
+            peso = 'bold' if a.startswith(('PK', 'FK')) else 'normal'
+            s.append(texto(x + 14, y + 58 + i * 26, a, 12, peso, ancla='start'))
+    def rel(p1, p2, a, b, ea, eb, etiqueta=None, el=(0, 0)):
+        s.append(f'<path d="M{p1[0]},{p1[1]} L{p2[0]},{p2[1]}" stroke="{TINTA}" stroke-width="1.7"/>')
+        s.append(texto(p1[0] + ea[0], p1[1] + ea[1], a, 13, 'bold', color='#b45309'))
+        s.append(texto(p2[0] + eb[0], p2[1] + eb[1], b, 13, 'bold', color='#b45309'))
+        if etiqueta:
+            s.append(texto((p1[0] + p2[0]) / 2 + el[0], (p1[1] + p2[1]) / 2 + el[1], etiqueta, 11, color=SUAVE))
+    ent(40, 90, 'Producto', ['PK id', 'nombre', 'especificación', 'código HS'])
+    ent(400, 90, 'Compra  (el proceso)', ['PK id · código GESI-CP', 'FK producto_id', 'cantidad', 'incoterm + lugar pedido', 'plazo de respuesta', 'etapa'], destacar=True)
+    ent(760, 90, 'OrdenCompra', ['PK id', 'FK compra_id', 'FK cotización_id', 'precio (congelado)'], '#1d4ed8')
+    ent(1110, 90, 'Pago', ['PK id', 'FK orden_id', 'tipo: anticipo / saldo', 'monto · fecha'], '#1d4ed8')
+    ent(40, 420, 'Proveedor', ['PK id', 'nombre · país', 'canal: WhatsApp / Alibaba / correo'])
+    ent(400, 420, 'Invitación  (RFQ a un proveedor)', ['PK id', 'FK compra_id', 'FK proveedor_id', 'enviada el', 'estado'], '#7c3aed')
+    ent(760, 420, 'Cotización', ['PK id', 'FK invitación_id', 'precio + moneda', 'incoterm + lugar', 'MOQ · lead time · validez'])
+    rel((300, 160), (398, 160), '1', 'N', (12, -12), (-12, -12))
+    rel((660, 160), (758, 160), '1', '0..1', (12, -12), (-18, -12))
+    rel((1020, 160), (1108, 160), '1', 'N', (12, -12), (-12, -12))
+    rel((530, 296), (530, 418), '1', 'N', (14, 12), (14, -12), 'se envía a varios', (64, 0))
+    rel((300, 490), (398, 490), '1', 'N', (12, -12), (-12, -12))
+    rel((660, 490), (758, 490), '1', '0..1', (12, -12), (-18, -12), 'responde con', (0, 16))
+    rel((890, 418), (890, 248), '1', '0..1', (14, -12), (22, 12), 'la elegida', (44, 0))
+    s.append(caja(40, 640, 1320, 56, None, '#f8fafc', '#94a3b8', rx=10))
+    s.append(texto(700, 658, 'Naranja: el proceso · Morado: la RFQ, nueva · Verde: ya existe en Importa (se reutiliza) · Azul: lo que se crea al comprar', 12.5))
+    s.append(texto(700, 680, 'PK = clave primaria (ID de la tabla) · FK = clave foránea (ID de otra tabla) · 0..1 = puede no existir todavía', 12, color=SUAVE))
+    return guardar('modelo-p2p', s, W, H)
+
+def estados_compra():
+    W, H = 1100, 730
+    s = lienzo(W, H, 'Etapas de una Compra y de una Invitación', 'Las etapas avanzan en orden; las marcadas con ⚙ se despejan solas de lo que registras')
+    etapas = [('Necesidad', False), ('Cotizando ⚙', True), ('Evaluando ⚙', True), ('Proveedor elegido', False), ('OC emitida ⚙', True),
+              ('Anticipo pagado ⚙', True), ('En producción', False), ('Inspeccionada', False), ('Saldo pagado ⚙', True), ('Lista para importar', False)]
+    s.append(texto(40, 92, 'COMPRA', 14, 'bold', ancla='start', color='#b45309'))
+    for i, (e, auto) in enumerate(etapas):
+        fila, col = divmod(i, 5)
+        x = 40 + col * 190 + (60 if fila else 0)
+        y = 110 + fila * 110
+        final = i == len(etapas) - 1
+        s.append(caja(x, y, 160, 50, [e], '#ecfdf5' if final else ('#fff7ed' if auto else '#eff6ff'), '#047857' if final else ('#b45309' if auto else '#1d4ed8'), 12, 'bold', rx=25, grosor=2))
+        if col < 4 and i < len(etapas) - 1:
+            s.append(flecha([(x + 160, y + 25), (x + 188, y + 25)]))
+    s.append(flecha([(880, 160), (880, 192), (140, 192), (140, 218)]))
+    s.append(caja(420, 330, 200, 50, ['Cancelada'], '#fef2f2', '#b91c1c', 13, 'bold', rx=25, grosor=2))
+    s.append(texto(640, 355, 'desde cualquier etapa, con motivo escrito', 12, ancla='start', color='#b91c1c'))
+    autos = ['⚙ Cotizando: al enviar la primera invitación', '⚙ Evaluando: al registrar la primera cotización',
+             '⚙ OC emitida, Anticipo pagado, Saldo pagado: al registrar la OC y cada pago']
+    for i, t in enumerate(autos):
+        s.append(texto(40, 420 + i * 24, t, 12, ancla='start', color='#b45309'))
+    # invitación
+    s.append(f'<path d="M40,500 L1060,500" stroke="#e5e7eb" stroke-width="1.5"/>')
+    s.append(texto(40, 530, 'INVITACIÓN (una por cada proveedor invitado)', 14, 'bold', ancla='start', color='#7c3aed'))
+    s.append(texto(40, 575, ['Cada proveedor tiene su propio estado:', 'así ves de un vistazo quién respondió', 'y quién no. La Compra pasa sola a', '"Evaluando" con la primera Respondida.'], 12.5, ancla='start'))
+    s.append(caja(560, 540, 160, 48, ['Enviada'], '#eff6ff', '#1d4ed8', 13, 'bold', rx=24, grosor=2))
+    s.append(caja(440, 650, 160, 46, ['Respondida ⚙'], '#ecfdf5', '#047857', 12, 'bold', rx=23, grosor=2))
+    s.append(caja(620, 650, 160, 46, ['Sin respuesta ⚙'], '#f3f4f6', '#6b7280', 12, 'bold', rx=23, grosor=2))
+    s.append(caja(800, 650, 120, 46, ['Declinó'], '#fef2f2', '#b91c1c', 12, 'bold', rx=23, grosor=2))
+    s.append(flecha([(600, 588), (530, 648)], 'cotizó', -40, 0))
+    s.append(flecha([(660, 588), (690, 648)], 'pasó el plazo', 62, 0))
+    s.append(flecha([(720, 564), (860, 564), (860, 648)], 'dijo que no', 0, -12))
+    return guardar('estados-compra', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
-              hacia_donde_vamos()]
+              hacia_donde_vamos(), bpmn_p2p(), modelo_p2p(), estados_compra()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
