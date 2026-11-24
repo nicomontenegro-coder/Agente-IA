@@ -47,7 +47,7 @@ export default function FormCompra({ productos }: { productos: ProductoOpcion[] 
             <select name="incoterm" className="campo" defaultValue="FOB">
               {Object.entries(INCOTERM_LABEL).map(([k, v]) => (
                 <option key={k} value={k}>
-                  {k} — {v}
+                  {v}
                 </option>
               ))}
             </select>
@@ -68,13 +68,18 @@ export default function FormCompra({ productos }: { productos: ProductoOpcion[] 
       </section>
 
       <section className="panel p-5 space-y-3">
-        <h2 className="font-semibold text-sm">Productos</h2>
+        <div>
+          <h2 className="font-semibold text-sm">Productos</h2>
+          <p className="text-xs text-[var(--texto-tenue)] mt-0.5">
+            Si el producto no está en el catálogo, deja el primer campo como está y escribe la descripción al lado.
+          </p>
+        </div>
         {filas.map((f, i) => (
           <div key={f.clave} className="grid gap-2 sm:grid-cols-[1.2fr_1.4fr_1.4fr_0.7fr_0.6fr_auto] items-end border-b border-[var(--borde)] pb-3">
             <label className="text-sm space-y-1">
-              <span className="font-medium">Del catálogo</span>
+              <span className="font-medium">Del catálogo (opcional)</span>
               <select name="productoId" className="campo" value={f.productoId} onChange={(e) => elegir(f.clave, e.target.value)}>
-                <option value="">— escribir a mano —</option>
+                <option value="">— no está en el catálogo —</option>
                 {productos.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.nombre}

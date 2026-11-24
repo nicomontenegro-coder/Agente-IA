@@ -43,7 +43,7 @@ export default async function PaginaCotizacion({ params }: { params: Promise<{ i
             <select name="incoterm" className="campo" defaultValue={cot?.incoterm ?? c.incoterm}>
               {Object.entries(INCOTERM_LABEL).map(([k, v]) => (
                 <option key={k} value={k}>
-                  {k} — {v}
+                  {v}
                 </option>
               ))}
             </select>

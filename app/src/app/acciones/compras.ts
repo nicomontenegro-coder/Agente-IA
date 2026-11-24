@@ -63,6 +63,10 @@ export async function crearCompra(_e: EstadoForm, datos: FormData): Promise<Esta
   if (problemas.length) return { error: problemas.join('. ') }
   if (lineas.length === 0) return { error: 'Agrega al menos un producto con su cantidad' }
 
+  const plazoRespuesta = fechaDe(datos.get('plazoRespuesta'))
+  if (plazoRespuesta && plazoRespuesta.getTime() < new Date().setHours(0, 0, 0, 0)) {
+    return { error: 'El plazo de respuesta ya pasó: elige una fecha de hoy en adelante' }
+  }
   const c = await db.compra.create({
     data: {
       numero: await siguienteNumero('compra'),
@@ -70,7 +74,7 @@ export async function crearCompra(_e: EstadoForm, datos: FormData): Promise<Esta
       incoterm,
       lugar: texto(datos.get('lugar')),
       destino: texto(datos.get('destino')),
-      plazoRespuesta: fechaDe(datos.get('plazoRespuesta')),
+      plazoRespuesta,
       etapa: 'BUSCANDO',
       lineas: { create: lineas }
     }
