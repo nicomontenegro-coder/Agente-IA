@@ -615,11 +615,79 @@ def tabla_intermedia():
     s.append(texto(650, 470, 'Ninguna de las dos tablas principales guarda la lista de la otra: la relación vive solo en la tabla intermedia.', 12.5, color=SUAVE))
     return guardar('tabla-intermedia', s, W, H)
 
+def formato_oc():
+    W, H = 1240, 1754
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">', DEFS,
+         f'<rect width="{W}" height="{H}" fill="#e5e7eb"/>',
+         f'<rect x="40" y="40" width="{W - 80}" height="{H - 80}" fill="#ffffff" stroke="#9ca3af"/>']
+    x0, x1 = 90, W - 90
+    def bloque(y, n, titulo, lineas, alto, color='#0f766e', nota=None):
+        s.append(f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="{alto}" rx="8" fill="#ffffff" stroke="{color}" stroke-width="1.6"/>')
+        s.append(f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="34" rx="8" fill="{color}"/>')
+        s.append(texto(x0 + 16, y + 17, f'{n}. {titulo}', 15, 'bold', ancla='start', color='#ffffff'))
+        for k, l in enumerate(lineas):
+            s.append(texto(x0 + 18, y + 56 + k * 24, l, 13.5, ancla='start'))
+        if nota:
+            s.append(texto(x1 - 16, y + 17, nota, 12, 'bold', ancla='end', color='#ffffff'))
+    # encabezado
+    s.append(f'<rect x="{x0}" y="70" width="170" height="70" rx="8" fill="#f3f4f6" stroke="#9ca3af" stroke-dasharray="5 4"/>')
+    s.append(texto(x0 + 85, 105, 'Logo GESI', 13, color=SUAVE))
+    s.append(texto(x0 + 190, 88, 'GESI SpA', 18, 'bold', ancla='start'))
+    s.append(texto(x0 + 190, 112, 'RUT · dirección · Nico Montenegro · correo @gesi.cl · WhatsApp', 12.5, ancla='start', color=SUAVE))
+    s.append(texto(x1, 86, 'PURCHASE ORDER', 24, 'bold', ancla='end', color='#1d4ed8'))
+    s.append(texto(x1, 112, 'N° GESI-OC7 · fecha', 14, 'bold', ancla='end'))
+    s.append(texto(x1, 134, 'Compra GESI-CP3 · Cotización del proveedor N° y fecha', 12, ancla='end', color=SUAVE))
+    y = 165
+    bloque(y, 1, 'Proveedor  (Supplier)', ['Razón social, dirección, país', 'Contacto, correo y teléfono'], 110)
+    y += 125
+    bloque(y, 2, 'Consignatario y notificar  (Consignee / Notify party)', ['GESI SpA, Chile · o el cliente final en una triangulación (ej. Perú)', 'Notificar a: agente de aduana o forwarder'], 110)
+    y += 125
+    bloque(y, 3, 'Condiciones comerciales', ['Incoterm 2020 y lugar (ej. FOB Ningbo) · puerto de carga · puerto de destino', 'Fecha de embarque comprometida (ETD) · moneda (USD)'], 110)
+    y += 125
+    # tabla de productos
+    s.append(f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="250" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>')
+    s.append(f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="34" rx="8" fill="#0f766e"/>')
+    s.append(texto(x0 + 16, y + 17, '4. Productos  (varios por orden)', 15, 'bold', ancla='start', color='#ffffff'))
+    cols = [('#', 40), ('Código', 100), ('Descripción', 240), ('Especificación / norma', 230), ('Cant.', 80), ('Unidad', 80), ('Precio unit.', 120), ('Total', 130)]
+    cx = x0 + 10
+    for nombre, w in cols:
+        s.append(f'<rect x="{cx}" y="{y + 44}" width="{w}" height="30" fill="#ecfdf5" stroke="#d1d5db"/>')
+        s.append(texto(cx + w / 2, y + 59, nombre, 12, 'bold'))
+        for r in range(3):
+            s.append(f'<rect x="{cx}" y="{y + 74 + r * 30}" width="{w}" height="30" fill="#ffffff" stroke="#e5e7eb"/>')
+        cx += w
+    ejemplo = ['1', 'PPR-20', 'Tubería preaislada', 'PPR 20×3,4 · ISO 15874', '2.000', 'm', '0,79', '1.580,00']
+    cx = x0 + 10
+    for (nombre, w), v in zip(cols, ejemplo):
+        s.append(texto(cx + w / 2, y + 89, v, 12, color=SUAVE))
+        cx += w
+    s.append(texto(x1 - 20, y + 190, 'Subtotal · descuento por volumen (si se acordó) · TOTAL', 13.5, 'bold', ancla='end'))
+    s.append(texto(x0 + 18, y + 225, 'Los precios quedan congelados en la orden: no cambian si después cambia la cotización.', 12.5, ancla='start', color='#b45309'))
+    y += 265
+    bloque(y, 5, 'Pago', ['Primer embarque: carta de crédito irrevocable (L/C)', 'Embarques siguientes: T/T, anticipo % y saldo %',
+                          'El segundo pago se libera contra: certificado de inspección aprobado + documentos de embarque'], 135, '#b45309', 'regla GESI')
+    y += 150
+    bloque(y, 6, 'Inspección antes del embarque', ['Por una agencia que designa GESI · inspección de calidad general',
+                                                   'Si no aprueba: el proveedor corrige a su costo y se vuelve a inspeccionar'], 110, '#b45309', 'regla GESI')
+    y += 125
+    bloque(y, 7, 'Documentos requeridos', ['Factura comercial · packing list · BL original · certificado de inspección',
+                                           'Certificado de origen del tratado con Chile (arancel 0 %) · certificados de calidad',
+                                           'El N° de esta orden debe aparecer en todos los documentos'], 135)
+    y += 150
+    bloque(y, 8, 'Embalaje, marcas y calidad', ['Embalaje de exportación, marcado con el N° de orden · plan de carga en pedidos mixtos',
+                                                'Según especificaciones y muestras aprobadas: todo cambio, por escrito antes de producir',
+                                                'Garantía: N meses contra defectos de fabricación'], 135)
+    y += 150
+    bloque(y, 9, 'Aceptación', ['El proveedor confirma por escrito: aceptación, fecha de embarque y datos bancarios', '', 
+                                'Firma GESI SpA: __________________          Firma y timbre proveedor: __________________'], 130, '#1d4ed8')
+    s.append(texto(W / 2, H - 58, 'Formato de la orden de compra GESI · el documento sale en inglés; la app lo muestra también en español', 12, color=SUAVE))
+    return guardar('formato-oc', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia()]
+              tabla_intermedia(), formato_oc()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)

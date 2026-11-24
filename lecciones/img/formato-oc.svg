@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1754" viewBox="0 0 1240 1754">
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="1240" height="1754" fill="#e5e7eb"/>
+<rect x="40" y="40" width="1160" height="1674" fill="#ffffff" stroke="#9ca3af"/>
+<rect x="90" y="70" width="170" height="70" rx="8" fill="#f3f4f6" stroke="#9ca3af" stroke-dasharray="5 4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="175" y="105.0">Logo GESI</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="280" y="88.0">GESI SpA</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#4b5563"><tspan x="280" y="112.0">RUT · dirección · Nico Montenegro · correo @gesi.cl · WhatsApp</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="end" dominant-baseline="middle" fill="#1d4ed8"><tspan x="1150" y="86.0">PURCHASE ORDER</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="end" dominant-baseline="middle" fill="#1f2937"><tspan x="1150" y="112.0">N° GESI-OC7 · fecha</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="end" dominant-baseline="middle" fill="#4b5563"><tspan x="1150" y="134.0">Compra GESI-CP3 · Cotización del proveedor N° y fecha</tspan></text>
+<rect x="90" y="165" width="1060" height="110" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
+<rect x="90" y="165" width="1060" height="34" rx="8" fill="#0f766e"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="182.0">1. Proveedor  (Supplier)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="221.0">Razón social, dirección, país</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="245.0">Contacto, correo y teléfono</tspan></text>
+<rect x="90" y="290" width="1060" height="110" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
+<rect x="90" y="290" width="1060" height="34" rx="8" fill="#0f766e"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="307.0">2. Consignatario y notificar  (Consignee / Notify party)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="346.0">GESI SpA, Chile · o el cliente final en una triangulación (ej. Perú)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="370.0">Notificar a: agente de aduana o forwarder</tspan></text>
+<rect x="90" y="415" width="1060" height="110" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
+<rect x="90" y="415" width="1060" height="34" rx="8" fill="#0f766e"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="432.0">3. Condiciones comerciales</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="471.0">Incoterm 2020 y lugar (ej. FOB Ningbo) · puerto de carga · puerto de destino</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="495.0">Fecha de embarque comprometida (ETD) · moneda (USD)</tspan></text>
+<rect x="90" y="540" width="1060" height="250" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
+<rect x="90" y="540" width="1060" height="34" rx="8" fill="#0f766e"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="557.0">4. Productos  (varios por orden)</tspan></text>
+<rect x="100" y="584" width="40" height="30" fill="#ecfdf5" stroke="#d1d5db"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="120.0" y="599.0">#</tspan></text>
+<rect x="100" y="614" width="40" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="100" y="644" width="40" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="100" y="674" width="40" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="140" y="584" width="100" height="30" fill="#ecfdf5" stroke="#d1d5db"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="190.0" y="599.0">Código</tspan></text>
+<rect x="140" y="614" width="100" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="140" y="644" width="100" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="140" y="674" width="100" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="240" y="584" width="240" height="30" fill="#ecfdf5" stroke="#d1d5db"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="360.0" y="599.0">Descripción</tspan></text>
+<rect x="240" y="614" width="240" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="240" y="644" width="240" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="240" y="674" width="240" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="480" y="584" width="230" height="30" fill="#ecfdf5" stroke="#d1d5db"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="595.0" y="599.0">Especificación / norma</tspan></text>
+<rect x="480" y="614" width="230" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="480" y="644" width="230" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="480" y="674" width="230" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="710" y="584" width="80" height="30" fill="#ecfdf5" stroke="#d1d5db"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="750.0" y="599.0">Cant.</tspan></text>
+<rect x="710" y="614" width="80" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="710" y="644" width="80" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="710" y="674" width="80" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="790" y="584" width="80" height="30" fill="#ecfdf5" stroke="#d1d5db"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="830.0" y="599.0">Unidad</tspan></text>
+<rect x="790" y="614" width="80" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="790" y="644" width="80" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="790" y="674" width="80" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="870" y="584" width="120" height="30" fill="#ecfdf5" stroke="#d1d5db"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="930.0" y="599.0">Precio unit.</tspan></text>
+<rect x="870" y="614" width="120" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="870" y="644" width="120" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="870" y="674" width="120" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="990" y="584" width="130" height="30" fill="#ecfdf5" stroke="#d1d5db"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="1055.0" y="599.0">Total</tspan></text>
+<rect x="990" y="614" width="130" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="990" y="644" width="130" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<rect x="990" y="674" width="130" height="30" fill="#ffffff" stroke="#e5e7eb"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="120.0" y="629.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="190.0" y="629.0">PPR-20</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="360.0" y="629.0">Tubería preaislada</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="595.0" y="629.0">PPR 20×3,4 · ISO 15874</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="750.0" y="629.0">2.000</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="830.0" y="629.0">m</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="930.0" y="629.0">0,79</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="1055.0" y="629.0">1.580,00</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="end" dominant-baseline="middle" fill="#1f2937"><tspan x="1130" y="730.0">Subtotal · descuento por volumen (si se acordó) · TOTAL</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#b45309"><tspan x="108" y="765.0">Los precios quedan congelados en la orden: no cambian si después cambia la cotización.</tspan></text>
+<rect x="90" y="805" width="1060" height="135" rx="8" fill="#ffffff" stroke="#b45309" stroke-width="1.6"/>
+<rect x="90" y="805" width="1060" height="34" rx="8" fill="#b45309"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="822.0">5. Pago</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="861.0">Primer embarque: carta de crédito irrevocable (L/C)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="885.0">Embarques siguientes: T/T, anticipo % y saldo %</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="909.0">El segundo pago se libera contra: certificado de inspección aprobado + documentos de embarque</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="end" dominant-baseline="middle" fill="#ffffff"><tspan x="1134" y="822.0">regla GESI</tspan></text>
+<rect x="90" y="955" width="1060" height="110" rx="8" fill="#ffffff" stroke="#b45309" stroke-width="1.6"/>
+<rect x="90" y="955" width="1060" height="34" rx="8" fill="#b45309"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="972.0">6. Inspección antes del embarque</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1011.0">Por una agencia que designa GESI · inspección de calidad general</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1035.0">Si no aprueba: el proveedor corrige a su costo y se vuelve a inspeccionar</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="end" dominant-baseline="middle" fill="#ffffff"><tspan x="1134" y="972.0">regla GESI</tspan></text>
+<rect x="90" y="1080" width="1060" height="135" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
+<rect x="90" y="1080" width="1060" height="34" rx="8" fill="#0f766e"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="1097.0">7. Documentos requeridos</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1136.0">Factura comercial · packing list · BL original · certificado de inspección</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1160.0">Certificado de origen del tratado con Chile (arancel 0 %) · certificados de calidad</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1184.0">El N° de esta orden debe aparecer en todos los documentos</tspan></text>
+<rect x="90" y="1230" width="1060" height="135" rx="8" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
+<rect x="90" y="1230" width="1060" height="34" rx="8" fill="#0f766e"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="1247.0">8. Embalaje, marcas y calidad</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1286.0">Embalaje de exportación, marcado con el N° de orden · plan de carga en pedidos mixtos</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1310.0">Según especificaciones y muestras aprobadas: todo cambio, por escrito antes de producir</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1334.0">Garantía: N meses contra defectos de fabricación</tspan></text>
+<rect x="90" y="1380" width="1060" height="130" rx="8" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.6"/>
+<rect x="90" y="1380" width="1060" height="34" rx="8" fill="#1d4ed8"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="15" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#ffffff"><tspan x="106" y="1397.0">9. Aceptación</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1436.0">El proveedor confirma por escrito: aceptación, fecha de embarque y datos bancarios</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1460.0"></tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="108" y="1484.0">Firma GESI SpA: __________________          Firma y timbre proveedor: __________________</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="620.0" y="1696.0">Formato de la orden de compra GESI · el documento sale en inglés; la app lo muestra también en español</tspan></text>
+</svg>

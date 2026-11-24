@@ -39,3 +39,10 @@ Claude Agent SDK existe en TypeScript. Las lecciones de programación del curso 
   pudiera detener. Queda en uso: sirve para emitir RFQ ahora. Sus funciones probadas se
   reutilizan en la app nueva.
 - Las RFQ se generan solo en inglés y español: nunca en idiomas que Nico no domina.
+
+## 2026-11-24 — Primera versión de la app nueva
+
+Nico pidió implementar el diseño sin esperar más revisiones, para avanzar. Se construyó en `app/`
+la primera mitad del P2P: compras con varios productos, RFQ en inglés y español a varios
+proveedores, cotizaciones con filtros y comparativa, y orden de compra imprimible con el formato
+GESI. La revisión guiada del modelo (paso 1 de 5) queda pendiente y se retoma con la app funcionando.

@@ -66,3 +66,11 @@ Estado:
 - De Importa: cálculos de landed cost, incoterms y aranceles, con sus pruebas.
 - Del módulo RFQ que se construyó en Importa (`src/lib/pedido-cotizacion.ts`): el armado del
   texto en inglés, la traducción de unidades y la validación de líneas, con sus pruebas.
+
+## Formato estándar de la orden de compra
+
+![Formato de la orden de compra GESI](../lecciones/img/formato-oc.png)
+
+Nueve secciones: proveedor, consignatario, condiciones comerciales, productos (precios congelados),
+pago, inspección antes del embarque, documentos requeridos, embalaje y calidad, y aceptación.
+Sale en inglés para el proveedor y en español para revisar. Implementado en `app/src/lib/documentos.ts`.

@@ -1,0 +1,249 @@
+// Base de datos de la app GESI, organizada por procesos.
+// El diseño está en diseno/p2p.md, en la raíz del repositorio.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ───────────────────────────── Datos que se reutilizan ─────────────────────────────
+
+/// Datos de GESI para los documentos (RFQ y OC).
+model Empresa {
+  id        Int     @id @default(1)
+  nombre    String  @default("GESI SpA")
+  rut       String?
+  direccion String?
+  contacto  String?
+  email     String?
+  telefono  String?
+  /// Garantía que se pide por defecto en las OC, en meses.
+  garantiaMeses Int?
+  /// Anticipo por defecto en pagos T/T, en % (se escribe 30, no 0,3).
+  anticipoPct   Float @default(30)
+}
+
+/// Familia de productos: un proveedor trabaja una o varias.
+model Familia {
+  id          String             @id @default(cuid())
+  nombre      String             @unique
+  productos   Producto[]
+  proveedores ProveedorFamilia[]
+}
+
+model Producto {
+  id             String   @id @default(cuid())
+  codigo         String?
+  nombre         String
+  /// Medidas, material o norma: lo que hace que dos fábricas coticen lo mismo.
+  especificacion String?
+  unidad         String   @default("u")
+  codigoHS       String?
+  /// Certificación exigida en Chile para venderlo (por ejemplo, SEC).
+  certificacionLocal String?
+  familiaId      String?
+  familia        Familia? @relation(fields: [familiaId], references: [id], onDelete: SetNull)
+  creadoEn       DateTime @default(now())
+  lineas         CompraLinea[]
+}
+
+model Proveedor {
+  id        String   @id @default(cuid())
+  nombre    String   @unique
+  pais      String?
+  contacto  String?
+  email     String?
+  telefono  String?
+  /// WHATSAPP, ALIBABA, CORREO: por dónde se le escribe.
+  canal     String   @default("CORREO")
+  /// null = todavía no lo ha dicho. Si es false, queda eliminado en el primer embarque.
+  aceptaCartaCredito Boolean?
+  notas     String?
+  creadoEn  DateTime @default(now())
+
+  familias     ProveedorFamilia[]
+  certificados Certificado[]
+  invitaciones Invitacion[]
+}
+
+/// Tabla intermedia: qué familias trabaja cada proveedor (muchos a muchos).
+model ProveedorFamilia {
+  proveedorId String
+  familiaId   String
+  proveedor   Proveedor @relation(fields: [proveedorId], references: [id], onDelete: Cascade)
+  familia     Familia   @relation(fields: [familiaId], references: [id], onDelete: Cascade)
+
+  @@id([proveedorId, familiaId])
+}
+
+model Certificado {
+  id           String    @id @default(cuid())
+  proveedorId  String
+  proveedor    Proveedor @relation(fields: [proveedorId], references: [id], onDelete: Cascade)
+  /// CALIDAD, CUMPLIMIENTO o GESTION: cada tipo suma puntaje.
+  tipo         String
+  /// El nombre del certificado: ISO 9001, ISO 15874, CE…
+  nombre       String
+  vigenteHasta DateTime?
+  creadoEn     DateTime  @default(now())
+}
+
+// ───────────────────────────── El proceso P2P ─────────────────────────────
+
+/// Una compra: el proceso de principio a fin. Sabe en qué paso va.
+model Compra {
+  id        String   @id @default(cuid())
+  /// Correlativo para el código GESI-CP12.
+  numero    Int      @unique
+  /// De qué se trata, en pocas palabras (también es el asunto de la RFQ).
+  titulo    String
+  incoterm  String   @default("FOB")
+  /// Lugar del incoterm que se pide (por ejemplo, el puerto de carga).
+  lugar     String?
+  /// Destino final: San Antonio, Punta Arenas…
+  destino   String?
+  plazoRespuesta DateTime?
+  /// La etapa decidida a mano. La que se muestra se despeja de lo registrado.
+  etapa     String   @default("NECESIDAD")
+  /// Por qué se canceló o se corrigió hacia atrás.
+  nota      String?
+  creadoEn  DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  lineas       CompraLinea[]
+  invitaciones Invitacion[]
+  ordenes      OrdenCompra[]
+}
+
+/// Un producto pedido en una compra, con su cantidad.
+model CompraLinea {
+  id         String    @id @default(cuid())
+  compraId   String
+  compra     Compra    @relation(fields: [compraId], references: [id], onDelete: Cascade)
+  productoId String?
+  producto   Producto? @relation(fields: [productoId], references: [id], onDelete: SetNull)
+  /// Como se le describe al proveedor, en inglés.
+  descripcion    String
+  especificacion String?
+  cantidad   Float
+  unidad     String
+  orden      Int       @default(0)
+
+  precios CotizacionLinea[]
+}
+
+/// La RFQ enviada a un proveedor. Una compra invita a varios.
+model Invitacion {
+  id          String    @id @default(cuid())
+  compraId    String
+  compra      Compra    @relation(fields: [compraId], references: [id], onDelete: Cascade)
+  proveedorId String
+  proveedor   Proveedor @relation(fields: [proveedorId], references: [id], onDelete: Cascade)
+  enviadaEl   DateTime?
+  /// El proveedor dijo que no cotiza.
+  declino     Boolean   @default(false)
+  creadoEn    DateTime  @default(now())
+
+  cotizacion Cotizacion?
+
+  @@unique([compraId, proveedorId])
+}
+
+/// La respuesta de un proveedor a una invitación.
+model Cotizacion {
+  id           String     @id @default(cuid())
+  invitacionId String     @unique
+  invitacion   Invitacion @relation(fields: [invitacionId], references: [id], onDelete: Cascade)
+  recibidaEl   DateTime   @default(now())
+  /// Número o referencia del documento del proveedor.
+  referencia   String?
+  moneda       String     @default("USD")
+  incoterm     String
+  lugar        String?
+  leadTimeDias Int?
+  validezDias  Int?
+  moq          String?
+  /// Lo que dijo el proveedor en esta cotización; también actualiza su ficha.
+  aceptaCartaCredito Boolean?
+  notas        String?
+
+  lineas  CotizacionLinea[]
+  ordenes OrdenCompra[]
+}
+
+/// El precio de una línea de la compra en una cotización (tabla intermedia con datos).
+model CotizacionLinea {
+  id            String      @id @default(cuid())
+  cotizacionId  String
+  cotizacion    Cotizacion  @relation(fields: [cotizacionId], references: [id], onDelete: Cascade)
+  compraLineaId String
+  compraLinea   CompraLinea @relation(fields: [compraLineaId], references: [id], onDelete: Cascade)
+  precioUnitario Float?
+
+  @@unique([cotizacionId, compraLineaId])
+}
+
+/// La orden de compra. Copia los precios: lo decidido se congela.
+model OrdenCompra {
+  id           String     @id @default(cuid())
+  /// Correlativo para el código GESI-OC7.
+  numero       Int        @unique
+  compraId     String
+  compra       Compra     @relation(fields: [compraId], references: [id], onDelete: Cascade)
+  cotizacionId String
+  cotizacion   Cotizacion @relation(fields: [cotizacionId], references: [id])
+  fecha        DateTime   @default(now())
+  moneda       String
+  incoterm     String
+  lugar        String?
+  destino      String?
+  consignatario String?
+  /// Fecha de embarque comprometida (ETD).
+  etd          DateTime?
+  /// CARTA_CREDITO o TT.
+  formaPago    String
+  anticipoPct  Float?
+  descuentoPct Float?
+  garantiaMeses Int?
+  creadoEn     DateTime   @default(now())
+
+  lineas OrdenLinea[]
+  pagos  Pago[]
+}
+
+/// Una línea de la orden, con descripción y precio copiados de la cotización.
+model OrdenLinea {
+  id             String      @id @default(cuid())
+  ordenId        String
+  orden          OrdenCompra @relation(fields: [ordenId], references: [id], onDelete: Cascade)
+  /// De qué línea de la compra viene: trazabilidad, el precio igual se copia.
+  compraLineaId  String?
+  codigo         String?
+  descripcion    String
+  especificacion String?
+  cantidad       Float
+  unidad         String
+  precioUnitario Float
+  posicion       Int         @default(0)
+}
+
+/// Un pago de la orden: carta de crédito, anticipo o saldo.
+model Pago {
+  id      String      @id @default(cuid())
+  ordenId String
+  orden   OrdenCompra @relation(fields: [ordenId], references: [id], onDelete: Cascade)
+  /// CARTA_CREDITO, ANTICIPO o SALDO.
+  tipo    String
+  monto   Float?
+  fecha   DateTime    @default(now())
+  nota    String?
+}
+
+/// Correlativos de los códigos GESI.
+model Correlativo {
+  tipo  String @id
+  ultimo Int   @default(0)
+}
