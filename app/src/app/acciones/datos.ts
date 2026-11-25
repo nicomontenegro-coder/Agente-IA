@@ -33,9 +33,9 @@ async function familiasDe(datos: FormData): Promise<string[]> {
 
 export async function guardarProveedor(id: string | null, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const nombre = texto(datos.get('nombre'))
-  if (!nombre) return { error: 'Escribe el nombre del proveedor' }
+  if (!nombre) return { error: 'Ingresa el nombre del proveedor' }
   const otro = await db.proveedor.findUnique({ where: { nombre } })
-  if (otro && otro.id !== id) return { error: 'Ya hay un proveedor con ese nombre' }
+  if (otro && otro.id !== id) return { error: 'Ya existe un proveedor con ese nombre' }
   const lc = texto(datos.get('aceptaCartaCredito'))
   const data = {
     nombre,
@@ -60,8 +60,8 @@ export async function guardarProveedor(id: string | null, _e: EstadoForm, datos:
 export async function agregarCertificado(proveedorId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const tipo = texto(datos.get('tipo'))
   const nombre = texto(datos.get('nombre'))
-  if (!tipo || !TIPOS_CERTIFICADO.some((t) => t.valor === tipo)) return { error: 'Elige el tipo de certificado' }
-  if (!nombre) return { error: 'Escribe qué certificado es (por ejemplo, ISO 9001)' }
+  if (!tipo || !TIPOS_CERTIFICADO.some((t) => t.valor === tipo)) return { error: 'Selecciona el tipo de certificado' }
+  if (!nombre) return { error: 'Ingresa el nombre del certificado (por ejemplo, ISO 9001)' }
   await db.certificado.create({ data: { proveedorId, tipo, nombre, vigenteHasta: fechaDe(datos.get('vigenteHasta')) } })
   revalidatePath(`/proveedores/${proveedorId}`)
   return { ok: 'Certificado agregado' }
@@ -74,7 +74,7 @@ export async function quitarCertificado(proveedorId: string, certificadoId: stri
 
 export async function guardarProducto(id: string | null, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const nombre = texto(datos.get('nombre'))
-  if (!nombre) return { error: 'Escribe el nombre del producto' }
+  if (!nombre) return { error: 'Ingresa el nombre del producto' }
   let familiaId = texto(datos.get('familiaId'))
   const familiaNueva = texto(datos.get('familiaNueva'))
   if (familiaNueva) familiaId = (await db.familia.upsert({ where: { nombre: familiaNueva }, create: { nombre: familiaNueva }, update: {} })).id

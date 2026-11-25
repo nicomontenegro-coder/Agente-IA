@@ -2,9 +2,7 @@ import 'server-only'
 
 import Anthropic from '@anthropic-ai/sdk'
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod'
-import { z } from 'zod'
-
-import { INCOTERMS } from './incoterms'
+import { EsquemaLectura, desdeIA, type LecturaCotizacion } from './lectura-esquema'
 import { lecturaDePrueba } from './lector-prueba'
 
 /**
@@ -32,53 +30,7 @@ export const hayLectorIa = (): boolean => dePrueba() || Boolean(process.env.ANTH
 /** El modelo es una decisión de plata, no de código: se cambia sin desplegar. */
 const MODELO = process.env.GESI_MODELO_IA ?? 'claude-opus-5-5'
 
-const Lectura = z.object({
-  proveedor: z.string().nullable().describe('Nombre de la empresa que cotiza, tal como aparece en el membrete'),
-  proveedorPais: z.string().nullable().describe('País del proveedor según su dirección, en español: China, Turquía…'),
-  contacto: z.string().nullable().describe('Persona que firma o aparece como vendedor'),
-  email: z.string().nullable().describe('Correo del proveedor'),
-  telefono: z.string().nullable().describe('Teléfono, móvil, WeChat o WhatsApp'),
-  referencia: z.string().nullable().describe('Número o referencia de la cotización. Null si no tiene'),
-  fecha: z.string().nullable().describe('Fecha del documento, AAAA-MM-DD'),
-  moneda: z.string().nullable().describe('Código de tres letras: USD, EUR, CNY'),
-  incoterm: z.string().nullable().describe(`El incoterm del TOTAL, uno de: ${INCOTERMS.join(', ')}. Null si no lo dice`),
-  lugar: z.string().nullable().describe('Puerto o ciudad del incoterm del total, por ejemplo "Xiamen"'),
-  subtotal: z.number().nullable().describe('Suma de los ítems tal como la escribe el documento (por ejemplo el total EXW). Null si no la escribe'),
-  gastosHastaFob: z.number().nullable().describe('Gastos cotizados aparte para llegar a puerto (FOB cost, inland freight). Null si no hay'),
-  total: z.number().nullable().describe('El total final que escribe el documento'),
-  validezDias: z.number().nullable().describe('Días de validez de la oferta. Null si no lo dice'),
-  leadTimeDias: z.number().nullable().describe('Días hasta el embarque. Si da un rango, el mayor, y anota el rango en dudas'),
-  condicionesPago: z.string().nullable().describe('Condiciones de pago tal como las escribe'),
-  aceptaCartaCredito: z
-    .boolean()
-    .nullable()
-    .describe('True solo si menciona L/C o carta de crédito como forma aceptada; false si la rechaza o exige otra forma excluyente; null si no la menciona'),
-  moq: z.string().nullable().describe('Cantidad mínima de pedido, si aparece'),
-  noIncluye: z.string().nullable().describe('Lo que el documento dice que NO incluye el precio (instalación, fundaciones…)'),
-  desglose: z
-    .array(
-      z.object({
-        descripcion: z.string().describe('Descripción corta del ítem, en el idioma del documento'),
-        unidad: z.string().nullable(),
-        cantidad: z.number().nullable(),
-        precioUnitario: z.number().nullable(),
-        monto: z.number().nullable().describe('El monto de la línea tal como aparece, sin recalcularlo')
-      })
-    )
-    .describe('Cada ítem cotizado, en el orden del documento'),
-  preciosPorLinea: z
-    .array(
-      z.object({
-        lineaId: z.string().describe('El id de la línea de GESI a la que corresponde'),
-        precioUnitario: z.number().describe('Precio por la unidad que pidió GESI'),
-        cita: z.string().describe('Fragmento literal del documento de donde sale ese precio')
-      })
-    )
-    .describe('El precio que corresponde a cada línea pedida por GESI. Omite las que el documento no cotiza'),
-  dudas: z.array(z.string()).describe('Lo que no se pudo leer con seguridad o quedó ambiguo. Vacío si todo está claro')
-})
-
-export type LecturaCotizacion = z.infer<typeof Lectura>
+export type { LecturaCotizacion }
 
 const INSTRUCCIONES = `Lees cotizaciones de proveedores para GESI, un importador chileno.
 
@@ -109,7 +61,7 @@ export async function leerCotizacion(pdfBase64: string, pedido: LineaPedida[]): 
       model: MODELO,
       max_tokens: 16000,
       system: INSTRUCCIONES,
-      output_config: { format: zodOutputFormat(Lectura) },
+      output_config: { format: zodOutputFormat(EsquemaLectura) },
       messages: [
         {
           role: 'user',
@@ -126,9 +78,13 @@ export async function leerCotizacion(pdfBase64: string, pedido: LineaPedida[]): 
     if (!r.parsed_output) return { ok: false, error: 'No se pudo entender la lectura. Copia los datos a mano.' }
     // Un id que la IA inventó no corresponde a nada: se descarta.
     const ids = new Set(pedido.map((l) => l.id))
-    const lectura = { ...r.parsed_output, preciosPorLinea: r.parsed_output.preciosPorLinea.filter((p) => ids.has(p.lineaId)) }
+    const leido = desdeIA(r.parsed_output)
+    const lectura = { ...leido, preciosPorLinea: leido.preciosPorLinea.filter((p) => ids.has(p.lineaId)) }
     return { ok: true, lectura }
   } catch (e) {
+    // El motivo real queda en el registro del servidor (journalctl -u gesi):
+    // el mensaje de pantalla dice qué hacer, pero sin esto no se sabe qué arreglar.
+    console.error('Lectura de cotización falló:', e instanceof Error ? e.message : e)
     // La lectura es una ayuda, no el único camino: nunca revienta la pantalla.
     if (e instanceof Anthropic.AuthenticationError) return { ok: false, error: 'La clave de la API no es válida. Revísala en el servidor.' }
     if (e instanceof Anthropic.PermissionDeniedError) return { ok: false, error: 'La clave no tiene permiso, o la cuenta no tiene saldo.' }

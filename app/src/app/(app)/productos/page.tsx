@@ -12,7 +12,7 @@ export default async function PaginaProductos() {
   ])
   return (
     <div className="space-y-5">
-      <Encabezado titulo="Productos" descripcion="El catálogo: al crear una compra, se eligen de aquí." />
+      <Encabezado titulo="Productos" descripcion="Catálogo de productos disponibles para las compras." />
       <div className="panel scroll-x">
         <table className="tabla">
           <thead>

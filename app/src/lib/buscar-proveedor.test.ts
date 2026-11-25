@@ -27,7 +27,7 @@ igual(
 igual(
   'el dominio del correo lo encuentra aunque el nombre esté escrito distinto',
   sugerirProveedores({ nombre: 'Hebei Steel Tube Co.', email: 'tom@hebeipipes.com' }, guardados)[0],
-  { id: 'hebei', nombre: 'Hebei Pipes', motivo: 'mismo dominio de correo (hebeipipes.com)' }
+  { id: 'hebei', nombre: 'Hebei Pipes', motivo: 'coincide el dominio de correo (hebeipipes.com)' }
 )
 igual(
   'compartir «pipes» no basta para confundir a Lvzhou con Hebei',

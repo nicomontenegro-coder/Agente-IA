@@ -39,7 +39,7 @@ export default function FormCompra({ productos }: { productos: ProductoOpcion[] 
         <label className="text-sm space-y-1 block">
           <span className="font-medium">De qué se trata</span>
           <input name="titulo" className="campo" required placeholder="Pre-insulated PPR pipe for Magallanes" />
-          <span className="block text-xs text-[var(--texto-tenue)]">Es también el asunto de la RFQ: conviene en inglés.</span>
+          <span className="block text-xs text-[var(--texto-tenue)]">Se usa como asunto de la RFQ (recomendado en inglés).</span>
         </label>
         <div className="grid gap-3 sm:grid-cols-4">
           <label className="text-sm space-y-1">

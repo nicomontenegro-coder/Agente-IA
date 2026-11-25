@@ -60,7 +60,7 @@ export default async function PaginaEmitirOrden({ params }: { params: Promise<{ 
           <label className="text-sm space-y-1">
             <span className="font-medium">Consignatario</span>
             <input name="consignatario" className="campo" placeholder={e.nombre} />
-            <span className="block text-xs text-[var(--texto-tenue)]">En blanco: GESI. En una triangulación, el cliente final.</span>
+            <span className="block text-xs text-[var(--texto-tenue)]">Vacío: GESI. En triangulación, el cliente final.</span>
           </label>
         </div>
       </FormAccion>

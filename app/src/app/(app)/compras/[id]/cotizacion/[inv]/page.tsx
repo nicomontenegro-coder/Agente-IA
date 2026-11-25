@@ -59,7 +59,7 @@ export default async function PaginaCotizacion({
       <Volver href={`/compras/${c.id}`}>{codigo('compra', c.numero)}</Volver>
       <Encabezado
         titulo={`Cotización de ${i.proveedor.nombre}`}
-        descripcion={lector ? 'Sube el PDF y la IA llena el formulario. Tú lo revisas contra el documento y guardas.' : 'Copia lo que dice su documento. Un dato que no viene, déjalo en blanco: no lo supongas.'}
+        descripcion={lector ? 'Sube el PDF para completar el formulario automáticamente. Revisa los datos antes de guardar.' : 'Ingresa los datos del documento. Deja en blanco lo que no indique.'}
       />
 
       <section className="panel p-4 space-y-3">
@@ -69,30 +69,30 @@ export default async function PaginaCotizacion({
             <a href={`/documentos/${archivo}`} target="_blank" rel="noreferrer" className="text-[var(--acento)] underline">
               Abrir {archivoNombre ?? 'el PDF'} ↗
             </a>
-            {lp && !cot?.archivo && <span className="text-[var(--texto-tenue)]"> · queda adjunto al guardar</span>}
+            {lp && !cot?.archivo && <span className="text-[var(--texto-tenue)]"> · se adjunta al guardar</span>}
           </p>
         )}
         <FormAccion accion={subirPdf.bind(null, c.id, i.id)} etiqueta={lector ? 'Leer el PDF' : 'Adjuntar PDF'} clase="flex flex-wrap items-end gap-3">
           <label className="text-sm space-y-1">
-            <span className="font-medium">{archivo ? 'Cambiar por otro PDF' : 'PDF de la cotización'}</span>
+            <span className="font-medium">{archivo ? 'Reemplazar PDF' : 'PDF de la cotización'}</span>
             <input name="pdf" type="file" accept="application/pdf" className="campo" required />
           </label>
         </FormAccion>
         {lector ? (
-          <p className="text-xs text-[var(--texto-tenue)]">La lectura toma entre medio y un minuto. No guarda nada: propone.</p>
+          <p className="text-xs text-[var(--texto-tenue)]">La lectura tarda hasta un minuto. Los datos no se guardan hasta confirmar.</p>
         ) : (
-          <p className="text-xs text-[var(--texto-tenue)]">El lector con IA no está activo en este servidor: el PDF se adjunta y los datos se copian a mano.</p>
+          <p className="text-xs text-[var(--texto-tenue)]">Lectura automática no disponible: el PDF se adjunta y los datos se ingresan manualmente.</p>
         )}
       </section>
 
       {lp && (
         <section className="panel p-4 space-y-2" aria-label="Revisión de la lectura">
-          <h2 className="font-semibold text-sm">{leido ? 'Lo que leyó la IA: revísalo antes de guardar' : 'PDF adjunto'}</h2>
-          {lp.error && <p className="text-sm text-[var(--malo)]">No se pudo leer: {lp.error}</p>}
+          <h2 className="font-semibold text-sm">{leido ? 'Datos leídos del documento: revisa antes de guardar' : 'PDF adjunto'}</h2>
+          {lp.error && <p className="text-sm text-[var(--malo)]">No se pudo leer el documento: {lp.error}</p>}
           {leido && desglose.length > 0 && problemas.length === 0 && (
             <p className="text-sm text-[var(--ok)]">
-              Las cuentas cuadran: {desglose.length} ítems suman {moneda} {numero(revision.suma ?? 0, 2)}
-              {documento.gastos ? `, más ${numero(documento.gastos, 2)} de gastos hasta puerto` : ''} = {moneda} {numero(documento.total ?? 0, 2)}, igual que el documento.
+              Montos verificados: {desglose.length} ítems suman {moneda} {numero(revision.suma ?? 0, 2)}
+              {documento.gastos ? `, más ${numero(documento.gastos, 2)} de gastos hasta puerto` : ''} = {moneda} {numero(documento.total ?? 0, 2)}, coincide con el documento.
             </p>
           )}
           {problemas.length > 0 && (
@@ -104,7 +104,7 @@ export default async function PaginaCotizacion({
           )}
           {leido && leido.dudas.length > 0 && (
             <>
-              <p className="text-sm font-medium">La IA no está segura de:</p>
+              <p className="text-sm font-medium">Requiere revisión:</p>
               <ul className="text-sm list-disc pl-5">
                 {leido.dudas.map((d) => (
                   <li key={d}>{d}</li>
@@ -195,7 +195,7 @@ export default async function PaginaCotizacion({
         </section>
 
         <section className="panel p-5 grid gap-3 sm:grid-cols-3">
-          <p className="sm:col-span-3 text-xs text-[var(--texto-tenue)]">Los totales tal como los escribe el documento: la app los usa para comprobar que las cuentas cuadren.</p>
+          <p className="sm:col-span-3 text-xs text-[var(--texto-tenue)]">Totales según el documento, para verificar los montos.</p>
           <label className="text-sm space-y-1">
             <span className="font-medium">Subtotal de los ítems</span>
             <input name="subtotalDocumento" className="campo num" inputMode="decimal" defaultValue={fmt(documento.subtotal)} placeholder="EXW" />
@@ -214,7 +214,7 @@ export default async function PaginaCotizacion({
           <summary className="font-semibold text-sm px-4 py-3 cursor-pointer">
             Desglose del proveedor {desglose.length > 0 && <span className="font-normal text-[var(--texto-tenue)]">· {desglose.length} ítems</span>}
           </summary>
-          <p className="px-4 pb-2 text-xs text-[var(--texto-tenue)]">Cómo arma su precio (su cubicación). No reemplaza lo pedido: sirve para comparar toneladas, metros y qué incluye cada uno.</p>
+          <p className="px-4 pb-2 text-xs text-[var(--texto-tenue)]">Detalle de ítems del proveedor. Se usa para comparar cantidades y alcance; no reemplaza los productos solicitados.</p>
           <div className="scroll-x">
             <table className="tabla">
               <thead>
@@ -228,7 +228,7 @@ export default async function PaginaCotizacion({
                 </tr>
               </thead>
               <tbody>
-                {/* Tres filas en blanco para agregar a mano lo que falte. */}
+                {/* Tres filas en blanco para agregar ítems manualmente. */}
                 {[...desglose, ...Array.from({ length: 3 }, () => null)].map((d, k) => (
                   <tr key={k}>
                     <td className="num text-[var(--texto-tenue)]">{k + 1}</td>
@@ -256,11 +256,11 @@ export default async function PaginaCotizacion({
 
         <label className="text-sm space-y-1 block">
           <span className="font-medium">Notas</span>
-          <textarea name="notas" rows={2} className="campo" defaultValue={notas} placeholder="Condiciones de pago, qué no incluye…" />
+          <textarea name="notas" rows={2} className="campo" defaultValue={notas} placeholder="Condiciones de pago, exclusiones…" />
         </label>
         <label className="text-sm flex items-center gap-2">
           <input type="checkbox" name="aceptoDiferencias" />
-          Guardar igual si las cuentas no cuadran (el error es del documento del proveedor)
+          Guardar con diferencias (el error está en el documento del proveedor)
         </label>
       </FormAccion>
     </div>

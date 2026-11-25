@@ -61,12 +61,12 @@ igual('avanzar no pide nota', validarCambio('EVALUANDO', 'NEGOCIANDO', ''), null
 igual(
   'cancelar sin motivo no se acepta',
   validarCambio('EVALUANDO', 'CANCELADA', ' '),
-  'Para cancelar la compra escribe el motivo'
+  'Ingresa el motivo de la cancelación'
 )
 igual(
   'corregir hacia atrás sin nota no se acepta',
   validarCambio('NEGOCIANDO', 'EVALUANDO', null),
-  'Volver atrás es una corrección: escribe por qué'
+  'Ingresa el motivo para retroceder la etapa'
 )
 igual('una etapa inventada no se acepta', validarCambio('NECESIDAD', 'APURADA', null), 'Etapa desconocida')
 

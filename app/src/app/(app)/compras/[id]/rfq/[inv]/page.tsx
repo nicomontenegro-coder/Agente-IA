@@ -45,7 +45,7 @@ export default async function PaginaRfq({ params }: { params: Promise<{ id: stri
           {i.enviadaEl ? (
             <>Enviada el {fecha(i.enviadaEl)}. Cuando responda, registra su cotización en la compra.</>
           ) : (
-            <>Copia el texto en inglés, envíalo al proveedor y marca que lo enviaste: así la app sabe a quién seguir.</>
+            <>Copia el texto, envíalo al proveedor y márcalo como enviado para hacer el seguimiento.</>
           )}
         </p>
         {!i.enviadaEl && (

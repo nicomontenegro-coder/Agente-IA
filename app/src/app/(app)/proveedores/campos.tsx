@@ -20,7 +20,7 @@ export default function CamposProveedor({
         </label>
         <label className="text-sm space-y-1">
           <span className="font-medium">Contacto</span>
-          <input name="contacto" className="campo" defaultValue={p?.contacto ?? ''} placeholder="A quién se le escribe" />
+          <input name="contacto" className="campo" defaultValue={p?.contacto ?? ''} placeholder="Nombre del contacto" />
         </label>
         <label className="text-sm space-y-1">
           <span className="font-medium">Se le escribe por</span>
@@ -43,7 +43,7 @@ export default function CamposProveedor({
           <select name="aceptaCartaCredito" className="campo" defaultValue={lc === true ? 'SI' : lc === false ? 'NO' : ''}>
             <option value="">No lo sé todavía</option>
             <option value="SI">Sí</option>
-            <option value="NO">No: queda eliminado en el primer embarque</option>
+            <option value="NO">No (excluido en el primer embarque)</option>
           </select>
         </label>
         <label className="text-sm space-y-1">

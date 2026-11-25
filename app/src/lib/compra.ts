@@ -67,8 +67,8 @@ export const SIGUE_ETAPA: Record<EtapaCompra, string> = {
   SEGUNDO_PAGO: 'Seguir la importación',
   EN_IMPORTACION: 'Recibir en bodega',
   RECIBIDA: 'Hacer el calce de 3 vías (OC, recibido y factura) y cerrar',
-  CERRADA: 'Nada: la compra terminó',
-  CANCELADA: 'Nada: la compra se canceló'
+  CERRADA: 'Sin acciones pendientes',
+  CANCELADA: 'Sin acciones pendientes'
 }
 
 /** El camino normal, sin Cancelada. */
@@ -131,8 +131,8 @@ export function validarCambio(de: string, a: string, nota: string | null | undef
   if (!esEtapa(a)) return 'Etapa desconocida'
   const conNota = (nota ?? '').trim() !== ''
   const tipo = tipoDeCambio(de, a)
-  if (tipo === 'CANCELACION' && !conNota) return 'Para cancelar la compra escribe el motivo'
-  if (tipo === 'CORRECCION' && !conNota) return 'Volver atrás es una corrección: escribe por qué'
+  if (tipo === 'CANCELACION' && !conNota) return 'Ingresa el motivo de la cancelación'
+  if (tipo === 'CORRECCION' && !conNota) return 'Ingresa el motivo para retroceder la etapa'
   return null
 }
 

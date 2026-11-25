@@ -86,11 +86,11 @@ export function evaluarProveedor(
   const motivos: string[] = []
   const pendientes: string[] = []
   const vigentes = p.certificados.filter((c) => vigente(c, hoy))
-  if (p.certificados.length === 0) pendientes.push('Falta que envíe sus certificados')
-  else if (vigentes.length === 0) motivos.push('Sus certificados están vencidos')
+  if (p.certificados.length === 0) pendientes.push('Certificados pendientes')
+  else if (vigentes.length === 0) motivos.push('Certificados vencidos')
   if (primerEmbarque) {
-    if (p.aceptaCartaCredito === false) motivos.push('No acepta carta de crédito en el primer embarque')
-    if (p.aceptaCartaCredito == null) pendientes.push('Falta confirmar si acepta carta de crédito')
+    if (p.aceptaCartaCredito === false) motivos.push('No acepta carta de crédito (primer embarque)')
+    if (p.aceptaCartaCredito == null) pendientes.push('Carta de crédito por confirmar')
   }
   return { eliminado: motivos.length > 0, motivos, pendientes, puntaje: puntajeCertificados(p.certificados, hoy) }
 }
@@ -117,5 +117,5 @@ export function totalCotizacion(lineas: LineaCotizada[]): number | null {
 export function avisoComparacion(cotizaciones: { moneda: string; incoterm: string; lugar: string | null }[]): string | null {
   const claves = new Set(cotizaciones.map((c) => `${c.moneda}|${c.incoterm}|${(c.lugar ?? '').trim().toLowerCase()}`))
   if (claves.size <= 1) return null
-  return 'Las cotizaciones vienen en distinta moneda, incoterm o lugar: los totales no se comparan directo. Compáralas por landed cost.'
+  return 'Las cotizaciones difieren en moneda, incoterm o lugar: los totales no son comparables directamente. Compara por landed cost.'
 }

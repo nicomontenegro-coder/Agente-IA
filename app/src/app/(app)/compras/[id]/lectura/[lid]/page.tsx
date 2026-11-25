@@ -27,17 +27,17 @@ export default async function PaginaLectura({ params }: { params: Promise<{ id: 
   return (
     <div className="space-y-5 max-w-3xl">
       <Volver href={`/compras/${id}`}>{codigo('compra', compra.numero)}</Volver>
-      <Encabezado titulo="¿De quién es esta cotización?" descripcion="La IA leyó el membrete. Elige al proveedor que ya tienes, o créalo con esos datos." />
+      <Encabezado titulo="Asignar proveedor" descripcion="Selecciona el proveedor de esta cotización o crea uno nuevo con los datos del documento." />
 
       <section className="panel p-4 space-y-1 text-sm">
         <a href={`/documentos/${lp.archivo}`} target="_blank" rel="noreferrer" className="text-[var(--acento)] underline">
           Abrir {lp.archivoNombre} ↗
         </a>
-        {lp.error && <p className="text-[var(--malo)]">No se pudo leer: {lp.error}. Elige el proveedor y copia los datos a mano.</p>}
-        {!lp.lectura && !lp.error && <p className="text-[var(--texto-tenue)]">El lector con IA no está activo: elige el proveedor a mano.</p>}
+        {lp.error && <p className="text-[var(--malo)]">No se pudo leer el documento: {lp.error} Asigna el proveedor y completa los datos manualmente.</p>}
+        {!lp.lectura && !lp.error && <p className="text-[var(--texto-tenue)]">Lectura automática no disponible: asigna el proveedor manualmente.</p>}
         {leido && (
           <>
-            <p className="font-semibold text-base">{leido.proveedor ?? 'El documento no dice el nombre del proveedor'}</p>
+            <p className="font-semibold text-base">{leido.proveedor ?? 'Proveedor no identificado en el documento'}</p>
             <p className="text-[var(--texto-tenue)]">{[leido.proveedorPais, leido.contacto, leido.email, leido.telefono].filter(Boolean).join(' · ')}</p>
           </>
         )}
@@ -45,13 +45,13 @@ export default async function PaginaLectura({ params }: { params: Promise<{ id: 
 
       {sugeridos.length > 0 && (
         <section className="panel p-4 space-y-3">
-          <h2 className="font-semibold text-sm">{sugeridos.length === 1 ? 'Parece ser este' : 'Pueden ser estos'}</h2>
+          <h2 className="font-semibold text-sm">{sugeridos.length === 1 ? 'Coincidencia encontrada' : 'Coincidencias encontradas'}</h2>
           {sugeridos.map((s) => (
-            <FormAccion key={s.id} accion={asignarLectura.bind(null, id, lid)} etiqueta="Es este" clase="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--borde)] pt-3 first-of-type:border-0 first-of-type:pt-0">
+            <FormAccion key={s.id} accion={asignarLectura.bind(null, id, lid)} etiqueta="Seleccionar" clase="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--borde)] pt-3 first-of-type:border-0 first-of-type:pt-0">
               <input type="hidden" name="proveedorId" value={s.id} />
               <div className="text-sm">
                 <span className="font-medium">{s.nombre}</span>
-                <span className="text-[var(--texto-tenue)]"> · {s.motivo}{invitados.has(s.id) ? ' · invitado a esta compra' : ''}</span>
+                <span className="text-[var(--texto-tenue)]"> · {s.motivo}{invitados.has(s.id) ? ' · ya invitado' : ''}</span>
               </div>
             </FormAccion>
           ))}
@@ -60,9 +60,9 @@ export default async function PaginaLectura({ params }: { params: Promise<{ id: 
 
       {proveedores.length > 0 && (
         <section className="panel p-4">
-          <FormAccion accion={asignarLectura.bind(null, id, lid)} etiqueta="Usar este" clase="flex flex-wrap items-end gap-3">
+          <FormAccion accion={asignarLectura.bind(null, id, lid)} etiqueta="Seleccionar" clase="flex flex-wrap items-end gap-3">
             <label className="text-sm space-y-1 grow">
-              <span className="font-medium">{sugeridos.length ? 'Es otro de los que ya tengo' : 'Es uno de los que ya tengo'}</span>
+              <span className="font-medium">{sugeridos.length ? 'Otro proveedor registrado' : 'Proveedor registrado'}</span>
               <select name="proveedorId" className="campo" defaultValue="">
                 <option value="">Elegir…</option>
                 {proveedores.map((p) => (
@@ -78,8 +78,8 @@ export default async function PaginaLectura({ params }: { params: Promise<{ id: 
       )}
 
       <section className="panel p-4 space-y-3">
-        <h2 className="font-semibold text-sm">Es un proveedor nuevo</h2>
-        <FormAccion accion={crearProveedorDeLectura.bind(null, id, lid)} etiqueta="Crear y seguir" clase="grid gap-3 sm:grid-cols-2">
+        <h2 className="font-semibold text-sm">Nuevo proveedor</h2>
+        <FormAccion accion={crearProveedorDeLectura.bind(null, id, lid)} etiqueta="Crear proveedor" clase="grid gap-3 sm:grid-cols-2">
           <label className="text-sm space-y-1 sm:col-span-2">
             <span className="font-medium">Nombre</span>
             <input name="nombre" className="campo" defaultValue={leido?.proveedor ?? ''} required />
@@ -101,7 +101,7 @@ export default async function PaginaLectura({ params }: { params: Promise<{ id: 
             <input name="telefono" className="campo" defaultValue={leido?.telefono ?? ''} />
           </label>
         </FormAccion>
-        <p className="text-xs text-[var(--texto-tenue)]">Certificados, familias y carta de crédito se completan después en su ficha.</p>
+        <p className="text-xs text-[var(--texto-tenue)]">Certificados, familias y carta de crédito se completan luego en la ficha del proveedor.</p>
       </section>
     </div>
   )

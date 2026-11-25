@@ -63,7 +63,7 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
             </label>
             <label className="space-y-1">
               <span className="font-medium">Nota</span>
-              <input name="nota" className="campo" placeholder="Obligatoria para cancelar o volver atrás" />
+              <input name="nota" className="campo" placeholder="Requerida para cancelar o retroceder" />
             </label>
           </FormAccion>
         </details>
@@ -94,7 +94,7 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
       </section>
 
       <section className="panel p-4 space-y-2">
-        <h2 className="font-semibold text-sm">Llegó una cotización</h2>
+        <h2 className="font-semibold text-sm">Registrar cotización recibida</h2>
         <FormAccion accion={subirCotizacion.bind(null, c.id)} etiqueta={hayLectorIa() ? 'Leer cotización' : 'Subir cotización'} clase="flex flex-wrap items-end gap-3">
           <label className="text-sm space-y-1">
             <span className="sr-only">PDF de la cotización</span>
@@ -103,18 +103,18 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
         </FormAccion>
         <p className="text-xs text-[var(--texto-tenue)]">
           {hayLectorIa()
-            ? 'Sube el PDF: la IA reconoce al proveedor, lo busca entre los tuyos y llena la cotización. Tú revisas y guardas.'
-            : 'Sube el PDF, elige de qué proveedor es y copia sus datos.'}
+            ? 'Sube el PDF para identificar al proveedor y completar la cotización automáticamente.'
+            : 'Sube el PDF y asigna el proveedor.'}
         </p>
       </section>
 
       <section className="panel">
         <div className="px-4 py-3 border-b border-[var(--borde)]">
           <h2 className="font-semibold text-sm">Proveedores invitados</h2>
-          <p className="text-xs text-[var(--texto-tenue)] mt-0.5">Una RFQ por proveedor. Respondida y Sin respuesta se marcan solas.</p>
+          <p className="text-xs text-[var(--texto-tenue)] mt-0.5">Una RFQ por proveedor. El estado se actualiza automáticamente.</p>
         </div>
         {c.invitaciones.length === 0 ? (
-          <p className="text-sm text-[var(--texto-tenue)] px-4 py-5">Todavía no invitas a nadie. Agrega proveedores abajo.</p>
+          <p className="text-sm text-[var(--texto-tenue)] px-4 py-5">Sin proveedores invitados.</p>
         ) : (
           <div className="scroll-x">
             <table className="tabla">
@@ -151,7 +151,7 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
                       )}
                     </td>
                     <td className="text-right num">
-                      {i.cotizacion ? (i.total != null ? `${i.cotizacion.moneda} ${numero(i.total)}` : 'faltan precios') : '—'}
+                      {i.cotizacion ? (i.total != null ? `${i.cotizacion.moneda} ${numero(i.total)}` : 'precios incompletos') : '—'}
                     </td>
                     <td>
                       <div className="flex gap-2 justify-end flex-wrap">
@@ -276,7 +276,7 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
                   <tr>
                     <td className="text-sm">
                       Por tonelada
-                      <div className="text-xs text-[var(--texto-tenue)]">total ÷ toneladas: incluye planchas, pernos y gastos</div>
+                      <div className="text-xs text-[var(--texto-tenue)]">total ÷ toneladas (incluye planchas, pernos y gastos)</div>
                     </td>
                     {respondidas.map((i) => (
                       <td key={i.id} className="text-right num">
@@ -354,7 +354,7 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
               <span className="font-medium">Unidad</span>
               <input name="unidadRef" className="campo w-20" defaultValue={c.unidadRef ?? ''} placeholder="m²" />
             </label>
-            <p className="text-xs text-[var(--texto-tenue)] basis-full">Cuando cada proveedor cubica distinto: los m² del galpón dan «precio por m²» y comparan ofertas que no se comparan ítem por ítem.</p>
+            <p className="text-xs text-[var(--texto-tenue)] basis-full">Permite comparar ofertas con distinto desglose mediante el precio por unidad (por ejemplo, US$/m²).</p>
           </FormAccion>
         </section>
       )}

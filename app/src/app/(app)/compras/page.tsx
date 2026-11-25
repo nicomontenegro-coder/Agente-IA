@@ -15,7 +15,7 @@ export default async function PaginaCompras() {
     <div className="space-y-5">
       <Encabezado
         titulo="Compras"
-        descripcion="Cada compra es el proceso completo: de la necesidad a la orden de compra, y después al cierre."
+        descripcion="Procesos de compra, desde la necesidad hasta el cierre."
         accion={
           <Link href="/compras/nueva" className="btn btn-primario">
             Nueva compra

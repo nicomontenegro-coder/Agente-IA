@@ -1,4 +1,5 @@
-import type { LecturaCotizacion, LineaPedida } from './leer-cotizacion'
+import type { LecturaCotizacion } from './lectura-esquema'
+import type { LineaPedida } from './leer-cotizacion'
 
 /**
  * Lo que la IA lee de la cotización real de Quanzhou Ridge (24-11-2026), para

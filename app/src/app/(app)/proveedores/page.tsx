@@ -12,7 +12,7 @@ export default async function PaginaProveedores() {
     <div className="space-y-5">
       <Encabezado
         titulo="Proveedores"
-        descripcion="Quién fabrica qué, con qué certificados y si acepta carta de crédito."
+        descripcion="Proveedores, sus productos, certificados y condiciones de pago."
         accion={
           <Link href="/proveedores/nuevo" className="btn btn-primario">
             Nuevo proveedor

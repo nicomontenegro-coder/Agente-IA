@@ -45,3 +45,12 @@ npm run typecheck
 
 Muestras, documentos de embarque, recepción, calce de 3 vías, landed cost en la comparativa,
 y publicarla en el servidor.
+
+## Tono de los textos
+
+Tono estándar de aplicación de negocios, en toda la app:
+
+- Títulos que nombran la acción o el objeto: «Asignar proveedor», «Nuevo proveedor», no preguntas ni frases coloquiales.
+- Instrucciones y errores cortos, en imperativo: «Ingresa…», «Selecciona…». Sin explicar el porqué en la pantalla (eso va en los comentarios del código).
+- Estados y avisos como etiquetas: «Certificados pendientes», «Montos verificados», «Requiere revisión».
+- Nada que hable de «la IA» como si fuera una persona: «Datos leídos del documento», «Lectura automática no disponible».

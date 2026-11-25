@@ -31,7 +31,7 @@ export default async function PaginaProveedor({ params }: { params: Promise<{ id
         ) : ev.pendientes.length ? (
           <p className="text-[var(--alerta)]">Para evaluarlo falta: {ev.pendientes.join('; ')}.</p>
         ) : (
-          <p className="text-[var(--ok)]">Pasa los filtros de GESI para un primer embarque.</p>
+          <p className="text-[var(--ok)]">Cumple los requisitos para un primer embarque.</p>
         )}
       </section>
       <section className="panel">

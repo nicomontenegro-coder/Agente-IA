@@ -31,7 +31,7 @@ igual(
 igual(
   'no aceptar carta de crédito en el primer embarque elimina',
   evaluarProveedor({ certificados: [{ tipo: 'CALIDAD', vigenteHasta: null }], aceptaCartaCredito: false }, true, hoy),
-  { eliminado: true, motivos: ['No acepta carta de crédito en el primer embarque'], pendientes: [], puntaje: 1 }
+  { eliminado: true, motivos: ['No acepta carta de crédito (primer embarque)'], pendientes: [], puntaje: 1 }
 )
 igual(
   'en embarques siguientes no exigir carta de crédito',
@@ -41,12 +41,12 @@ igual(
 igual(
   'certificados todos vencidos elimina',
   evaluarProveedor({ certificados: [{ tipo: 'CALIDAD', vigenteHasta: dia('2025-01-01') }], aceptaCartaCredito: true }, true, hoy).motivos,
-  ['Sus certificados están vencidos']
+  ['Certificados vencidos']
 )
 igual(
   'si todavía no manda certificados ni responde sobre la carta, queda pendiente, no eliminado',
   evaluarProveedor({ certificados: [], aceptaCartaCredito: null }, true, hoy),
-  { eliminado: false, motivos: [], pendientes: ['Falta que envíe sus certificados', 'Falta confirmar si acepta carta de crédito'], puntaje: 0 }
+  { eliminado: false, motivos: [], pendientes: ['Certificados pendientes', 'Carta de crédito por confirmar'], puntaje: 0 }
 )
 
 grupo('Comparar cotizaciones')
@@ -56,7 +56,7 @@ igual('mismo incoterm y lugar: se comparan directo', avisoComparacion([{ moneda:
 igual(
   'FOB Ambarlı contra EXW Hebei: avisa',
   avisoComparacion([{ moneda: 'USD', incoterm: 'FOB', lugar: 'Ambarlı' }, { moneda: 'USD', incoterm: 'EXW', lugar: 'Hebei' }]),
-  'Las cotizaciones vienen en distinta moneda, incoterm o lugar: los totales no se comparan directo. Compáralas por landed cost.'
+  'Las cotizaciones difieren en moneda, incoterm o lugar: los totales no son comparables directamente. Compara por landed cost.'
 )
 
 terminar()

@@ -47,7 +47,7 @@ export function sugerirProveedores(leido: { nombre: string | null; email: string
   const resultado: (Sugerencia & { puntos: number })[] = []
   for (const p of guardados) {
     if (dom && dominio(p.email) === dom) {
-      resultado.push({ id: p.id, nombre: p.nombre, motivo: `mismo dominio de correo (${dom})`, puntos: 2 })
+      resultado.push({ id: p.id, nombre: p.nombre, motivo: `coincide el dominio de correo (${dom})`, puntos: 2 })
       continue
     }
     const suyo = nucleoDelNombre(p.nombre)
@@ -57,7 +57,7 @@ export function sugerirProveedores(leido: { nombre: string | null; email: string
     // («pipes») no basta: es el rubro, no la empresa.
     const comunes = suyo.filter((x) => nucleo.includes(x))
     if (comunes.length === suyo.length && (comunes.length >= 2 || suyo.length === 1)) {
-      resultado.push({ id: p.id, nombre: p.nombre, motivo: 'el nombre coincide', puntos: 1 })
+      resultado.push({ id: p.id, nombre: p.nombre, motivo: 'coincide el nombre', puntos: 1 })
     }
   }
   return resultado.sort((a, b) => b.puntos - a.puntos).map(({ id, nombre, motivo }) => ({ id, nombre, motivo }))

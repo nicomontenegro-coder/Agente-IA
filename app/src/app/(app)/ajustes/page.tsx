@@ -16,7 +16,7 @@ export default async function PaginaAjustes() {
   )
   return (
     <div className="space-y-5 max-w-3xl">
-      <Encabezado titulo="Ajustes" descripcion="Los datos de GESI que salen en las RFQ y en las órdenes de compra." />
+      <Encabezado titulo="Ajustes" descripcion="Datos de la empresa que aparecen en las RFQ y órdenes de compra." />
       <FormAccion accion={guardarEmpresa} clase="panel p-5 space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
           {campo('nombre', 'Razón social', e.nombre)}

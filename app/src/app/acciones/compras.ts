@@ -38,9 +38,9 @@ function refrescar(id?: string) {
 /** Crea la compra con sus líneas. Las líneas se leen con getAll: son varias filas con los mismos nombres. */
 export async function crearCompra(_e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const titulo = texto(datos.get('titulo'))
-  if (!titulo) return { error: 'Escribe de qué se trata la compra' }
+  if (!titulo) return { error: 'Ingresa el título de la compra' }
   const incoterm = texto(datos.get('incoterm')) ?? 'FOB'
-  if (!incotermValido(incoterm)) return { error: 'Elige un incoterm' }
+  if (!incotermValido(incoterm)) return { error: 'Selecciona un incoterm' }
 
   const descripciones = datos.getAll('descripcion')
   const especificaciones = datos.getAll('especificacion')
@@ -53,8 +53,8 @@ export async function crearCompra(_e: EstadoForm, datos: FormData): Promise<Esta
     const descripcion = texto(d)
     const cantidad = numero(cantidades[i] ?? null)
     if (!descripcion && cantidad == null) return
-    if (!descripcion) return problemas.push(`La línea ${i + 1} tiene cantidad pero no dice qué producto es`)
-    if (cantidad == null || cantidad <= 0) return problemas.push(`«${descripcion}» no tiene cantidad: sin ella el proveedor no puede cotizar`)
+    if (!descripcion) return problemas.push(`Línea ${i + 1}: ingresa la descripción del producto`)
+    if (cantidad == null || cantidad <= 0) return problemas.push(`«${descripcion}»: ingresa la cantidad`)
     lineas.push({
       descripcion,
       especificacion: texto(especificaciones[i] ?? null),
@@ -65,11 +65,11 @@ export async function crearCompra(_e: EstadoForm, datos: FormData): Promise<Esta
     })
   })
   if (problemas.length) return { error: problemas.join('. ') }
-  if (lineas.length === 0) return { error: 'Agrega al menos un producto con su cantidad' }
+  if (lineas.length === 0) return { error: 'Agrega al menos un producto con cantidad' }
 
   const plazoRespuesta = fechaDe(datos.get('plazoRespuesta'))
   if (plazoRespuesta && plazoRespuesta.getTime() < new Date().setHours(0, 0, 0, 0)) {
-    return { error: 'El plazo de respuesta ya pasó: elige una fecha de hoy en adelante' }
+    return { error: 'El plazo de respuesta debe ser igual o posterior a hoy' }
   }
   const c = await db.compra.create({
     data: {
@@ -89,12 +89,12 @@ export async function crearCompra(_e: EstadoForm, datos: FormData): Promise<Esta
 
 export async function invitarProveedor(compraId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const proveedorId = texto(datos.get('proveedorId'))
-  if (!proveedorId) return { error: 'Elige un proveedor' }
+  if (!proveedorId) return { error: 'Selecciona un proveedor' }
   const ya = await db.invitacion.findUnique({ where: { compraId_proveedorId: { compraId, proveedorId } } })
-  if (ya) return { error: 'Ese proveedor ya está invitado' }
+  if (ya) return { error: 'El proveedor ya está invitado' }
   await db.invitacion.create({ data: { compraId, proveedorId } })
   refrescar(compraId)
-  return { ok: 'Proveedor agregado: abre su RFQ para enviarla' }
+  return { ok: 'Proveedor invitado. Abre su RFQ para enviarla' }
 }
 
 export async function marcarEnviada(compraId: string, invitacionId: string) {
@@ -115,13 +115,13 @@ export async function marcarDeclino(compraId: string, invitacionId: string) {
  */
 export async function registrarCotizacion(compraId: string, invitacionId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const incoterm = texto(datos.get('incoterm'))
-  if (!incotermValido(incoterm)) return { error: 'Elige el incoterm que cotizó el proveedor' }
+  if (!incotermValido(incoterm)) return { error: 'Selecciona el incoterm cotizado' }
   const compra = await db.compra.findUnique({ where: { id: compraId }, include: { lineas: true } })
-  if (!compra) return { error: 'Esa compra ya no existe' }
+  if (!compra) return { error: 'La compra no existe' }
   const aceptaTexto = texto(datos.get('aceptaCartaCredito'))
   const aceptaCartaCredito = aceptaTexto === 'SI' ? true : aceptaTexto === 'NO' ? false : null
   const precios = compra.lineas.map((l) => ({ compraLineaId: l.id, precioUnitario: numero(datos.get(`precio-${l.id}`)) }))
-  if (precios.every((p) => p.precioUnitario == null)) return { error: 'Escribe al menos un precio' }
+  if (precios.every((p) => p.precioUnitario == null)) return { error: 'Ingresa al menos un precio' }
   if (precios.some((p) => p.precioUnitario != null && p.precioUnitario < 0)) return { error: 'Un precio no puede ser negativo' }
 
   // El desglose del proveedor: filas con los mismos nombres, se leen con getAll.
@@ -153,7 +153,7 @@ export async function registrarCotizacion(compraId: string, invitacionId: string
   const totalLineas = totalCotizacion(compra.lineas.map((l) => ({ compraLineaId: l.id, cantidad: l.cantidad, precioUnitario: precios.find((p) => p.compraLineaId === l.id)!.precioUnitario })))
   const problemas = [...revisarDesglose(desglose, documento).problemas, cuadraConPedido(totalLineas, documento.total, moneda)].filter((x): x is string => !!x)
   if (problemas.length && datos.get('aceptoDiferencias') !== 'on') {
-    return { error: `Las cuentas no cuadran: ${problemas.join('. ')}. Corrige el dato mal copiado, o marca «Guardar igual» si el error es del documento del proveedor.` }
+    return { error: `Diferencias en los montos: ${problemas.join('. ')}. Corrige el dato o marca «Guardar con diferencias» si el error está en el documento del proveedor.` }
   }
 
   // El PDF viene de la lectura que se está revisando, si la hay.
@@ -178,7 +178,7 @@ export async function registrarCotizacion(compraId: string, invitacionId: string
     recibidaEl: fechaDe(datos.get('recibidaEl')) ?? new Date()
   }
   const inv = await db.invitacion.findUnique({ where: { id: invitacionId }, include: { cotizacion: true } })
-  if (!inv) return { error: 'Esa invitación ya no existe' }
+  if (!inv) return { error: 'La invitación no existe' }
   await db.$transaction(async (tx) => {
     const filas = desglose.map((d, posicion) => ({ ...d, posicion }))
     if (inv.cotizacion) {
@@ -202,12 +202,12 @@ export async function registrarCotizacion(compraId: string, invitacionId: string
 /** Guarda el PDF y, si hay lector, lo lee. Lo comparten las dos formas de subirlo. */
 async function guardarYLeer(compraId: string, datos: FormData): Promise<{ error: string } | { archivo: string; archivoNombre: string; lectura: string | null; error: string | null }> {
   const archivo = datos.get('pdf')
-  if (!(archivo instanceof File) || archivo.size === 0) return { error: 'Elige el PDF de la cotización' }
-  if (archivo.size > MAXIMO_PDF) return { error: 'El PDF pesa más de 30 MB: es demasiado para leerlo' }
+  if (!(archivo instanceof File) || archivo.size === 0) return { error: 'Selecciona el PDF de la cotización' }
+  if (archivo.size > MAXIMO_PDF) return { error: 'El PDF supera el máximo de 30 MB' }
   const contenido = Buffer.from(await archivo.arrayBuffer())
-  if (!esPdf(contenido)) return { error: 'Ese archivo no es un PDF' }
+  if (!esPdf(contenido)) return { error: 'El archivo no es un PDF válido' }
   const compra = await db.compra.findUnique({ where: { id: compraId }, include: { lineas: { orderBy: { orden: 'asc' } } } })
-  if (!compra) return { error: 'Esa compra ya no existe' }
+  if (!compra) return { error: 'La compra no existe' }
 
   const nombre = await guardarPdf(archivo)
   let lectura: string | null = null
@@ -260,16 +260,16 @@ async function asignarA(compraId: string, lecturaId: string, proveedorId: string
 
 export async function asignarLectura(compraId: string, lecturaId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const proveedorId = texto(datos.get('proveedorId'))
-  if (!proveedorId) return { error: 'Elige el proveedor' }
-  if (!(await db.proveedor.findUnique({ where: { id: proveedorId } }))) return { error: 'Ese proveedor ya no existe' }
+  if (!proveedorId) return { error: 'Selecciona un proveedor' }
+  if (!(await db.proveedor.findUnique({ where: { id: proveedorId } }))) return { error: 'El proveedor no existe' }
   return asignarA(compraId, lecturaId, proveedorId)
 }
 
 /** Crea el proveedor con los datos del membrete y le asigna la lectura. */
 export async function crearProveedorDeLectura(compraId: string, lecturaId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const nombre = texto(datos.get('nombre'))
-  if (!nombre) return { error: 'Escribe el nombre del proveedor' }
-  if (await db.proveedor.findUnique({ where: { nombre } })) return { error: 'Ya hay un proveedor con ese nombre: elígelo en la lista de arriba' }
+  if (!nombre) return { error: 'Ingresa el nombre del proveedor' }
+  if (await db.proveedor.findUnique({ where: { nombre } })) return { error: 'Ya existe un proveedor con ese nombre: selecciónalo en la lista' }
   const p = await db.proveedor.create({
     data: { nombre, pais: texto(datos.get('pais')), contacto: texto(datos.get('contacto')), email: texto(datos.get('email')), telefono: texto(datos.get('telefono')) }
   })
@@ -281,8 +281,8 @@ export async function crearProveedorDeLectura(compraId: string, lecturaId: strin
 export async function guardarMedida(compraId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const medidaRef = numero(datos.get('medidaRef'))
   const unidadRef = texto(datos.get('unidadRef'))
-  if (medidaRef != null && medidaRef <= 0) return { error: 'La medida tiene que ser mayor que cero' }
-  if (medidaRef != null && !unidadRef) return { error: 'Escribe en qué se mide: m², m, kg…' }
+  if (medidaRef != null && medidaRef <= 0) return { error: 'La medida debe ser mayor que cero' }
+  if (medidaRef != null && !unidadRef) return { error: 'Ingresa la unidad de medida: m², m, kg…' }
   await db.compra.update({ where: { id: compraId }, data: { medidaRef, unidadRef: medidaRef == null ? null : unidadRef } })
   refrescar(compraId)
   return { ok: medidaRef == null ? 'Medida borrada' : 'Medida guardada' }
@@ -296,11 +296,11 @@ export async function guardarMedida(compraId: string, _e: EstadoForm, datos: For
 export async function emitirOrden(compraId: string, cotizacionId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const cot = await db.cotizacion.findUnique({ where: { id: cotizacionId }, include: { lineas: true, invitacion: true } })
   const compra = await db.compra.findUnique({ where: { id: compraId }, include: { lineas: { orderBy: { orden: 'asc' }, include: { producto: true } } } })
-  if (!cot || !compra || cot.invitacion.compraId !== compraId) return { error: 'Esa cotización no es de esta compra' }
+  if (!cot || !compra || cot.invitacion.compraId !== compraId) return { error: 'La cotización no corresponde a esta compra' }
   const faltan = compra.lineas.filter((l) => cot.lineas.find((x) => x.compraLineaId === l.id)?.precioUnitario == null)
-  if (faltan.length) return { error: `Falta el precio de: ${faltan.map((l) => l.descripcion).join(', ')}. Complétalo en la cotización antes de emitir la OC` }
+  if (faltan.length) return { error: `Falta el precio de: ${faltan.map((l) => l.descripcion).join(', ')}. Complétalo en la cotización para emitir la OC` }
   const formaPago = texto(datos.get('formaPago'))
-  if (formaPago !== 'CARTA_CREDITO' && formaPago !== 'TT') return { error: 'Elige la forma de pago' }
+  if (formaPago !== 'CARTA_CREDITO' && formaPago !== 'TT') return { error: 'Selecciona la forma de pago' }
 
   const o = await db.ordenCompra.create({
     data: {
@@ -337,7 +337,7 @@ export async function emitirOrden(compraId: string, cotizacionId: string, _e: Es
 
 export async function registrarPago(compraId: string, ordenId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const tipo = texto(datos.get('tipo'))
-  if (!tipo || !['CARTA_CREDITO', 'ANTICIPO', 'SALDO'].includes(tipo)) return { error: 'Elige qué pago es' }
+  if (!tipo || !['CARTA_CREDITO', 'ANTICIPO', 'SALDO'].includes(tipo)) return { error: 'Selecciona el tipo de pago' }
   await db.pago.create({ data: { ordenId, tipo, monto: numero(datos.get('monto')), fecha: fechaDe(datos.get('fecha')) ?? new Date(), nota: texto(datos.get('nota')) } })
   refrescar(compraId)
   return { ok: 'Pago registrado' }
@@ -346,9 +346,9 @@ export async function registrarPago(compraId: string, ordenId: string, _e: Estad
 /** Cambio de etapa a mano, comparado contra la etapa que vale (no la guardada). */
 export async function cambiarEtapa(compraId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   const c = await compraCompleta(compraId)
-  if (!c) return { error: 'Esa compra ya no existe' }
+  if (!c) return { error: 'La compra no existe' }
   const a = texto(datos.get('etapa'))
-  if (!a) return { error: 'Elige la etapa' }
+  if (!a) return { error: 'Selecciona la etapa' }
   const nota = texto(datos.get('nota'))
   const error = validarCambio(c.etapaVale, a, nota)
   if (error) return { error }
