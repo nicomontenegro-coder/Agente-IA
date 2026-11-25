@@ -58,3 +58,6 @@ prisma/*.db-journal
 
 # Capturas de pantalla de `npm run mirar` (se regeneran, no se versionan)
 /capturas/
+
+# PDF de los proveedores (viven en el servidor, no en git)
+/documentos/

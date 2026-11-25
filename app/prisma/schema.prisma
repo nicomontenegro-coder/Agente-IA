@@ -110,6 +110,10 @@ model Compra {
   etapa     String   @default("NECESIDAD")
   /// Por qué se canceló o se corrigió hacia atrás.
   nota      String?
+  /// Medida para comparar ofertas que cada proveedor cubica distinto:
+  /// 722 m² de un galpón, 3.000 m de tubería. Con ella sale «US$ por m²».
+  medidaRef Float?
+  unidadRef String?
   creadoEn  DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
@@ -169,9 +173,46 @@ model Cotizacion {
   /// Lo que dijo el proveedor en esta cotización; también actualiza su ficha.
   aceptaCartaCredito Boolean?
   notas        String?
+  /// El PDF del proveedor, guardado en la carpeta de documentos.
+  archivo       String?
+  archivoNombre String?
+  /// Lo que dice el documento, para comprobar que las cuentas cuadran.
+  subtotalDocumento Float?
+  /// Gastos aparte hasta FOB (flete interno, despacho), si cotiza EXW + gastos.
+  gastosDocumento   Float?
+  totalDocumento    Float?
 
-  lineas  CotizacionLinea[]
-  ordenes OrdenCompra[]
+  lineas   CotizacionLinea[]
+  desglose CotizacionDesglose[]
+  ordenes  OrdenCompra[]
+}
+
+/// El detalle con que el proveedor arma su precio (su cubicación). Se guarda
+/// aparte de las líneas de la compra: cada proveedor cubica distinto, y lo que
+/// se compara y se compra es lo que pidió GESI, no su lista de piezas.
+model CotizacionDesglose {
+  id             String     @id @default(cuid())
+  cotizacionId   String
+  cotizacion     Cotizacion @relation(fields: [cotizacionId], references: [id], onDelete: Cascade)
+  posicion       Int
+  descripcion    String
+  unidad         String?
+  cantidad       Float?
+  precioUnitario Float?
+  monto          Float?
+}
+
+/// Lo que leyó la IA de un PDF, esperando que una persona lo revise. Se borra
+/// al guardar la cotización: la IA propone, no guarda.
+model LecturaPendiente {
+  id            String   @id @default(cuid())
+  invitacionId  String
+  archivo       String
+  archivoNombre String
+  /// La lectura completa en JSON (null si no hubo lector y solo se adjuntó el PDF).
+  lectura       String?
+  error         String?
+  creadoEn      DateTime @default(now())
 }
 
 /// El precio de una línea de la compra en una cotización (tabla intermedia con datos).

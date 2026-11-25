@@ -2,6 +2,7 @@ import 'server-only'
 
 import { db } from './db'
 import { etapaCompra, type HechosCompra } from './compra'
+import { toneladas, porMedida } from './lectura'
 import { estadoInvitacion, evaluarProveedor, totalCotizacion, avisoComparacion } from './proveedores'
 
 /**
@@ -15,7 +16,7 @@ const INCLUIR = {
     orderBy: { creadoEn: 'asc' as const },
     include: {
       proveedor: { include: { certificados: true } },
-      cotizacion: { include: { lineas: true } }
+      cotizacion: { include: { lineas: true, desglose: { orderBy: { posicion: 'asc' as const } } } }
     }
   },
   ordenes: { orderBy: { fecha: 'asc' as const }, include: { pagos: true, lineas: true, cotizacion: { include: { invitacion: { include: { proveedor: true } } } } } }
@@ -74,6 +75,10 @@ export async function compraCompleta(id: string, hoy = new Date()) {
       lineasCotizadas,
       total: i.cotizacion ? totalCotizacion(lineasCotizadas) : null
     }
+  }).map((i) => {
+    // Indicadores para comparar lo que cada proveedor cubica distinto.
+    const ton = i.cotizacion ? toneladas(i.cotizacion.desglose) : null
+    return { ...i, toneladas: ton, porMedida: porMedida(i.total, c.medidaRef), porTonelada: porMedida(i.total, ton) }
   })
   const cotizadas = invitaciones.filter((i) => i.cotizacion)
   return {

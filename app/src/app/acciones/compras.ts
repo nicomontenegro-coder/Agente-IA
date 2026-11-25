@@ -8,6 +8,10 @@ import { siguienteNumero, compraCompleta } from '@/lib/compras-db'
 import { validarCambio } from '@/lib/compra'
 import { INCOTERM_LABEL } from '@/lib/incoterms'
 import { leerNumero } from '@/lib/numeros'
+import { guardarPdf, esPdf, MAXIMO_PDF } from '@/lib/archivos'
+import { hayLectorIa, leerCotizacion } from '@/lib/leer-cotizacion'
+import { revisarDesglose, cuadraConPedido, type LineaDesglose } from '@/lib/lectura'
+import { totalCotizacion } from '@/lib/proveedores'
 
 export interface EstadoForm {
   error?: string
@@ -120,9 +124,50 @@ export async function registrarCotizacion(compraId: string, invitacionId: string
   if (precios.every((p) => p.precioUnitario == null)) return { error: 'Escribe al menos un precio' }
   if (precios.some((p) => p.precioUnitario != null && p.precioUnitario < 0)) return { error: 'Un precio no puede ser negativo' }
 
+  // El desglose del proveedor: filas con los mismos nombres, se leen con getAll.
+  const dDesc = datos.getAll('d-descripcion')
+  const dUni = datos.getAll('d-unidad')
+  const dCant = datos.getAll('d-cantidad')
+  const dPrecio = datos.getAll('d-precio')
+  const dMonto = datos.getAll('d-monto')
+  const desglose: LineaDesglose[] = []
+  dDesc.forEach((d, k) => {
+    const descripcion = texto(d)
+    if (!descripcion) return
+    desglose.push({
+      descripcion,
+      unidad: texto(dUni[k] ?? null),
+      cantidad: numero(dCant[k] ?? null),
+      precioUnitario: numero(dPrecio[k] ?? null),
+      monto: numero(dMonto[k] ?? null)
+    })
+  })
+  const documento = {
+    subtotal: numero(datos.get('subtotalDocumento')),
+    gastos: numero(datos.get('gastosDocumento')),
+    total: numero(datos.get('totalDocumento'))
+  }
+  // Las cuentas se rehacen al guardar, no solo al leer: lo que se corrigió a
+  // mano también tiene que cuadrar.
+  const moneda = texto(datos.get('moneda')) ?? 'USD'
+  const totalLineas = totalCotizacion(compra.lineas.map((l) => ({ compraLineaId: l.id, cantidad: l.cantidad, precioUnitario: precios.find((p) => p.compraLineaId === l.id)!.precioUnitario })))
+  const problemas = [...revisarDesglose(desglose, documento).problemas, cuadraConPedido(totalLineas, documento.total, moneda)].filter((x): x is string => !!x)
+  if (problemas.length && datos.get('aceptoDiferencias') !== 'on') {
+    return { error: `Las cuentas no cuadran: ${problemas.join('. ')}. Corrige el dato mal copiado, o marca «Guardar igual» si el error es del documento del proveedor.` }
+  }
+
+  // El PDF viene de la lectura que se está revisando, si la hay.
+  const lecturaId = texto(datos.get('lecturaId'))
+  const lectura = lecturaId ? await db.lecturaPendiente.findUnique({ where: { id: lecturaId } }) : null
+  const adjunto = lectura && lectura.invitacionId === invitacionId ? { archivo: lectura.archivo, archivoNombre: lectura.archivoNombre } : {}
+
   const cabecera = {
+    ...adjunto,
+    subtotalDocumento: documento.subtotal,
+    gastosDocumento: documento.gastos,
+    totalDocumento: documento.total,
     referencia: texto(datos.get('referencia')),
-    moneda: texto(datos.get('moneda')) ?? 'USD',
+    moneda,
     incoterm: incoterm!,
     lugar: texto(datos.get('lugar')),
     leadTimeDias: numero(datos.get('leadTimeDias')),
@@ -135,12 +180,16 @@ export async function registrarCotizacion(compraId: string, invitacionId: string
   const inv = await db.invitacion.findUnique({ where: { id: invitacionId }, include: { cotizacion: true } })
   if (!inv) return { error: 'Esa invitación ya no existe' }
   await db.$transaction(async (tx) => {
+    const filas = desglose.map((d, posicion) => ({ ...d, posicion }))
     if (inv.cotizacion) {
       await tx.cotizacionLinea.deleteMany({ where: { cotizacionId: inv.cotizacion.id } })
-      await tx.cotizacion.update({ where: { id: inv.cotizacion.id }, data: { ...cabecera, leadTimeDias: cabecera.leadTimeDias ?? null, validezDias: cabecera.validezDias ?? null, lineas: { create: precios } } })
+      await tx.cotizacionDesglose.deleteMany({ where: { cotizacionId: inv.cotizacion.id } })
+      await tx.cotizacion.update({ where: { id: inv.cotizacion.id }, data: { ...cabecera, leadTimeDias: cabecera.leadTimeDias ?? null, validezDias: cabecera.validezDias ?? null, lineas: { create: precios }, desglose: { create: filas } } })
     } else {
-      await tx.cotizacion.create({ data: { ...cabecera, invitacionId, lineas: { create: precios } } })
+      await tx.cotizacion.create({ data: { ...cabecera, invitacionId, lineas: { create: precios }, desglose: { create: filas } } })
     }
+    // La IA propuso, la persona aceptó: la propuesta ya no hace falta.
+    if (lectura) await tx.lecturaPendiente.delete({ where: { id: lectura.id } })
     // Si la invitación no estaba marcada como enviada, haber cotizado lo prueba.
     if (!inv.enviadaEl) await tx.invitacion.update({ where: { id: invitacionId }, data: { enviadaEl: cabecera.recibidaEl } })
     // Lo que el proveedor dice de la carta de crédito queda en su ficha.
@@ -148,6 +197,43 @@ export async function registrarCotizacion(compraId: string, invitacionId: string
   })
   refrescar(compraId)
   redirect(`/compras/${compraId}`)
+}
+
+/**
+ * Sube el PDF del proveedor y, si hay lector, lo lee. No guarda la
+ * cotización: deja la lectura pendiente y vuelve al formulario ya lleno, para
+ * que una persona la revise contra el documento.
+ */
+export async function subirPdf(compraId: string, invitacionId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const archivo = datos.get('pdf')
+  if (!(archivo instanceof File) || archivo.size === 0) return { error: 'Elige el PDF de la cotización' }
+  if (archivo.size > MAXIMO_PDF) return { error: 'El PDF pesa más de 30 MB: es demasiado para leerlo' }
+  const contenido = Buffer.from(await archivo.arrayBuffer())
+  if (!esPdf(contenido)) return { error: 'Ese archivo no es un PDF' }
+  const compra = await db.compra.findUnique({ where: { id: compraId }, include: { lineas: { orderBy: { orden: 'asc' } } } })
+  if (!compra) return { error: 'Esa compra ya no existe' }
+
+  const nombre = await guardarPdf(archivo)
+  let lectura: string | null = null
+  let error: string | null = null
+  if (hayLectorIa()) {
+    const r = await leerCotizacion(contenido.toString('base64'), compra.lineas.map((l) => ({ id: l.id, descripcion: l.descripcion, cantidad: l.cantidad, unidad: l.unidad })))
+    if (r.ok) lectura = JSON.stringify(r.lectura)
+    else error = r.error
+  }
+  const p = await db.lecturaPendiente.create({ data: { invitacionId, archivo: nombre, archivoNombre: archivo.name || 'cotizacion.pdf', lectura, error } })
+  redirect(`/compras/${compraId}/cotizacion/${invitacionId}?lectura=${p.id}`)
+}
+
+/** La medida para comparar ofertas que cada proveedor cubica distinto. */
+export async function guardarMedida(compraId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const medidaRef = numero(datos.get('medidaRef'))
+  const unidadRef = texto(datos.get('unidadRef'))
+  if (medidaRef != null && medidaRef <= 0) return { error: 'La medida tiene que ser mayor que cero' }
+  if (medidaRef != null && !unidadRef) return { error: 'Escribe en qué se mide: m², m, kg…' }
+  await db.compra.update({ where: { id: compraId }, data: { medidaRef, unidadRef: medidaRef == null ? null : unidadRef } })
+  refrescar(compraId)
+  return { ok: medidaRef == null ? 'Medida borrada' : 'Medida guardada' }
 }
 
 /**

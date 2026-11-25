@@ -10,7 +10,7 @@ import { codigo } from '@/lib/codigos'
 import { ETIQUETA_ETAPA, ETAPAS_COMPRA, SIGUE_ETAPA } from '@/lib/compra'
 import { totalesOrden } from '@/lib/documentos'
 import { numero, fecha, conUnidad } from '@/lib/formato'
-import { invitarProveedor, marcarDeclino, registrarPago, cambiarEtapa } from '@/app/acciones/compras'
+import { invitarProveedor, marcarDeclino, registrarPago, cambiarEtapa, guardarMedida } from '@/app/acciones/compras'
 
 export const dynamic = 'force-dynamic'
 
@@ -231,6 +231,64 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
                   </td>
                 ))}
               </tr>
+              {c.medidaRef != null && (
+                <tr>
+                  <td className="text-sm">
+                    Por {c.unidadRef}
+                    <div className="text-xs text-[var(--texto-tenue)]">total ÷ {numero(c.medidaRef, c.medidaRef % 1 ? 2 : 0)} {c.unidadRef}</div>
+                  </td>
+                  {respondidas.map((i) => (
+                    <td key={i.id} className="text-right num">
+                      {i.porMedida != null ? numero(i.porMedida, 2) : '—'}
+                    </td>
+                  ))}
+                </tr>
+              )}
+              {respondidas.some((i) => i.toneladas != null) && (
+                <>
+                  <tr>
+                    <td className="text-sm">
+                      Acero
+                      <div className="text-xs text-[var(--texto-tenue)]">toneladas de su desglose</div>
+                    </td>
+                    {respondidas.map((i) => (
+                      <td key={i.id} className="text-right num">
+                        {i.toneladas != null ? `${numero(i.toneladas, 2)} t` : '—'}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="text-sm">
+                      Por tonelada
+                      <div className="text-xs text-[var(--texto-tenue)]">total ÷ toneladas: incluye planchas, pernos y gastos</div>
+                    </td>
+                    {respondidas.map((i) => (
+                      <td key={i.id} className="text-right num">
+                        {i.porTonelada != null ? numero(i.porTonelada, 0) : '—'}
+                      </td>
+                    ))}
+                  </tr>
+                </>
+              )}
+              <tr>
+                <td className="text-sm">Documento</td>
+                {respondidas.map((i) => (
+                  <td key={i.id} className="text-right text-sm">
+                    {i.cotizacion!.archivo ? (
+                      <a href={`/documentos/${i.cotizacion!.archivo}`} target="_blank" rel="noreferrer" className="text-[var(--acento)] underline">
+                        PDF ↗
+                      </a>
+                    ) : (
+                      <span className="text-[var(--texto-tenue)]">sin PDF</span>
+                    )}
+                    {i.cotizacion!.desglose.length > 0 && (
+                      <Link href={`/compras/${c.id}/cotizacion/${i.id}`} className="block text-xs text-[var(--texto-tenue)] underline">
+                        desglose: {i.cotizacion!.desglose.length} ítems
+                      </Link>
+                    )}
+                  </td>
+                ))}
+              </tr>
               <tr>
                 <td className="text-sm">Incoterm y lugar</td>
                 {respondidas.map((i) => (
@@ -271,6 +329,17 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
               </tr>
             </tbody>
           </table>
+          <FormAccion accion={guardarMedida.bind(null, c.id)} etiqueta="Guardar medida" clase="flex flex-wrap items-end gap-3 px-4 py-3 border-t border-[var(--borde)]">
+            <label className="text-sm space-y-1">
+              <span className="font-medium">Medida para comparar</span>
+              <input name="medidaRef" className="campo num w-28" inputMode="decimal" defaultValue={c.medidaRef != null ? String(c.medidaRef).replace('.', ',') : ''} placeholder="722" />
+            </label>
+            <label className="text-sm space-y-1">
+              <span className="font-medium">Unidad</span>
+              <input name="unidadRef" className="campo w-20" defaultValue={c.unidadRef ?? ''} placeholder="m²" />
+            </label>
+            <p className="text-xs text-[var(--texto-tenue)] basis-full">Cuando cada proveedor cubica distinto: los m² del galpón dan «precio por m²» y comparan ofertas que no se comparan ítem por ítem.</p>
+          </FormAccion>
         </section>
       )}
 

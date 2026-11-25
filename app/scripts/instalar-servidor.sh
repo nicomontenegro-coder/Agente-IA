@@ -35,6 +35,9 @@ Environment=NODE_ENV=production
 Environment=TZ=America/Santiago
 Environment=GESI_DIST_DIR=.next-nube
 Environment=DATABASE_URL=file:$APP/prisma/gesi.db
+Environment=GESI_DOCUMENTOS=/home/ubuntu/gesi-documentos
+# La clave de la API para leer PDF es la misma de Importa; el guion previo la omite si no existe.
+EnvironmentFile=-/etc/importa.env
 ExecStart=/usr/bin/node $APP/node_modules/next/dist/bin/next start -H 127.0.0.1 -p 3010
 Restart=always
 RestartSec=5
