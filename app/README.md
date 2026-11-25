@@ -31,6 +31,16 @@ npm run typecheck
 - Reutiliza de Importa: incoterms, formato de números y fechas, textos de RFQ, componentes y estilos.
 - Next.js 16, Prisma 7 y SQLite, igual que Importa.
 
+## En el servidor
+
+- Corre en el mismo servidor de Oracle que Importa, en el puerto 3010, y se actualiza sola desde
+  GitHub cada dos minutos (`scripts/auto-desplegar.sh`). Se instaló con `scripts/instalar-servidor.sh`.
+- Direcciones: **https://compras.gesi.cl** (esta app) e **https://importa.gesi.cl** (Importa), con el
+  mismo usuario y clave. También responden las direcciones `sslip.io` con la IP.
+- El DNS de gesi.cl está en TuWeb (cPanel, Editor de zona): dos registros A, `importa` y `compras`,
+  hacia la IP del servidor. **Si Oracle cambia la IP, se actualizan esos dos registros**; el correo y
+  la web de gesi.cl no dependen de ellos. Caddy toma los nombres con `scripts/dominio-propio.sh`.
+
 ## Falta
 
 Muestras, documentos de embarque, recepción, calce de 3 vías, landed cost en la comparativa,
