@@ -5,7 +5,7 @@
  * Caso real: Quanzhou Ridge Steel Structure, galpón 19 × 38 × 8 m (24-11-2026).
  */
 
-import { revisarDesglose, toneladas, porMedida, cuadraConPedido, type LineaDesglose } from './lectura'
+import { revisarDesglose, toneladas, porMedida, cuadraConPedido, precioDeLinea, type LineaDesglose } from './lectura'
 import { igual, grupo, terminar } from './prueba'
 
 const ridge: LineaDesglose[] = [
@@ -64,5 +64,13 @@ igual(
   'Los precios por línea suman USD 48.352,16, pero el documento dice USD 49.752,16'
 )
 igual('sin total del documento no hay contra qué comparar', cuadraConPedido(48352.16, null), null)
+
+grupo('El precio por unidad cuando el documento cotiza un monto global')
+const m2 = precioDeLinea({ precioUnitario: null, montoTotal: 49752.16 }, 722)
+igual('galpón cotizado completo y pedido en 722 m²: se divide sin redondear', m2, 68.908809)
+igual('y vuelve a dar el total del documento', cuadraConPedido(Math.round(m2! * 722 * 100) / 100, 49752.16), null)
+igual('redondear a 68,91 habría descuadrado 0,86', cuadraConPedido(68.91 * 722, 49752.16), 'Los precios por línea suman USD 49.753,02, pero el documento dice USD 49.752,16')
+igual('si el documento da precio unitario, se usa tal cual', precioDeLinea({ precioUnitario: 0.79, montoTotal: 1580 }, 2000), 0.79)
+igual('sin precio ni monto no hay precio', precioDeLinea({ precioUnitario: null, montoTotal: null }, 10), null)
 
 terminar()

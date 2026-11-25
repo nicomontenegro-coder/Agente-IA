@@ -43,7 +43,7 @@ export function lecturaDePrueba(pedido: LineaPedida[]): LecturaCotizacion {
       { descripcion: 'Normal bolt M12, 4.6S', unidad: 'Set', cantidad: 1224, precioUnitario: 0.1, monto: 122.4 },
       { descripcion: 'Accessories: screw, rivet, silicone, etc.', unidad: 'm2', cantidad: 1718, precioUnitario: 1.25, monto: 2147.5 }
     ],
-    preciosPorLinea: pedido.length ? [{ lineaId: pedido[0].id, precioUnitario: 49752.16, cita: 'Total Amount FOB XIAMEN: 49,752.16' }] : [],
+    preciosPorLinea: pedido.length ? [{ lineaId: pedido[0].id, precioUnitario: null, montoTotal: 49752.16, cita: 'Total Amount FOB XIAMEN: 49,752.16' }] : [],
     dudas: [
       'Plazo de embarque: dice 30-45 días después del anticipo; se tomó 45.',
       'El costo FOB de 1.400 (2 × 40\' HQ) está marcado como estimado: se ajusta según la carga real.'

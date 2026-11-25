@@ -78,3 +78,15 @@ export function cuadraConPedido(totalLineas: number | null, totalDocumento: numb
   if (cerca(totalLineas, totalDocumento)) return null
   return `Los precios por línea suman ${moneda} ${dos(totalLineas)}, pero el documento dice ${moneda} ${dos(totalDocumento)}`
 }
+
+/**
+ * El precio por la unidad que pidió GESI. Si el documento cotiza un monto
+ * global (el galpón completo) y GESI lo pidió en m², la división la hace la
+ * app y sin redondear a centavos: 68,91 × 722 m² ya no da el total del
+ * documento, y la verificación lo marcaría como error.
+ */
+export function precioDeLinea(leido: { precioUnitario: number | null; montoTotal: number | null }, cantidad: number): number | null {
+  if (leido.precioUnitario != null) return leido.precioUnitario
+  if (leido.montoTotal == null || !(cantidad > 0)) return null
+  return Math.round((leido.montoTotal / cantidad) * 1e6) / 1e6
+}

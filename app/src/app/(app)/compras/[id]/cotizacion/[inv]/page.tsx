@@ -8,7 +8,7 @@ import { codigo } from '@/lib/codigos'
 import { INCOTERM_LABEL } from '@/lib/incoterms'
 import { fechaInput, conUnidad, numero } from '@/lib/formato'
 import { hayLectorIa, type LecturaCotizacion } from '@/lib/leer-cotizacion'
-import { revisarDesglose, cuadraConPedido, type LineaDesglose } from '@/lib/lectura'
+import { revisarDesglose, cuadraConPedido, precioDeLinea, type LineaDesglose } from '@/lib/lectura'
 import { totalCotizacion } from '@/lib/proveedores'
 import { registrarCotizacion, subirPdf } from '@/app/acciones/compras'
 
@@ -37,14 +37,19 @@ export default async function PaginaCotizacion({
 
   // Lo que se muestra en el formulario: lo leído manda sobre lo guardado.
   const precioLeido = (lineaId: string) => leido?.preciosPorLinea.find((p) => p.lineaId === lineaId)
-  const precio = (lineaId: string) => (leido ? precioLeido(lineaId)?.precioUnitario : cot?.lineas.find((l) => l.compraLineaId === lineaId)?.precioUnitario)
+  const precio = (lineaId: string) => {
+    if (!leido) return cot?.lineas.find((l) => l.compraLineaId === lineaId)?.precioUnitario
+    const p = precioLeido(lineaId)
+    const linea = c.lineas.find((l) => l.id === lineaId)
+    return p && linea ? precioDeLinea({ precioUnitario: p.precioUnitario, montoTotal: p.montoTotal ?? null }, linea.cantidad) : null
+  }
   const desglose: LineaDesglose[] = leido?.desglose ?? cot?.desglose ?? []
   const documento = leido
     ? { subtotal: leido.subtotal, gastos: leido.gastosHastaFob, total: leido.total }
     : { subtotal: cot?.subtotalDocumento ?? null, gastos: cot?.gastosDocumento ?? null, total: cot?.totalDocumento ?? null }
   const lc = leido ? leido.aceptaCartaCredito ?? i.proveedor.aceptaCartaCredito : cot?.aceptaCartaCredito ?? i.proveedor.aceptaCartaCredito
   const incoterm = leido?.incoterm && leido.incoterm in INCOTERM_LABEL ? leido.incoterm : cot?.incoterm ?? c.incoterm
-  const notas = leido ? [leido.condicionesPago && `Pago: ${leido.condicionesPago}`, leido.noIncluye && `No incluye: ${leido.noIncluye}`].filter(Boolean).join('. ') : cot?.notas ?? ''
+  const notas = leido ? [leido.condicionesPago && `Pago: ${leido.condicionesPago}`, leido.noIncluye && `No incluye: ${leido.noIncluye}`].filter(Boolean).map((x) => String(x).replace(/\.+$/, '')).join('. ') : cot?.notas ?? ''
 
   // La app rehace las cuentas de lo leído: la IA puede leer mal un número.
   const moneda = leido?.moneda ?? cot?.moneda ?? 'USD'
@@ -183,6 +188,11 @@ export default async function PaginaCotizacion({
                     {l.descripcion}
                     {l.especificacion && <div className="text-xs text-[var(--texto-tenue)]">{l.especificacion}</div>}
                     {precioLeido(l.id) && <div className="text-xs text-[var(--texto-tenue)]">Del PDF: «{precioLeido(l.id)!.cita}»</div>}
+                    {precioLeido(l.id)?.precioUnitario == null && precioLeido(l.id)?.montoTotal != null && (
+                      <div className="text-xs text-[var(--texto-tenue)]">
+                        Monto global {numero(precioLeido(l.id)!.montoTotal!, 2)} ÷ {numero(l.cantidad, l.cantidad % 1 ? 2 : 0)} {l.unidad} = {numero(precio(l.id) ?? 0, 6)}
+                      </div>
+                    )}
                   </td>
                   <td className="text-right num">{conUnidad(l.cantidad, l.unidad, l.cantidad % 1 ? 2 : 0)}</td>
                   <td className="text-right">

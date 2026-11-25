@@ -38,7 +38,7 @@ Extrae solo lo que el documento dice:
 - Si un dato no aparece, es null. No lo completes con lo habitual.
 - Los números tal cual: no conviertas monedas, no apliques descuentos, no recalcules montos. La app rehace las cuentas y avisa si no cuadran; si corriges un monto, esconde un error del documento.
 - La cita tiene que ser texto literal del documento.
-- Cuando GESI pidió un solo conjunto (por ejemplo, un galpón completo) y el proveedor lo desglosa en piezas, el precio de esa línea es el total que el documento declara para el conjunto, y las piezas van en el desglose.
+- Cuando el documento cotiza un monto global para lo que GESI pidió (por ejemplo, el galpón completo en 49.752,16 aunque GESI lo pidió en m²), informa ese monto en montoTotal y deja precioUnitario en null. No dividas: la app divide sin redondear. Las piezas del proveedor van en el desglose.
 - Anota en dudas lo ambiguo: un rango de plazos, un monto "estimado", impuestos incluidos.`
 
 export interface LineaPedida {
