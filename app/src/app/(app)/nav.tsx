@@ -12,12 +12,18 @@ const ENLACES = [
   { href: '/ajustes', label: 'Ajustes' }
 ]
 
-/** Vuelta a Importa: en el servidor es el mismo dominio sin el «gesi.» del comienzo. */
+/** Vuelta a Importa, según la dirección en que se abrió la app. */
 const sinSuscripcion = () => () => {}
 function useUrlImporta(): string | null {
   return useSyncExternalStore(
     sinSuscripcion,
-    () => (window.location.hostname.startsWith('gesi.') ? `${window.location.protocol}//${window.location.host.replace(/^gesi\./, '')}/` : null),
+    () => {
+      const { protocol, host } = window.location
+      // compras.gesi.cl → importa.gesi.cl; en la dirección sslip.io, sin el «gesi.» del comienzo.
+      if (host.startsWith('compras.')) return `${protocol}//importa.${host.slice('compras.'.length)}/`
+      if (host.startsWith('gesi.')) return `${protocol}//${host.slice('gesi.'.length)}/`
+      return null
+    },
     () => null
   )
 }
