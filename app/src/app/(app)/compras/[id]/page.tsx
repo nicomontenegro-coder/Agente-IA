@@ -10,7 +10,8 @@ import { codigo } from '@/lib/codigos'
 import { ETIQUETA_ETAPA, ETAPAS_COMPRA, SIGUE_ETAPA } from '@/lib/compra'
 import { totalesOrden } from '@/lib/documentos'
 import { numero, fecha, conUnidad } from '@/lib/formato'
-import { invitarProveedor, marcarDeclino, registrarPago, cambiarEtapa, guardarMedida } from '@/app/acciones/compras'
+import { invitarProveedor, marcarDeclino, registrarPago, cambiarEtapa, guardarMedida, subirCotizacion } from '@/app/acciones/compras'
+import { hayLectorIa } from '@/lib/leer-cotizacion'
 
 export const dynamic = 'force-dynamic'
 
@@ -90,6 +91,21 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
             ))}
           </tbody>
         </table>
+      </section>
+
+      <section className="panel p-4 space-y-2">
+        <h2 className="font-semibold text-sm">Llegó una cotización</h2>
+        <FormAccion accion={subirCotizacion.bind(null, c.id)} etiqueta={hayLectorIa() ? 'Leer cotización' : 'Subir cotización'} clase="flex flex-wrap items-end gap-3">
+          <label className="text-sm space-y-1">
+            <span className="sr-only">PDF de la cotización</span>
+            <input name="pdf" type="file" accept="application/pdf" className="campo" required aria-label="PDF de la cotización" />
+          </label>
+        </FormAccion>
+        <p className="text-xs text-[var(--texto-tenue)]">
+          {hayLectorIa()
+            ? 'Sube el PDF: la IA reconoce al proveedor, lo busca entre los tuyos y llena la cotización. Tú revisas y guardas.'
+            : 'Sube el PDF, elige de qué proveedor es y copia sus datos.'}
+        </p>
       </section>
 
       <section className="panel">

@@ -8,6 +8,10 @@ import type { LecturaCotizacion, LineaPedida } from './leer-cotizacion'
 export function lecturaDePrueba(pedido: LineaPedida[]): LecturaCotizacion {
   return {
     proveedor: 'Quanzhou Ridge Steel Structure Co., Ltd.',
+    proveedorPais: 'China',
+    contacto: null,
+    email: 'merlin@ridgesteelstructure.com',
+    telefono: '+86-17750077961',
     referencia: null,
     fecha: '2026-11-24',
     moneda: 'USD',

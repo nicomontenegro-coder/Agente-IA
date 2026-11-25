@@ -206,7 +206,10 @@ model CotizacionDesglose {
 /// al guardar la cotización: la IA propone, no guarda.
 model LecturaPendiente {
   id            String   @id @default(cuid())
-  invitacionId  String
+  compraId      String?
+  /// Null mientras no se sabe de qué proveedor es: se sube el PDF primero y
+  /// el proveedor se elige después, con lo que leyó la IA.
+  invitacionId  String?
   archivo       String
   archivoNombre String
   /// La lectura completa en JSON (null si no hubo lector y solo se adjuntó el PDF).

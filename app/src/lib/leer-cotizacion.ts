@@ -33,7 +33,11 @@ export const hayLectorIa = (): boolean => dePrueba() || Boolean(process.env.ANTH
 const MODELO = process.env.GESI_MODELO_IA ?? 'claude-opus-5-5'
 
 const Lectura = z.object({
-  proveedor: z.string().nullable().describe('Nombre de la empresa que cotiza'),
+  proveedor: z.string().nullable().describe('Nombre de la empresa que cotiza, tal como aparece en el membrete'),
+  proveedorPais: z.string().nullable().describe('País del proveedor según su dirección, en español: China, Turquía…'),
+  contacto: z.string().nullable().describe('Persona que firma o aparece como vendedor'),
+  email: z.string().nullable().describe('Correo del proveedor'),
+  telefono: z.string().nullable().describe('Teléfono, móvil, WeChat o WhatsApp'),
   referencia: z.string().nullable().describe('Número o referencia de la cotización. Null si no tiene'),
   fecha: z.string().nullable().describe('Fecha del documento, AAAA-MM-DD'),
   moneda: z.string().nullable().describe('Código de tres letras: USD, EUR, CNY'),

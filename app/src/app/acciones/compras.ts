@@ -199,12 +199,8 @@ export async function registrarCotizacion(compraId: string, invitacionId: string
   redirect(`/compras/${compraId}`)
 }
 
-/**
- * Sube el PDF del proveedor y, si hay lector, lo lee. No guarda la
- * cotización: deja la lectura pendiente y vuelve al formulario ya lleno, para
- * que una persona la revise contra el documento.
- */
-export async function subirPdf(compraId: string, invitacionId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+/** Guarda el PDF y, si hay lector, lo lee. Lo comparten las dos formas de subirlo. */
+async function guardarYLeer(compraId: string, datos: FormData): Promise<{ error: string } | { archivo: string; archivoNombre: string; lectura: string | null; error: string | null }> {
   const archivo = datos.get('pdf')
   if (!(archivo instanceof File) || archivo.size === 0) return { error: 'Elige el PDF de la cotización' }
   if (archivo.size > MAXIMO_PDF) return { error: 'El PDF pesa más de 30 MB: es demasiado para leerlo' }
@@ -221,8 +217,64 @@ export async function subirPdf(compraId: string, invitacionId: string, _e: Estad
     if (r.ok) lectura = JSON.stringify(r.lectura)
     else error = r.error
   }
-  const p = await db.lecturaPendiente.create({ data: { invitacionId, archivo: nombre, archivoNombre: archivo.name || 'cotizacion.pdf', lectura, error } })
+  return { archivo: nombre, archivoNombre: archivo.name || 'cotizacion.pdf', lectura, error }
+}
+
+/**
+ * Sube el PDF de un proveedor ya invitado. No guarda la cotización: deja la
+ * lectura pendiente y vuelve al formulario ya lleno, para que una persona la
+ * revise contra el documento.
+ */
+export async function subirPdf(compraId: string, invitacionId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const r = await guardarYLeer(compraId, datos)
+  if (!('archivo' in r)) return r
+  const p = await db.lecturaPendiente.create({ data: { compraId, invitacionId, ...r } })
   redirect(`/compras/${compraId}/cotizacion/${invitacionId}?lectura=${p.id}`)
+}
+
+/**
+ * Sube una cotización sin decir de quién es: la IA lee quién la firma y la
+ * pantalla siguiente sugiere a cuál de los proveedores guardados corresponde.
+ */
+export async function subirCotizacion(compraId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const r = await guardarYLeer(compraId, datos)
+  if (!('archivo' in r)) return r
+  const p = await db.lecturaPendiente.create({ data: { compraId, invitacionId: null, ...r } })
+  redirect(`/compras/${compraId}/lectura/${p.id}`)
+}
+
+/**
+ * Asigna la lectura a un proveedor. Si no estaba invitado a esta compra, se
+ * invita: que haya cotizado prueba que recibió la RFQ, por el canal que sea.
+ */
+async function asignarA(compraId: string, lecturaId: string, proveedorId: string): Promise<never> {
+  const inv = await db.invitacion.upsert({
+    where: { compraId_proveedorId: { compraId, proveedorId } },
+    create: { compraId, proveedorId },
+    update: {}
+  })
+  await db.lecturaPendiente.update({ where: { id: lecturaId }, data: { invitacionId: inv.id } })
+  refrescar(compraId)
+  redirect(`/compras/${compraId}/cotizacion/${inv.id}?lectura=${lecturaId}`)
+}
+
+export async function asignarLectura(compraId: string, lecturaId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const proveedorId = texto(datos.get('proveedorId'))
+  if (!proveedorId) return { error: 'Elige el proveedor' }
+  if (!(await db.proveedor.findUnique({ where: { id: proveedorId } }))) return { error: 'Ese proveedor ya no existe' }
+  return asignarA(compraId, lecturaId, proveedorId)
+}
+
+/** Crea el proveedor con los datos del membrete y le asigna la lectura. */
+export async function crearProveedorDeLectura(compraId: string, lecturaId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const nombre = texto(datos.get('nombre'))
+  if (!nombre) return { error: 'Escribe el nombre del proveedor' }
+  if (await db.proveedor.findUnique({ where: { nombre } })) return { error: 'Ya hay un proveedor con ese nombre: elígelo en la lista de arriba' }
+  const p = await db.proveedor.create({
+    data: { nombre, pais: texto(datos.get('pais')), contacto: texto(datos.get('contacto')), email: texto(datos.get('email')), telefono: texto(datos.get('telefono')) }
+  })
+  revalidatePath('/proveedores')
+  return asignarA(compraId, lecturaId, p.id)
 }
 
 /** La medida para comparar ofertas que cada proveedor cubica distinto. */
