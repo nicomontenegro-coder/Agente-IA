@@ -25,7 +25,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
   // con las filas cambiadas de lugar el factor de los tubos cae en los codos.
   const orden = familiasDe(l.items).map((f) => f.familia)
   const familias = [...v.familias].sort((a, b) => orden.indexOf(a.familia) - orden.indexOf(b.familia))
-  const filas = filasDeVenta(l.items, familias, v.tipoCambio)
+  const filas = filasDeVenta(l.items, { factor: v.factor, tipoCambio: v.tipoCambio }, familias)
   const vig = vigencia(l.fecha, l.validezDias)
   const conPrecio = new Set(filas.map((f) => f.familia))
   const faltaTc = v.tipoCambio == null
@@ -47,6 +47,15 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
             <input name="tipoCambio" className="campo num" inputMode="decimal" defaultValue={fmt(v.tipoCambio)} placeholder="950" />
           </label>
           <label className="text-sm space-y-1">
+            <span className="font-medium">Factor de internación</span>
+            <input name="factor" className="campo num" inputMode="decimal" defaultValue={fmt(v.factor)} placeholder="1,45" />
+            <span className="block text-xs text-[var(--texto-tenue)]">Costo puesto en bodega ÷ FOB, de un costeo real.</span>
+          </label>
+          <label className="text-sm space-y-1">
+            <span className="font-medium">De dónde sale el factor</span>
+            <input name="factorOrigen" className="campo" defaultValue={v.factorOrigen ?? ''} placeholder="Costeo embarque octubre (Excel)" />
+          </label>
+          <label className="text-sm space-y-1">
             <span className="font-medium">Validez de la lista de venta (días)</span>
             <input name="validezDias" className="campo num" inputMode="numeric" defaultValue={v.validezDias ?? ''} />
           </label>
@@ -61,38 +70,44 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
         </section>
 
         <section className="panel scroll-x">
-          <h2 className="font-semibold text-sm px-4 pt-3 pb-1">Factor y margen por familia</h2>
+          <h2 className="font-semibold text-sm px-4 pt-3 pb-1">Margen y unidad de venta por familia</h2>
           <p className="px-4 pb-2 text-xs text-[var(--texto-tenue)]">
-            Factor de internación = costo puesto en bodega ÷ FOB, de un costeo real. Margen sobre el precio de venta (35 da 35%). Una familia sin factor o sin margen no se ofrece.
+            Margen sobre el precio de venta (35 da 35%). Si la familia no se vende en la unidad del proveedor, indica la unidad de venta y cuánto trae: tira de 4 m = 4 m. Sin margen, la familia no se ofrece.
           </p>
           <table className="tabla">
             <thead>
               <tr>
                 <th>Familia</th>
-                <th className="text-right">Factor</th>
-                <th>De dónde sale el factor</th>
                 <th className="text-right">Margen %</th>
+                <th>Se vende por</th>
+                <th className="text-right">Trae</th>
               </tr>
             </thead>
             <tbody>
-              {familias.map((f) => (
-                <tr key={f.id}>
-                  <td>
-                    {f.familia}
-                    <input type="hidden" name="familia" value={f.familia} />
-                    {!conPrecio.has(f.familia) && <div className="text-xs text-[var(--texto-tenue)]">no se ofrece</div>}
-                  </td>
-                  <td className="text-right">
-                    <input name="factor" className="campo num w-24 ml-auto" inputMode="decimal" defaultValue={fmt(f.factor)} placeholder="1,45" aria-label={`Factor de ${f.familia}`} />
-                  </td>
-                  <td>
-                    <input name="factorOrigen" className="campo min-w-48" defaultValue={f.factorOrigen ?? ''} placeholder="Costeo embarque octubre (Excel)" aria-label={`Origen del factor de ${f.familia}`} />
-                  </td>
-                  <td className="text-right">
-                    <input name="margen" className="campo num w-20 ml-auto" inputMode="decimal" defaultValue={fmt(f.margenPct)} placeholder="35" aria-label={`Margen de ${f.familia}`} />
-                  </td>
-                </tr>
-              ))}
+              {familias.map((f) => {
+                const unidad = l.items.find((i) => i.familia === f.familia)?.unidad ?? ''
+                return (
+                  <tr key={f.id}>
+                    <td>
+                      {f.familia}
+                      <input type="hidden" name="familia" value={f.familia} />
+                      <div className="text-xs text-[var(--texto-tenue)]">{conPrecio.has(f.familia) ? `proveedor cotiza por ${unidad}` : 'no se ofrece'}</div>
+                    </td>
+                    <td className="text-right">
+                      <input name="margen" className="campo num w-20 ml-auto" inputMode="decimal" defaultValue={fmt(f.margenPct)} placeholder="35" aria-label={`Margen de ${f.familia}`} />
+                    </td>
+                    <td>
+                      <input name="unidadVenta" className="campo w-36" defaultValue={f.unidadVenta ?? ''} placeholder={unidad} aria-label={`Unidad de venta de ${f.familia}`} />
+                    </td>
+                    <td className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <input name="contenido" className="campo num w-20" inputMode="decimal" defaultValue={fmt(f.contenido)} aria-label={`Cuánto trae cada unidad de venta de ${f.familia}`} />
+                        <span className="text-sm text-[var(--texto-suave)]">{unidad}</span>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </section>
@@ -110,17 +125,17 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
             </Link>
           )}
         </div>
-        {faltaTc ? (
-          <p className="px-4 py-3 text-sm text-[var(--texto-suave)]">Ingresa el tipo de cambio y, por familia, el factor y el margen.</p>
+        {faltaTc || v.factor == null ? (
+          <p className="px-4 py-3 text-sm text-[var(--texto-suave)]">Ingresa el tipo de cambio, el factor de internación y su origen.</p>
         ) : filas.length === 0 ? (
-          <p className="px-4 py-3 text-sm text-[var(--texto-suave)]">Ingresa el factor, su origen y el margen de al menos una familia.</p>
+          <p className="px-4 py-3 text-sm text-[var(--texto-suave)]">Ingresa el margen de al menos una familia.</p>
         ) : (
           <table className="tabla">
             <thead>
               <tr>
                 <th>Producto</th>
                 <th>Medida</th>
-                <th>Unidad</th>
+                <th>Vende por</th>
                 <th className="text-right">FOB {l.moneda}</th>
                 <th className="text-right">Landed {l.moneda}</th>
                 <th className="text-right">Landed CLP</th>
@@ -135,8 +150,8 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
                     <div className="text-xs text-[var(--texto-tenue)]">{f.familia}</div>
                   </td>
                   <td className="num">{[f.especificacion, f.pn].filter(Boolean).join(' · ') || '—'}</td>
-                  <td>{f.unidad}</td>
-                  <td className="text-right num">{numero(f.precio!, 3)}</td>
+                  <td>{f.unidadVenta}</td>
+                  <td className="text-right num">{numero(f.fobVenta, 3)}</td>
                   <td className="text-right num">{numero(f.landedUsd, 3)}</td>
                   <td className="text-right num">{numero(f.landedClp, 0)}</td>
                   <td className="text-right num font-semibold">{numero(f.precioClp, 0)}</td>

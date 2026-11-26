@@ -45,8 +45,17 @@ const items = [
   { familia: 'Tubería PPR', descripcion: 'Tubo PPR', especificacion: '110×15.1', unidad: 'm', precio: null },
   { familia: 'Fittings PPR', descripcion: 'Codo 90°', especificacion: '20', unidad: 'pieza', precio: 0.039 }
 ]
-const filas = filasDeVenta(items, [{ familia: 'Tubería PPR', factor: 1.45, margenPct: 35 }, { familia: 'Fittings PPR', factor: null, margenPct: 40 }], 950)
-igual('solo entra el tubo con precio de una familia completa', filas.map((f) => f.especificacion), ['20×2.8'])
-igual('con el mismo precio que el cálculo unitario', filas[0].precioClp, 659)
+const general = { factor: 1.45, tipoCambio: 950 }
+const porMetro = filasDeVenta(items, general, [{ familia: 'Tubería PPR', margenPct: 35, unidadVenta: null, contenido: null }])
+igual('sin unidad de venta, el tubo se vende por metro: 659', [porMetro[0].unidadVenta, porMetro[0].precioClp], ['m', 659])
+igual('la medida sin precio y la familia sin margen quedan fuera', porMetro.map((f) => f.especificacion), ['20×2.8'])
+const porTira = filasDeVenta(items, general, [
+  { familia: 'Tubería PPR', margenPct: 35, unidadVenta: 'tira de 4 m', contenido: 4 },
+  { familia: 'Fittings PPR', margenPct: 40, unidadVenta: null, contenido: null }
+])
+igual('por tira de 4 m: el FOB de la tira es 0,311 × 4 = 1,244', porTira[0].fobVenta, 1.244)
+igual('landed de la tira: 1,244 × 1,45 × 950 = 1.714 pesos', Math.round(porTira[0].landedClp), 1714)
+igual('precio de la tira con 35% de margen: 2.636', [porTira[0].unidadVenta, porTira[0].precioClp], ['tira de 4 m', 2636])
+igual('el codo sigue por pieza: 0,039 × 1,45 × 950 ÷ 0,6 = 90', [porTira[1].unidadVenta, porTira[1].precioClp], ['pieza', 90])
 
 terminar()

@@ -23,7 +23,7 @@ export default async function ImprimirLista({ params }: { params: Promise<{ id: 
     empresa()
   ])
   if (!v) notFound()
-  const filas = filasDeVenta(v.listaPrecios.items, v.familias, v.tipoCambio)
+  const filas = filasDeVenta(v.listaPrecios.items, { factor: v.factor, tipoCambio: v.tipoCambio }, v.familias)
   const familias = familiasDe(filas)
   const vence = v.validezDias != null ? new Date(v.actualizadoEn.getTime() + v.validezDias * 86400000) : null
 
@@ -99,7 +99,7 @@ export default async function ImprimirLista({ params }: { params: Promise<{ id: 
                     <tr key={k}>
                       <td>{x.descripcion}</td>
                       <td>{[x.especificacion, x.pn].filter(Boolean).join(' · ') || '—'}</td>
-                      <td>{UNIDAD[x.unidad.toLowerCase()] ?? x.unidad}</td>
+                      <td>{UNIDAD[x.unidadVenta.toLowerCase()] ?? x.unidadVenta}</td>
                       <td className="der">${pesos(x.precioClp)}</td>
                     </tr>
                   ))}

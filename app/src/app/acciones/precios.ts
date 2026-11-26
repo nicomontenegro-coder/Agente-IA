@@ -70,25 +70,37 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
   if (!titulo) return { error: 'Ingresa el título de la lista' }
   const tipoCambio = numero(datos.get('tipoCambio'))
   if (tipoCambio != null && tipoCambio <= 0) return { error: 'El tipo de cambio debe ser mayor que cero' }
+  const factor = numero(datos.get('factor'))
+  const factorOrigen = texto(datos.get('factorOrigen'))
+  if (factor != null && factor < 1) return { error: 'El factor no puede ser menor que 1: el costo puesto en bodega nunca es menor que el FOB' }
+  if (factor != null && !factorOrigen) return { error: 'Indica de dónde sale el factor' }
   const familias = datos.getAll('familia')
-  const factores = datos.getAll('factor')
-  const origenes = datos.getAll('factorOrigen')
   const margenes = datos.getAll('margen')
+  const unidades = datos.getAll('unidadVenta')
+  const contenidos = datos.getAll('contenido')
   const filas = familias.map((f, k) => ({
     familia: String(f),
-    factor: numero(factores[k] ?? null),
-    factorOrigen: texto(origenes[k] ?? null),
-    margenPct: numero(margenes[k] ?? null)
+    margenPct: numero(margenes[k] ?? null),
+    unidadVenta: texto(unidades[k] ?? null),
+    contenido: numero(contenidos[k] ?? null)
   }))
   for (const f of filas) {
-    if (f.factor != null && f.factor < 1) return { error: `${f.familia}: el factor no puede ser menor que 1 (el costo puesto en bodega nunca es menor que el FOB)` }
     if (f.margenPct != null && (f.margenPct < 0 || f.margenPct >= 100)) return { error: `${f.familia}: el margen debe estar entre 0 y 99%` }
-    if (f.factor != null && !f.factorOrigen) return { error: `${f.familia}: indica de dónde sale el factor` }
+    if (f.unidadVenta && !(f.contenido && f.contenido > 0)) return { error: `${f.familia}: indica cuánto trae cada ${f.unidadVenta}` }
+    if (!f.unidadVenta && f.contenido != null) return { error: `${f.familia}: indica la unidad de venta (por ejemplo, tira de 4 m)` }
   }
   await db.$transaction([
     db.listaVenta.update({
       where: { id: ventaId },
-      data: { titulo, tipoCambio, entrega: texto(datos.get('entrega')), condiciones: texto(datos.get('condiciones')), validezDias: (() => { const d = numero(datos.get('validezDias')); return d == null ? null : Math.round(d) })() }
+      data: {
+        titulo,
+        tipoCambio,
+        factor,
+        factorOrigen,
+        entrega: texto(datos.get('entrega')),
+        condiciones: texto(datos.get('condiciones')),
+        validezDias: (() => { const d = numero(datos.get('validezDias')); return d == null ? null : Math.round(d) })()
+      }
     }),
     ...filas.map((f) => db.listaVentaFamilia.update({ where: { listaVentaId_familia: { listaVentaId: ventaId, familia: f.familia } }, data: f }))
   ])

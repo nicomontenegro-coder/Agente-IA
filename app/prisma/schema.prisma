@@ -349,6 +349,10 @@ model ListaVenta {
   titulo         String
   /// Pesos por dólar con que se calcularon los precios.
   tipoCambio     Float?
+  /// Costo puesto en bodega ÷ FOB, uno para toda la lista.
+  factor         Float?
+  /// De dónde salió el factor: «costeo de octubre, Excel», «GESI-C12 de Importa».
+  factorOrigen   String?
   entrega        String?
   condiciones    String?
   validezDias    Int?
@@ -363,12 +367,12 @@ model ListaVentaFamilia {
   listaVentaId String
   listaVenta   ListaVenta @relation(fields: [listaVentaId], references: [id], onDelete: Cascade)
   familia      String
-  /// Costo puesto en bodega ÷ FOB. Sin factor, la familia no tiene precio.
-  factor       Float?
-  /// De dónde salió el factor: «costeo de octubre, Excel», «GESI-C12 de Importa».
-  factorOrigen String?
   /// Margen sobre el precio de venta, en %. Sin margen, la familia no se ofrece.
   margenPct    Float?
+  /// Cómo se vende si no es en la unidad del proveedor: «tira de 4 m».
+  unidadVenta  String?
+  /// Cuántas unidades del proveedor trae una unidad de venta: 4 (metros por tira).
+  contenido    Float?
 
   @@unique([listaVentaId, familia])
 }

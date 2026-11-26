@@ -62,21 +62,38 @@ export interface ItemLista {
   precio: number | null
 }
 
+/** Cómo se vende una familia: el margen y, si no se vende en la unidad del proveedor, la unidad de venta. */
+export interface VentaFamilia {
+  familia: string
+  margenPct: number | null
+  /** «tira de 4 m». Null: se vende en la unidad del proveedor. */
+  unidadVenta: string | null
+  /** Cuántas unidades del proveedor trae una unidad de venta: 4 metros por tira. */
+  contenido: number | null
+}
+
 /**
  * Las filas de una lista de venta: la pantalla interna y el documento para
  * clientes llaman a esta misma función, para que nunca digan dos precios
- * distintos del mismo producto. Solo entran las medidas con precio del
- * proveedor y las familias con factor y margen.
+ * distintos del mismo producto.
+ *
+ * El factor y el tipo de cambio son uno para toda la lista; el margen y la
+ * unidad de venta van por familia. El tubo se cotiza por metro y se vende por
+ * tira: el costo de la tira es el del metro por 4, y el margen va encima.
+ * Solo entran las medidas con precio del proveedor y las familias con margen.
  */
 export function filasDeVenta<T extends ItemLista>(
   items: T[],
-  familias: ({ familia: string } & ParametrosFamilia)[],
-  tipoCambio: number | null
-): (T & PrecioVenta)[] {
+  general: { factor: number | null; tipoCambio: number | null },
+  familias: VentaFamilia[]
+): (T & PrecioVenta & { unidadVenta: string; fobVenta: number })[] {
   const por = new Map(familias.map((f) => [f.familia, f]))
   return items.flatMap((i) => {
     const f = por.get(i.familia)
-    const p = f ? precioVenta(i.precio, f, tipoCambio) : null
-    return p ? [{ ...i, ...p }] : []
+    if (!f || i.precio == null) return []
+    const porUnidad = f.unidadVenta && f.contenido && f.contenido > 0
+    const fobVenta = porUnidad ? redondear(i.precio * f.contenido!, 6) : i.precio
+    const p = precioVenta(fobVenta, { factor: general.factor, margenPct: f.margenPct }, general.tipoCambio)
+    return p ? [{ ...i, ...p, fobVenta, unidadVenta: porUnidad ? f.unidadVenta! : i.unidad }] : []
   })
 }
