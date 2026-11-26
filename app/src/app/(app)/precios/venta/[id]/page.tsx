@@ -134,7 +134,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
                     {f.descripcion}
                     <div className="text-xs text-[var(--texto-tenue)]">{f.familia}</div>
                   </td>
-                  <td className="num">{f.especificacion ?? '—'}</td>
+                  <td className="num">{[f.especificacion, f.pn].filter(Boolean).join(' · ') || '—'}</td>
                   <td>{f.unidad}</td>
                   <td className="text-right num">{numero(f.precio!, 3)}</td>
                   <td className="text-right num">{numero(f.landedUsd, 3)}</td>

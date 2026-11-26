@@ -33,3 +33,15 @@ Cada regla dice de qué error salió: así se entiende por qué existe.
 | El margen es sobre el precio de venta, no markup: precio = costo ÷ (1 − margen). | Misma convención que las ofertas de Importa. |
 | Una lista de proveedor vencida no se borra: queda con su fecha, y se avisa antes de vender sobre ella. | Lvzhou: lista del 05-11 con 10 días de validez. |
 | Al cliente nunca se le muestran costos, factores ni márgenes. | Regla de Importa. |
+
+## Herramientas del asistente (Precios, 26-11-2026)
+
+El primer agente de verdad: una caja de chat en cada lista de precios. El modelo conversa y elige
+herramientas; las herramientas son código de la app.
+
+| Herramienta | Qué hace | Por qué es herramienta y no conocimiento del modelo |
+|---|---|---|
+| `ver_lista` | Lee la lista abierta con todos sus productos | Los datos están en la base, no en la cabeza del modelo |
+| `calcular_pn` | SDR, serie y PN de un tubo según la norma | Es una cuenta con una tabla: tiene que dar siempre lo mismo |
+| `calcular_precio_venta` | FOB × factor × dólar ÷ (1 − margen) | Ídem: el modelo no calcula de cabeza |
+| `proponer_cambios` | Deja una propuesta que Nico aprueba o descarta | El agente propone; el jefe decide (Lección 0) |

@@ -335,6 +335,8 @@ model ListaPreciosItem {
   unidad         String
   /// Null si la lista deja la celda en blanco (se cotiza a pedido).
   precio         Float?
+  /// Presión nominal según la norma indicada, por ejemplo «PN16 (DIN 8077)».
+  pn             String?
 }
 
 /// Una lista de venta (por ejemplo, la preventa de un embarque) armada desde
@@ -369,4 +371,32 @@ model ListaVentaFamilia {
   margenPct    Float?
 
   @@unique([listaVentaId, familia])
+}
+
+// ───────────────────────────── Asistente ─────────────────────────────
+
+/// La conversación con el asistente, por pantalla: «lista:<id>» es la de una
+/// lista de precios. Se guarda para que el asistente recuerde lo hablado.
+model ChatMensaje {
+  id       String   @id @default(cuid())
+  contexto String
+  /// USUARIO o ASISTENTE.
+  rol      String
+  texto    String
+  creadoEn DateTime @default(now())
+
+  @@index([contexto, creadoEn])
+}
+
+/// Un cambio que propuso el asistente. No se aplica hasta que Nico lo aprueba.
+model Propuesta {
+  id          String   @id @default(cuid())
+  contexto    String
+  descripcion String
+  /// Los cambios en JSON: [{ itemId, campo, valor, antes }].
+  cambios     String
+  /// PENDIENTE, APLICADA o DESCARTADA.
+  estado      String   @default("PENDIENTE")
+  creadoEn    DateTime @default(now())
+  resueltaEn  DateTime?
 }

@@ -98,7 +98,7 @@ export default async function ImprimirLista({ params }: { params: Promise<{ id: 
                   .map((x, k) => (
                     <tr key={k}>
                       <td>{x.descripcion}</td>
-                      <td>{x.especificacion ?? '—'}</td>
+                      <td>{[x.especificacion, x.pn].filter(Boolean).join(' · ') || '—'}</td>
                       <td>{UNIDAD[x.unidad.toLowerCase()] ?? x.unidad}</td>
                       <td className="der">${pesos(x.precioClp)}</td>
                     </tr>
