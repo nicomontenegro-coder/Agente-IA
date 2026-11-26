@@ -14,6 +14,8 @@
  * Funciones puras.
  */
 
+import { seccionDe } from './normas-ppr'
+
 export interface ParametrosFamilia {
   factor: number | null
   margenPct: number | null
@@ -60,6 +62,8 @@ export interface ItemLista {
   especificacion: string | null
   unidad: string
   precio: number | null
+  /** PN aprobado a mano; si no hay, se calcula de la medida. */
+  pn?: string | null
 }
 
 /** Cómo se vende una familia: el margen y, si no se vende en la unidad del proveedor, la unidad de venta. */
@@ -86,7 +90,7 @@ export function filasDeVenta<T extends ItemLista>(
   items: T[],
   general: { factor: number | null; tipoCambio: number | null },
   familias: VentaFamilia[]
-): (T & PrecioVenta & { unidadVenta: string; fobVenta: number })[] {
+): (T & PrecioVenta & { unidadVenta: string; fobVenta: number; seccion: string })[] {
   const por = new Map(familias.map((f) => [f.familia, f]))
   return items.flatMap((i) => {
     const f = por.get(i.familia)
@@ -94,7 +98,7 @@ export function filasDeVenta<T extends ItemLista>(
     const porUnidad = f.unidadVenta && f.contenido && f.contenido > 0
     const fobVenta = porUnidad ? redondear(i.precio * f.contenido!, 6) : i.precio
     const p = precioVenta(fobVenta, { factor: general.factor, margenPct: f.margenPct }, general.tipoCambio)
-    return p ? [{ ...i, ...p, fobVenta, unidadVenta: porUnidad ? f.unidadVenta! : i.unidad }] : []
+    return p ? [{ ...i, ...p, fobVenta, unidadVenta: porUnidad ? f.unidadVenta! : i.unidad, seccion: seccionDe(i.familia, i.especificacion, i.pn ?? null) }] : []
   })
 }
 
@@ -109,4 +113,21 @@ export function pisoDeVenta(landedClp: number, precioLista: number, margenMinimo
   const precioMinimo = Math.ceil(landedClp / (1 - margenMinimoPct / 100))
   if (precioMinimo > precioLista) return { precioMinimo, descuentoMaxPct: 0 }
   return { precioMinimo, descuentoMaxPct: Math.floor((1 - precioMinimo / precioLista) * 1000) / 10 }
+}
+
+/** El margen que queda sobre el costo después de un descuento a un canal: no es la resta. */
+export function margenConDescuento(margenListaPct: number, descuentoPct: number): number {
+  return Math.round((1 - (1 - margenListaPct / 100) / (1 - descuentoPct / 100)) * 1000) / 10
+}
+
+/** El precio de un canal (ferreterías, instaladores): el de lista con su descuento, en pesos. */
+export function precioCanal(precioLista: number, descuentoPct: number): number {
+  return Math.round(precioLista * (1 - descuentoPct / 100))
+}
+
+/** Las filas agrupadas por sección, en el orden en que aparecen. */
+export function porSeccion<F extends { seccion: string }>(filas: F[]): { seccion: string; filas: F[] }[] {
+  const grupos = new Map<string, F[]>()
+  for (const f of filas) grupos.set(f.seccion, [...(grupos.get(f.seccion) ?? []), f])
+  return [...grupos].map(([seccion, filas]) => ({ seccion, filas }))
 }

@@ -51,3 +51,16 @@ export function pnDeTubo(especificacion: string | null, norma = 'DIN 8077'): { s
   if (!serie) return null
   return { sdr: Math.round(sdr * 10) / 10, serie: serie.serie, pn: PN_POR_NORMA[norma]?.[serie.serie] ?? null, norma }
 }
+
+/**
+ * Cómo se agrupa un producto en la lista de venta: los tubos por PN («Tubería
+ * PPR · PN16»), como los busca el cliente; lo demás, por su familia. Un PN
+ * aprobado a mano (guardado en el producto) manda sobre el calculado.
+ */
+export function seccionDe(familia: string, especificacion: string | null, pnGuardado: string | null = null, norma = 'DIN 8077'): string {
+  const pn = pnGuardado ?? (() => {
+    const r = pnDeTubo(especificacion, norma)
+    return r?.pn ? `${r.pn} (${r.norma})` : null
+  })()
+  return pn ? `${familia} · ${pn}` : familia
+}

@@ -7,7 +7,7 @@ import { db } from '@/lib/db'
 import { leerNumero } from '@/lib/numeros'
 import { guardarPdf, esPdf, MAXIMO_PDF } from '@/lib/archivos'
 import { leerLista } from '@/lib/leer-lista'
-import { familiasDe } from '@/lib/lista-venta'
+import { familiasDe, margenConDescuento } from '@/lib/lista-venta'
 import type { EstadoForm } from './compras'
 
 const texto = (v: FormDataEntryValue | null) => {
@@ -94,7 +94,28 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
     }
     if (!f.unidadVenta && f.contenido != null) return { error: `${f.familia}: indica la unidad de venta (por ejemplo, tira de 4 m)` }
   }
+  const nombres = datos.getAll('canalNombre')
+  const descuentos = datos.getAll('canalDescuento')
+  const canales: { nombre: string; descuentoPct: number; posicion: number }[] = []
+  for (let k = 0; k < nombres.length; k++) {
+    const nombre = texto(nombres[k] ?? null)
+    const descuentoPct = numero(descuentos[k] ?? null)
+    if (!nombre && descuentoPct == null) continue
+    if (!nombre) return { error: 'Ingresa el nombre del canal' }
+    if (descuentoPct == null || descuentoPct < 0 || descuentoPct >= 100) return { error: `Canal ${nombre}: el descuento debe estar entre 0 y 99%` }
+    // El descuento de un canal no puede cruzar el margen mínimo en ninguna familia.
+    for (const f of filas) {
+      if (f.margenPct == null || margenMinimoPct == null) continue
+      const queda = margenConDescuento(f.margenPct, descuentoPct)
+      if (queda < margenMinimoPct) {
+        return { error: `Canal ${nombre}: con ${descuentoPct}% de descuento, ${f.familia} queda con ${queda.toLocaleString('es-CL')}% de margen, bajo el mínimo de ${margenMinimoPct}%` }
+      }
+    }
+    canales.push({ nombre, descuentoPct, posicion: canales.length })
+  }
   await db.$transaction([
+    db.listaVentaCanal.deleteMany({ where: { listaVentaId: ventaId } }),
+    ...canales.map((c) => db.listaVentaCanal.create({ data: { ...c, listaVentaId: ventaId } })),
     db.listaVenta.update({
       where: { id: ventaId },
       data: {

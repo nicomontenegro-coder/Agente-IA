@@ -362,6 +362,18 @@ model ListaVenta {
   actualizadoEn  DateTime     @updatedAt
 
   familias ListaVentaFamilia[]
+  canales  ListaVentaCanal[]
+}
+
+/// Un canal de venta con su descuento sobre el precio de lista: ferreterías
+/// −30%, instaladores −15%. No puede dejar el margen bajo el mínimo.
+model ListaVentaCanal {
+  id           String     @id @default(cuid())
+  listaVentaId String
+  listaVenta   ListaVenta @relation(fields: [listaVentaId], references: [id], onDelete: Cascade)
+  posicion     Int
+  nombre       String
+  descuentoPct Float
 }
 
 model ListaVentaFamilia {

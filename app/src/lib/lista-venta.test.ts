@@ -7,7 +7,7 @@
  * los ingresa Nico.
  */
 
-import { precioVenta, vigencia, familiasDe, filasDeVenta, pisoDeVenta, type ParametrosFamilia } from './lista-venta'
+import { precioVenta, vigencia, familiasDe, filasDeVenta, pisoDeVenta, margenConDescuento, precioCanal, porSeccion, type ParametrosFamilia } from './lista-venta'
 import { igual, grupo, terminar } from './prueba'
 
 const tubos: ParametrosFamilia = { factor: 1.45, margenPct: 35 }
@@ -67,5 +67,24 @@ igual('el descuento máximo es 46,1%, no 30%: los márgenes no se restan', piso.
 igual('vendiendo al precio mínimo el margen es 35%', Math.round((1 - lista65.landedClp / piso.precioMinimo) * 100), 35)
 igual('si el margen de lista ya es menor que el mínimo, no hay descuento', pisoDeVenta(1714, 2000, 35)?.descuentoMaxPct, 0)
 igual('sin margen mínimo no hay piso', pisoDeVenta(1714, 4897, null), null)
+
+grupo('Canales de venta (planilla de Nico: ferreterías −30%, instaladores −15%)')
+igual('tira 20×2.8 a $4.553: ferreterías $3.187', precioCanal(4553, 30), 3187)
+igual('y instaladores $3.870', precioCanal(4553, 15), 3870)
+igual('con 65% de lista, ferreterías deja 50% de margen, no 35%', margenConDescuento(65, 30), 50)
+igual('instaladores deja 58,8%', margenConDescuento(65, 15), 58.8)
+
+grupo('Secciones')
+const conPn = filasDeVenta(
+  [
+    { familia: 'Tubería PPR', descripcion: 'Tubo PPR', especificacion: '20×2.8', unidad: 'm', precio: 0.311 },
+    { familia: 'Tubería PPR', descripcion: 'Tubo PPR', especificacion: '20×3.4', unidad: 'm', precio: 0.363 },
+    { familia: 'Tubería PPR', descripcion: 'Tubo PPR', especificacion: '25×3.5', unidad: 'm', precio: 0.496 }
+  ],
+  { factor: 1.22, tipoCambio: 1050 },
+  [{ familia: 'Tubería PPR', margenPct: 65, unidadVenta: 'tira de 4 m', contenido: 4 }]
+)
+igual('los tubos se agrupan por PN, en orden de aparición', porSeccion(conPn).map((g) => [g.seccion, g.filas.length]), [['Tubería PPR · PN16 (DIN 8077)', 2], ['Tubería PPR · PN20 (DIN 8077)', 1]])
+igual('con los parámetros de la planilla, la tira 20×2.8 da $4.553 como en el Excel', conPn[0].precioClp, 4553)
 
 terminar()

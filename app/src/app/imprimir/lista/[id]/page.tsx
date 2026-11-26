@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { db } from '@/lib/db'
 import { empresa } from '@/lib/compras-db'
-import { filasDeVenta, familiasDe } from '@/lib/lista-venta'
+import { filasDeVenta, porSeccion, precioCanal } from '@/lib/lista-venta'
 import Botones from './botones'
 
 export const dynamic = 'force-dynamic'
@@ -16,20 +16,25 @@ const UNIDAD: Record<string, string> = { m: 'metro', mt: 'metro', meter: 'metro'
  * La lista de precios para clientes. Solo producto, medida, unidad y precio:
  * nunca el costo, el factor ni el margen.
  */
-export default async function ImprimirLista({ params }: { params: Promise<{ id: string }> }) {
+export default async function ImprimirLista({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ canal?: string }> }) {
   const { id } = await params
+  const { canal: canalId } = await searchParams
   const [v, e] = await Promise.all([
-    db.listaVenta.findUnique({ where: { id }, include: { familias: true, listaPrecios: { include: { items: { orderBy: { posicion: 'asc' } } } } } }),
+    db.listaVenta.findUnique({ where: { id }, include: { familias: true, canales: true, listaPrecios: { include: { items: { orderBy: { posicion: 'asc' } } } } } }),
     empresa()
   ])
   if (!v) notFound()
   const filas = filasDeVenta(v.listaPrecios.items, { factor: v.factor, tipoCambio: v.tipoCambio }, v.familias)
-  const familias = familiasDe(filas)
+  // Cada canal recibe su lista con su precio; el descuento no se muestra:
+  // para la ferretería, ese es su precio.
+  const canal = v.canales.find((c) => c.id === canalId) ?? null
+  const precio = (p: number) => (canal ? precioCanal(p, canal.descuentoPct) : p)
+  const secciones = porSeccion(filas)
   const vence = v.validezDias != null ? new Date(v.actualizadoEn.getTime() + v.validezDias * 86400000) : null
 
   return (
     <>
-      <Botones id={v.id} />
+      <Botones id={v.id} canales={v.canales.map((c) => ({ id: c.id, nombre: c.nombre }))} actual={canal?.id ?? null} />
       <div className="hoja">
         <style>{`
           body { background: #e5e7eb; }
@@ -80,9 +85,9 @@ export default async function ImprimirLista({ params }: { params: Promise<{ id: 
             </tbody>
           </table>
         )}
-        {familias.map((f) => (
-          <div key={f.familia}>
-            <h2>{f.familia}</h2>
+        {secciones.map((g) => (
+          <div key={g.seccion}>
+            <h2>{g.seccion}</h2>
             <table>
               <thead>
                 <tr>
@@ -93,16 +98,14 @@ export default async function ImprimirLista({ params }: { params: Promise<{ id: 
                 </tr>
               </thead>
               <tbody>
-                {filas
-                  .filter((x) => x.familia === f.familia)
-                  .map((x, k) => (
-                    <tr key={k}>
-                      <td>{x.descripcion}</td>
-                      <td>{[x.especificacion, x.pn].filter(Boolean).join(' · ') || '—'}</td>
-                      <td>{UNIDAD[x.unidadVenta.toLowerCase()] ?? x.unidadVenta}</td>
-                      <td className="der">${pesos(x.precioClp)}</td>
-                    </tr>
-                  ))}
+                {g.filas.map((x, k) => (
+                  <tr key={k}>
+                    <td>{x.descripcion}</td>
+                    <td>{x.especificacion ?? '—'}</td>
+                    <td>{UNIDAD[x.unidadVenta.toLowerCase()] ?? x.unidadVenta}</td>
+                    <td className="der">${pesos(precio(x.precioClp))}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

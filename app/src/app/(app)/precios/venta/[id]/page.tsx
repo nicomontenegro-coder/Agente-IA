@@ -5,7 +5,7 @@ import { Encabezado, Volver } from '@/componentes/ui'
 import FormAccion from '@/componentes/form-accion'
 import { db } from '@/lib/db'
 import { fecha, numero } from '@/lib/formato'
-import { filasDeVenta, vigencia, familiasDe, pisoDeVenta } from '@/lib/lista-venta'
+import { filasDeVenta, vigencia, familiasDe, pisoDeVenta, porSeccion, precioCanal, margenConDescuento } from '@/lib/lista-venta'
 import { guardarListaVenta } from '@/app/acciones/precios'
 
 export const dynamic = 'force-dynamic'
@@ -17,7 +17,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
   const { id } = await params
   const v = await db.listaVenta.findUnique({
     where: { id },
-    include: { familias: true, listaPrecios: { include: { proveedor: true, items: { orderBy: { posicion: 'asc' } } } } }
+    include: { familias: true, canales: { orderBy: { posicion: 'asc' } }, listaPrecios: { include: { proveedor: true, items: { orderBy: { posicion: 'asc' } } } } }
   })
   if (!v) notFound()
   const l = v.listaPrecios
@@ -116,6 +116,30 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
             </tbody>
           </table>
         </section>
+        <section className="panel scroll-x">
+          <h2 className="font-semibold text-sm px-4 pt-3 pb-1">Canales de venta</h2>
+          <p className="px-4 pb-2 text-xs text-[var(--texto-tenue)]">Descuento sobre el precio de lista para cada canal. No puede dejar el margen bajo el mínimo en ninguna familia.</p>
+          <table className="tabla">
+            <thead>
+              <tr>
+                <th>Canal</th>
+                <th className="text-right">Descuento %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...v.canales, null, null].map((c, k) => (
+                <tr key={c?.id ?? `nuevo-${k}`}>
+                  <td>
+                    <input name="canalNombre" className="campo" defaultValue={c?.nombre ?? ''} placeholder={k === 0 ? 'Ferreterías' : 'Instaladores'} aria-label={`Canal ${k + 1}`} />
+                  </td>
+                  <td className="text-right">
+                    <input name="canalDescuento" className="campo num w-24 ml-auto" inputMode="decimal" defaultValue={fmt(c?.descuentoPct)} placeholder={k === 0 ? '30' : '15'} aria-label={`Descuento del canal ${k + 1}`} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
       </FormAccion>
 
       <section className="panel scroll-x">
@@ -125,9 +149,16 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
             <p className="text-xs text-[var(--texto-tenue)]">Uso interno: costos, márgenes, precio mínimo y descuento máximo no aparecen en el documento para clientes.</p>
           </div>
           {filas.length > 0 && (
-            <Link href={`/imprimir/lista/${v.id}`} className="btn btn-primario">
-              Documento para clientes
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link href={`/imprimir/lista/${v.id}`} className="btn btn-primario">
+                Documento para clientes
+              </Link>
+              {v.canales.map((c) => (
+                <Link key={c.id} href={`/imprimir/lista/${v.id}?canal=${c.id}`} className="btn btn-neutro">
+                  {c.nombre}
+                </Link>
+              ))}
+            </div>
           )}
         </div>
         {faltaTc || v.factor == null ? (
@@ -135,6 +166,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
         ) : filas.length === 0 ? (
           <p className="px-4 py-3 text-sm text-[var(--texto-suave)]">Ingresa el margen de al menos una familia.</p>
         ) : (
+          <>
           <table className="tabla">
             <thead>
               <tr>
@@ -142,32 +174,54 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
                 <th>Medida</th>
                 <th>Vende por</th>
                 <th className="text-right">FOB {l.moneda}</th>
-                <th className="text-right">Landed {l.moneda}</th>
                 <th className="text-right">Landed CLP</th>
-                <th className="text-right">Precio lista CLP</th>
+                <th className="text-right">Precio lista</th>
+                {v.canales.map((c) => (
+                  <th key={c.id} className="text-right">
+                    {c.nombre} −{numero(c.descuentoPct, c.descuentoPct % 1 ? 1 : 0)}%
+                  </th>
+                ))}
                 {v.margenMinimoPct != null && <th className="text-right">Precio mínimo</th>}
                 {v.margenMinimoPct != null && <th className="text-right">Desc. máx.</th>}
               </tr>
             </thead>
-            <tbody>
-              {filas.map((f, k) => (
-                <tr key={k}>
-                  <td>
-                    {f.descripcion}
-                    <div className="text-xs text-[var(--texto-tenue)]">{f.familia}</div>
+            {porSeccion(filas).map((g) => (
+              <tbody key={g.seccion}>
+                <tr>
+                  <td colSpan={6 + v.canales.length + (v.margenMinimoPct != null ? 2 : 0)} className="font-semibold bg-[var(--panel-alt)]">
+                    {g.seccion}
                   </td>
-                  <td className="num">{[f.especificacion, f.pn].filter(Boolean).join(' · ') || '—'}</td>
-                  <td>{f.unidadVenta}</td>
-                  <td className="text-right num">{numero(f.fobVenta, 3)}</td>
-                  <td className="text-right num">{numero(f.landedUsd, 3)}</td>
-                  <td className="text-right num">{numero(f.landedClp, 0)}</td>
-                  <td className="text-right num font-semibold">{numero(f.precioClp, 0)}</td>
-                  {v.margenMinimoPct != null && <td className="text-right num">{numero(pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct)!.precioMinimo, 0)}</td>}
-                  {v.margenMinimoPct != null && <td className="text-right num">{numero(pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct)!.descuentoMaxPct, 1)}%</td>}
                 </tr>
-              ))}
-            </tbody>
+                {g.filas.map((f, k) => (
+                  <tr key={k}>
+                    <td>{f.descripcion}</td>
+                    <td className="num">{f.especificacion ?? '—'}</td>
+                    <td>{f.unidadVenta}</td>
+                    <td className="text-right num">{numero(f.fobVenta, 3)}</td>
+                    <td className="text-right num">{numero(f.landedClp, 0)}</td>
+                    <td className="text-right num font-semibold">{numero(f.precioClp, 0)}</td>
+                    {v.canales.map((c) => (
+                      <td key={c.id} className="text-right num">
+                        {numero(precioCanal(f.precioClp, c.descuentoPct), 0)}
+                      </td>
+                    ))}
+                    {v.margenMinimoPct != null && <td className="text-right num">{numero(pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct)!.precioMinimo, 0)}</td>}
+                    {v.margenMinimoPct != null && <td className="text-right num">{numero(pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct)!.descuentoMaxPct, 1)}%</td>}
+                  </tr>
+                ))}
+              </tbody>
+            ))}
           </table>
+          {v.canales.length > 0 && (
+            <p className="px-4 py-2 text-xs text-[var(--texto-tenue)]">
+              Margen que deja cada canal:{' '}
+              {familias
+                .filter((f) => f.margenPct != null)
+                .map((f) => `${f.familia} ${v.canales.map((c) => `${c.nombre} ${margenConDescuento(f.margenPct!, c.descuentoPct).toLocaleString('es-CL')}%`).join(', ')}`)
+                .join(' · ')}
+            </p>
+          )}
+          </>
         )}
       </section>
     </div>

@@ -105,7 +105,7 @@ export function listaDePrueba(_nombreArchivo = ''): import('./lista-esquema').Le
     incoterm: 'FOB',
     lugar: 'Shanghai',
     items: [
-      tubo('20×2.3', 0.262), tubo('25×2.8', 0.402), tubo('20×2.8', 0.311), tubo('25×3.5', 0.496), tubo('110×15.1', null),
+      tubo('20×2.3', 0.262), tubo('25×2.8', 0.402), tubo('20×2.8', 0.311), tubo('25×3.5', 0.496), tubo('20×3.4', 0.363), tubo('110×15.1', null),
       fit('Unión recta', 'Straight connector', '20', 0.031), fit('Unión recta', 'Straight connector', '25', 0.049),
       fit('Codo 45°', '45° Elbow', '20', 0.028), fit('Codo 90°', '90° Elbow', '20', 0.039), fit('Codo 90°', '90° Elbow', '25', 0.06)
     ],
