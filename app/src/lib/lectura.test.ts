@@ -5,7 +5,7 @@
  * Caso real: Quanzhou Ridge Steel Structure, galpón 19 × 38 × 8 m (24-11-2026).
  */
 
-import { revisarDesglose, toneladas, porMedida, cuadraConPedido, precioDeLinea, type LineaDesglose } from './lectura'
+import { revisarDesglose, toneladas, porMedida, cuadraConPedido, precioDeLinea, avisoUnidad, type LineaDesglose } from './lectura'
 import { igual, grupo, terminar } from './prueba'
 
 const ridge: LineaDesglose[] = [
@@ -72,5 +72,17 @@ igual('y vuelve a dar el total del documento', cuadraConPedido(Math.round(m2! * 
 igual('redondear a 68,91 habría descuadrado 0,86', cuadraConPedido(68.91 * 722, 49752.16), 'Los precios por línea suman USD 49.753,02, pero el documento dice USD 49.752,16')
 igual('si el documento da precio unitario, se usa tal cual', precioDeLinea({ precioUnitario: 0.79, montoTotal: 1580 }, 2000), 0.79)
 igual('sin precio ni monto no hay precio', precioDeLinea({ precioUnitario: null, montoTotal: null }, 10), null)
+
+grupo('La unidad del precio contra la unidad pedida')
+igual(
+  'la lista de Lvzhou cobra por metro y la compra pedía unidades: se avisa',
+  avisoUnidad('u', 'meter'),
+  'El documento da el precio por meter y la compra pide en u: revisa la conversión'
+)
+igual('meter y m son lo mismo', avisoUnidad('m', 'meter'), null)
+igual('pcs y pzas son lo mismo', avisoUnidad('pzas', 'pcs'), null)
+igual('piece y u son lo mismo', avisoUnidad('u', 'piece'), null)
+igual('m2 y sqm son lo mismo', avisoUnidad('m2', 'sqm'), null)
+igual('si el documento no dice la unidad, no se inventa un aviso', avisoUnidad('u', ''), null)
 
 terminar()

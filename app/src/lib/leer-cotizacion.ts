@@ -39,6 +39,8 @@ Extrae solo lo que el documento dice:
 - Los números tal cual: no conviertas monedas, no apliques descuentos, no recalcules montos. La app rehace las cuentas y avisa si no cuadran; si corriges un monto, esconde un error del documento.
 - La cita tiene que ser texto literal del documento.
 - Cuando el documento cotiza un monto global para lo que GESI pidió (por ejemplo, el galpón completo en 49.752,16 aunque GESI lo pidió en m²), informa ese monto en montoTotal y deja precioUnitario en null. No dividas: la app divide sin redondear. Las piezas del proveedor van en el desglose.
+- Si el documento es una lista de precios o catálogo (muchos productos, sin cantidades de GESI), extrae solo los precios de las líneas que pidió GESI, deja el desglose vacío y anota en dudas que es una lista de precios.
+- Indica siempre en qué unidad da el documento cada precio (por metro, por pieza…). Si no es la unidad que pidió GESI, no conviertas: informa el precio tal cual con su unidad.
 - Anota en dudas lo ambiguo: un rango de plazos, un monto "estimado", impuestos incluidos.`
 
 export interface LineaPedida {

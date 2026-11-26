@@ -8,7 +8,7 @@ import { codigo } from '@/lib/codigos'
 import { INCOTERM_LABEL } from '@/lib/incoterms'
 import { fechaInput, conUnidad, numero } from '@/lib/formato'
 import { hayLectorIa, type LecturaCotizacion } from '@/lib/leer-cotizacion'
-import { revisarDesglose, cuadraConPedido, precioDeLinea, type LineaDesglose } from '@/lib/lectura'
+import { revisarDesglose, cuadraConPedido, precioDeLinea, avisoUnidad, type LineaDesglose } from '@/lib/lectura'
 import { totalCotizacion } from '@/lib/proveedores'
 import { registrarCotizacion, subirPdf } from '@/app/acciones/compras'
 
@@ -55,7 +55,14 @@ export default async function PaginaCotizacion({
   const moneda = leido?.moneda ?? cot?.moneda ?? 'USD'
   const revision = revisarDesglose(desglose, documento)
   const totalLineas = totalCotizacion(c.lineas.map((l) => ({ compraLineaId: l.id, cantidad: l.cantidad, precioUnitario: precio(l.id) ?? null })))
-  const problemas = [...revision.problemas, cuadraConPedido(totalLineas, documento.total, moneda)].filter((x): x is string => !!x)
+  // Solo un precio unitario puede venir en otra unidad: un monto global cubre
+  // la línea completa y la app lo divide por lo pedido.
+  const avisoDeLinea = (lineaId: string, unidad: string) => {
+    const p = precioLeido(lineaId)
+    return p && p.precioUnitario != null ? avisoUnidad(unidad, p.unidad ?? null) : null
+  }
+  const avisosUnidad = c.lineas.map((l) => (precioLeido(l.id) ? avisoDeLinea(l.id, l.unidad) : null)).map((a, k) => (a ? `${c.lineas[k].descripcion}: ${a}` : null))
+  const problemas = [...revision.problemas, cuadraConPedido(totalLineas, documento.total, moneda), ...avisosUnidad].filter((x): x is string => !!x)
   const archivo = lp?.archivo ?? cot?.archivo
   const archivoNombre = lp?.archivoNombre ?? cot?.archivoNombre
 
@@ -188,6 +195,9 @@ export default async function PaginaCotizacion({
                     {l.descripcion}
                     {l.especificacion && <div className="text-xs text-[var(--texto-tenue)]">{l.especificacion}</div>}
                     {precioLeido(l.id) && <div className="text-xs text-[var(--texto-tenue)]">Del PDF: «{precioLeido(l.id)!.cita}»</div>}
+                    {precioLeido(l.id) && avisoDeLinea(l.id, l.unidad) && (
+                      <div className="text-xs text-[var(--alerta)]">{avisoDeLinea(l.id, l.unidad)}</div>
+                    )}
                     {precioLeido(l.id)?.precioUnitario == null && precioLeido(l.id)?.montoTotal != null && (
                       <div className="text-xs text-[var(--texto-tenue)]">
                         Monto global {numero(precioLeido(l.id)!.montoTotal!, 2)} ÷ {numero(l.cantidad, l.cantidad % 1 ? 2 : 0)} {l.unidad} = {numero(precio(l.id) ?? 0, 6)}

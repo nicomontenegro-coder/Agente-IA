@@ -90,3 +90,29 @@ export function precioDeLinea(leido: { precioUnitario: number | null; montoTotal
   if (leido.montoTotal == null || !(cantidad > 0)) return null
   return Math.round((leido.montoTotal / cantidad) * 1e6) / 1e6
 }
+
+/** Las formas de escribir cada unidad, en inglés y en español. */
+const UNIDADES: string[][] = [
+  ['m', 'mt', 'mts', 'meter', 'meters', 'metre', 'metres', 'metro', 'metros', 'ml'],
+  ['u', 'un', 'und', 'unidad', 'unidades', 'pc', 'pcs', 'piece', 'pieces', 'pieza', 'piezas', 'pza', 'pzas', 'ea', 'each'],
+  ['m2', 'm²', 'sqm', 'sq m', 'square meter', 'square meters', 'metro cuadrado', 'metros cuadrados'],
+  ['t', 'ton', 'tons', 'tonne', 'tonnes', 'tonelada', 'toneladas', 'mt.'],
+  ['kg', 'kgs', 'kilo', 'kilos', 'kilogram', 'kilograms', 'kilogramo', 'kilogramos'],
+  ['set', 'sets', 'juego', 'juegos', 'conjunto', 'lot', 'lote']
+]
+const unidadNormal = (u: string) => {
+  const x = u.trim().toLowerCase().replace(/\.$/, '')
+  const grupo = UNIDADES.find((g) => g.includes(x))
+  return grupo ? grupo[0] : x
+}
+
+/**
+ * Si el documento da el precio en otra unidad que la pedida, el total sale
+ * mal sin que nada se vea raro: la lista de Lvzhou cobra el tubo por metro y
+ * la compra lo pedía en unidades. Null si coinciden o si no se sabe.
+ */
+export function avisoUnidad(pedida: string, enDocumento: string | null): string | null {
+  if (!enDocumento || !enDocumento.trim()) return null
+  if (unidadNormal(pedida) === unidadNormal(enDocumento)) return null
+  return `El documento da el precio por ${enDocumento.trim()} y la compra pide en ${pedida}: revisa la conversión`
+}

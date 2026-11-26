@@ -47,13 +47,14 @@ export const EsquemaLectura = z.object({
         monto: z.number().nullable().describe('El monto de la línea tal como aparece, sin recalcularlo')
       })
     )
-    .describe('Cada ítem cotizado, en el orden del documento'),
+    .describe('El detalle con que el proveedor arma el precio de lo que pidió GESI (su cubicación), en el orden del documento. VACÍO si el documento es una lista de precios o catálogo general'),
   preciosPorLinea: z
     .array(
       z.object({
         lineaId: z.string().describe('El id de la línea de GESI a la que corresponde'),
         precioUnitario: z.number().nullable().describe('Precio unitario SOLO si el documento lo escribe en la misma unidad que pidió GESI. Null si el documento da un monto global: no lo dividas tú'),
         montoTotal: z.number().nullable().describe('El monto que el documento da para todo lo de esa línea, cuando cotiza un global (por ejemplo el galpón completo). Null si da precio unitario'),
+        unidad: texto('Unidad en que el documento da ese precio o monto: meter, piece, set, m2…'),
         cita: z.string().describe('Fragmento literal del documento de donde sale ese precio')
       })
     )
