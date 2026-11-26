@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { INCOTERMS } from './incoterms'
+import { CAMPOS_PREGUNTABLES } from './preguntas'
 
 /**
  * Lo que se le pide a la IA que lea de una cotización.
@@ -59,7 +60,18 @@ export const EsquemaLectura = z.object({
       })
     )
     .describe('El precio que corresponde a cada línea pedida por GESI. Omite las que el documento no cotiza'),
-  dudas: z.array(z.string()).describe('Lo que no se pudo leer con seguridad o quedó ambiguo. Vacío si todo está claro')
+  preguntas: z
+    .array(
+      z.object({
+        campo: z.enum(CAMPOS_PREGUNTABLES).describe('El campo que la respuesta llena'),
+        pregunta: z.string().describe('La pregunta, corta, en español, citando lo que dice el documento'),
+        opciones: z
+          .array(z.object({ etiqueta: z.string(), valor: z.string().describe('Un número, o SI / NO para la carta de crédito') }))
+          .describe('Las respuestas posibles según el documento')
+      })
+    )
+    .describe('Preguntas para la persona, SOLO cuando el documento es ambiguo en un dato que mueve un número o una decisión (un rango de plazos, un monto estimado, dos totales distintos). Si la duda no cambia ninguno de esos campos, va en dudas'),
+  dudas: z.array(z.string()).describe('Lo que no se pudo leer con seguridad o quedó ambiguo y no tiene pregunta. Vacío si todo está claro')
 })
 
 type DeLaIA = z.infer<typeof EsquemaLectura>
@@ -67,7 +79,7 @@ type DeLaIA = z.infer<typeof EsquemaLectura>
 /** Lo mismo, con null donde el documento no decía nada: así lo usa la app. */
 export type LecturaCotizacion = {
   [K in Exclude<keyof DeLaIA, 'desglose'>]: DeLaIA[K] extends string ? string | null : DeLaIA[K]
-} & { desglose: { descripcion: string; unidad: string | null; cantidad: number | null; precioUnitario: number | null; monto: number | null }[] }
+} & { respuestas?: string[] } & { desglose: { descripcion: string; unidad: string | null; cantidad: number | null; precioUnitario: number | null; monto: number | null }[] }
 
 const nulo = (s: string) => (s.trim() === '' ? null : s.trim())
 

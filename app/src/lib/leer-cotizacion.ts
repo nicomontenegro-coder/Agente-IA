@@ -41,6 +41,7 @@ Extrae solo lo que el documento dice:
 - Cuando el documento cotiza un monto global para lo que GESI pidió (por ejemplo, el galpón completo en 49.752,16 aunque GESI lo pidió en m²), informa ese monto en montoTotal y deja precioUnitario en null. No dividas: la app divide sin redondear. Las piezas del proveedor van en el desglose.
 - Si el documento es una lista de precios o catálogo (muchos productos, sin cantidades de GESI), extrae solo los precios de las líneas que pidió GESI, deja el desglose vacío y anota en dudas que es una lista de precios.
 - Indica siempre en qué unidad da el documento cada precio (por metro, por pieza…). Si no es la unidad que pidió GESI, no conviertas: informa el precio tal cual con su unidad.
+- Si un dato que mueve un número es ambiguo (un rango de plazos, un monto marcado como estimado), pon tu mejor lectura en el campo y además una pregunta con las opciones que da el documento. Pregunta poco: solo lo que cambia una cifra o una decisión.
 - Anota en dudas lo ambiguo: un rango de plazos, un monto "estimado", impuestos incluidos.`
 
 export interface LineaPedida {
@@ -52,8 +53,8 @@ export interface LineaPedida {
 
 export type ResultadoLectura = { ok: true; lectura: LecturaCotizacion } | { ok: false; error: string }
 
-export async function leerCotizacion(pdfBase64: string, pedido: LineaPedida[]): Promise<ResultadoLectura> {
-  if (dePrueba()) return { ok: true, lectura: lecturaDePrueba(pedido) }
+export async function leerCotizacion(pdfBase64: string, pedido: LineaPedida[], nombreArchivo = ''): Promise<ResultadoLectura> {
+  if (dePrueba()) return { ok: true, lectura: lecturaDePrueba(pedido, nombreArchivo) }
   if (!hayLectorIa()) return { ok: false, error: 'Falta la clave de la API en el servidor' }
 
   const lineas = pedido.map((l) => `- id ${l.id}: ${l.descripcion} — ${l.cantidad} ${l.unidad}`).join('\n')

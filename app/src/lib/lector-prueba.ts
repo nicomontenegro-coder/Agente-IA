@@ -6,7 +6,8 @@ import type { LineaPedida } from './leer-cotizacion'
  * probar la pantalla sin gastar ni tener clave. El precio va a la primera
  * línea pedida: en esa compra es el galpón completo.
  */
-export function lecturaDePrueba(pedido: LineaPedida[]): LecturaCotizacion {
+export function lecturaDePrueba(pedido: LineaPedida[], nombreArchivo = ''): LecturaCotizacion {
+  if (/price.?list/i.test(nombreArchivo)) return listaLvzhou(pedido)
   return {
     proveedor: 'Quanzhou Ridge Steel Structure Co., Ltd.',
     proveedorPais: 'China',
@@ -44,9 +45,50 @@ export function lecturaDePrueba(pedido: LineaPedida[]): LecturaCotizacion {
       { descripcion: 'Accessories: screw, rivet, silicone, etc.', unidad: 'm2', cantidad: 1718, precioUnitario: 1.25, monto: 2147.5 }
     ],
     preciosPorLinea: pedido.length ? [{ lineaId: pedido[0].id, precioUnitario: null, montoTotal: 49752.16, unidad: 'set', cita: 'Total Amount FOB XIAMEN: 49,752.16' }] : [],
+    preguntas: [
+      {
+        campo: 'leadTimeDias',
+        pregunta: 'El embarque es «30-45 days after receipt of deposit». ¿Qué plazo uso para comparar?',
+        opciones: [
+          { etiqueta: '30 días', valor: '30' },
+          { etiqueta: '45 días', valor: '45' }
+        ]
+      }
+    ],
     dudas: [
-      'Plazo de embarque: dice 30-45 días después del anticipo; se tomó 45.',
       'El costo FOB de 1.400 (2 × 40\' HQ) está marcado como estimado: se ajusta según la carga real.'
     ]
+  }
+}
+
+/**
+ * Lo que la IA lee de la lista de precios real de Lvzhou (05-11-2026) cuando
+ * la compra pide un PPR PN16: el precio viene por metro.
+ */
+function listaLvzhou(pedido: LineaPedida[]): LecturaCotizacion {
+  return {
+    proveedor: 'Zhejiang Lvzhou Pipe Technology Co., Ltd',
+    proveedorPais: 'China',
+    contacto: null,
+    email: null,
+    telefono: null,
+    referencia: null,
+    fecha: '2026-11-05',
+    moneda: 'USD',
+    incoterm: 'FOB',
+    lugar: 'Shanghai',
+    subtotal: null,
+    gastosHastaFob: null,
+    total: null,
+    validezDias: 10,
+    leadTimeDias: null,
+    condicionesPago: null,
+    aceptaCartaCredito: null,
+    moq: null,
+    noIncluye: null,
+    desglose: [],
+    preciosPorLinea: pedido.length ? [{ lineaId: pedido[0].id, precioUnitario: 0.311, montoTotal: null, unidad: 'meter', cita: 'PPR cold & hot water pipe 20×2.8 US$0.311' }] : [],
+    preguntas: [],
+    dudas: ['Es una lista de precios general, no una cotización de esta compra: no trae cantidades ni total.']
   }
 }

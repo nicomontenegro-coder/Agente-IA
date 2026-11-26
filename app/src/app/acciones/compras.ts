@@ -12,6 +12,8 @@ import { guardarPdf, esPdf, MAXIMO_PDF } from '@/lib/archivos'
 import { hayLectorIa, leerCotizacion } from '@/lib/leer-cotizacion'
 import { revisarDesglose, cuadraConPedido, type LineaDesglose } from '@/lib/lectura'
 import { totalCotizacion } from '@/lib/proveedores'
+import { aplicarRespuesta, convertirUnidad } from '@/lib/preguntas'
+import type { LecturaCotizacion } from '@/lib/lectura-esquema'
 
 export interface EstadoForm {
   error?: string
@@ -213,7 +215,7 @@ async function guardarYLeer(compraId: string, datos: FormData): Promise<{ error:
   let lectura: string | null = null
   let error: string | null = null
   if (hayLectorIa()) {
-    const r = await leerCotizacion(contenido.toString('base64'), compra.lineas.map((l) => ({ id: l.id, descripcion: l.descripcion, cantidad: l.cantidad, unidad: l.unidad })))
+    const r = await leerCotizacion(contenido.toString('base64'), compra.lineas.map((l) => ({ id: l.id, descripcion: l.descripcion, cantidad: l.cantidad, unidad: l.unidad })), archivo.name)
     if (r.ok) lectura = JSON.stringify(r.lectura)
     else error = r.error
   }
@@ -275,6 +277,39 @@ export async function crearProveedorDeLectura(compraId: string, lecturaId: strin
   })
   revalidatePath('/proveedores')
   return asignarA(compraId, lecturaId, p.id)
+}
+
+/** Lee la lectura pendiente de una invitación, para responder sus preguntas. */
+async function lecturaDe(lecturaId: string, invitacionId: string) {
+  const lp = await db.lecturaPendiente.findUnique({ where: { id: lecturaId } })
+  if (!lp || lp.invitacionId !== invitacionId || !lp.lectura) return null
+  const lectura = JSON.parse(lp.lectura) as LecturaCotizacion
+  // Las lecturas guardadas antes de que existieran las preguntas no las traen.
+  return { lp, lectura: { ...lectura, preguntas: lectura.preguntas ?? [] } }
+}
+
+/** Responde una pregunta de la lectura: la respuesta llena el campo. */
+export async function responderPregunta(compraId: string, invitacionId: string, lecturaId: string, indice: number, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const l = await lecturaDe(lecturaId, invitacionId)
+  if (!l) return { error: 'La lectura ya no está disponible: vuelve a leer el PDF' }
+  const valor = texto(datos.get('otro')) ?? texto(datos.get('valor'))
+  if (!valor) return { error: 'Selecciona una opción o ingresa un valor' }
+  const r = aplicarRespuesta(l.lectura, indice, valor)
+  if (!r.ok) return { error: r.error }
+  await db.lecturaPendiente.update({ where: { id: lecturaId }, data: { lectura: JSON.stringify(r.lectura) } })
+  redirect(`/compras/${compraId}/cotizacion/${invitacionId}?lectura=${lecturaId}`)
+}
+
+/** Pasa el precio de una línea a la unidad pedida (metros por barra, por ejemplo). */
+export async function convertirPrecio(compraId: string, invitacionId: string, lecturaId: string, lineaId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const l = await lecturaDe(lecturaId, invitacionId)
+  if (!l) return { error: 'La lectura ya no está disponible: vuelve a leer el PDF' }
+  const linea = await db.compraLinea.findUnique({ where: { id: lineaId } })
+  if (!linea || linea.compraId !== compraId) return { error: 'La línea no corresponde a esta compra' }
+  const r = convertirUnidad(l.lectura, lineaId, numero(datos.get('factor')), linea.unidad)
+  if (!r.ok) return { error: r.error }
+  await db.lecturaPendiente.update({ where: { id: lecturaId }, data: { lectura: JSON.stringify(r.lectura) } })
+  redirect(`/compras/${compraId}/cotizacion/${invitacionId}?lectura=${lecturaId}`)
 }
 
 /** La medida para comparar ofertas que cada proveedor cubica distinto. */

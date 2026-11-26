@@ -18,7 +18,7 @@ const vacio = {
   proveedor: 'Quanzhou Ridge Steel Structure Co., Ltd.', proveedorPais: 'China', contacto: '', email: ' ', telefono: '', referencia: '', fecha: '', moneda: 'USD',
   incoterm: 'FOB', lugar: 'Xiamen', subtotal: null, gastosHastaFob: null, total: 49752.16, validezDias: null, leadTimeDias: null, condicionesPago: '',
   aceptaCartaCredito: null, moq: '', noIncluye: '', desglose: [{ descripcion: 'H steel', unidad: '', cantidad: 26.45, precioUnitario: 830, monto: 21953.5 }],
-  preciosPorLinea: [], dudas: []
+  preciosPorLinea: [], preguntas: [], dudas: []
 }
 const l = desdeIA(vacio)
 igual('un texto vacío pasa a null', [l.contacto, l.email, l.referencia, l.moq], [null, null, null, null])

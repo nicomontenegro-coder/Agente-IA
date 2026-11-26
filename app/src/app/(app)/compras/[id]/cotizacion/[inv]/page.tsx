@@ -10,7 +10,7 @@ import { fechaInput, conUnidad, numero } from '@/lib/formato'
 import { hayLectorIa, type LecturaCotizacion } from '@/lib/leer-cotizacion'
 import { revisarDesglose, cuadraConPedido, precioDeLinea, avisoUnidad, type LineaDesglose } from '@/lib/lectura'
 import { totalCotizacion } from '@/lib/proveedores'
-import { registrarCotizacion, subirPdf } from '@/app/acciones/compras'
+import { registrarCotizacion, subirPdf, responderPregunta, convertirPrecio } from '@/app/acciones/compras'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,7 +32,9 @@ export default async function PaginaCotizacion({
   const cot = i.cotizacion
   const pendiente = lecturaId ? await db.lecturaPendiente.findUnique({ where: { id: lecturaId } }) : null
   const lp = pendiente?.invitacionId === i.id ? pendiente : null
-  const leido: LecturaCotizacion | null = lp?.lectura ? JSON.parse(lp.lectura) : null
+  const crudo: LecturaCotizacion | null = lp?.lectura ? JSON.parse(lp.lectura) : null
+  // Las lecturas anteriores a las preguntas no las traen.
+  const leido = crudo ? { ...crudo, preguntas: crudo.preguntas ?? [], respuestas: crudo.respuestas ?? [] } : null
   const lector = hayLectorIa()
 
   // Lo que se muestra en el formulario: lo leído manda sobre lo guardado.
@@ -49,7 +51,7 @@ export default async function PaginaCotizacion({
     : { subtotal: cot?.subtotalDocumento ?? null, gastos: cot?.gastosDocumento ?? null, total: cot?.totalDocumento ?? null }
   const lc = leido ? leido.aceptaCartaCredito ?? i.proveedor.aceptaCartaCredito : cot?.aceptaCartaCredito ?? i.proveedor.aceptaCartaCredito
   const incoterm = leido?.incoterm && leido.incoterm in INCOTERM_LABEL ? leido.incoterm : cot?.incoterm ?? c.incoterm
-  const notas = leido ? [leido.condicionesPago && `Pago: ${leido.condicionesPago}`, leido.noIncluye && `No incluye: ${leido.noIncluye}`].filter(Boolean).map((x) => String(x).replace(/\.+$/, '')).join('. ') : cot?.notas ?? ''
+  const notas = leido ? [leido.condicionesPago && `Pago: ${leido.condicionesPago}`, leido.noIncluye && `No incluye: ${leido.noIncluye}`, ...leido.respuestas].filter(Boolean).map((x) => String(x).replace(/\.+$/, '')).join('. ') : cot?.notas ?? ''
 
   // La app rehace las cuentas de lo leído: la IA puede leer mal un número.
   const moneda = leido?.moneda ?? cot?.moneda ?? 'USD'
@@ -114,6 +116,47 @@ export default async function PaginaCotizacion({
               ))}
             </ul>
           )}
+          {leido && (leido.preguntas.length > 0 || c.lineas.some((l) => avisoDeLinea(l.id, l.unidad))) && (
+            <div className="space-y-3 border-t border-[var(--borde)] pt-3">
+              <p className="text-sm font-medium">Preguntas</p>
+              {c.lineas
+                .filter((l) => avisoDeLinea(l.id, l.unidad))
+                .map((l) => (
+                  <FormAccion key={l.id} accion={convertirPrecio.bind(null, c.id, i.id, lp.id, l.id)} etiqueta="Convertir" clase="flex flex-wrap items-end gap-3">
+                    <label className="text-sm space-y-1">
+                      <span className="font-medium">
+                        {l.descripcion}: ¿cuántos {precioLeido(l.id)!.unidad} tiene cada {l.unidad}?
+                      </span>
+                      <input name="factor" className="campo num w-28" inputMode="decimal" required />
+                      <span className="block text-xs text-[var(--texto-tenue)]">
+                        El precio leído es {numero(precioLeido(l.id)!.precioUnitario ?? 0, 3)} por {precioLeido(l.id)!.unidad}.
+                      </span>
+                    </label>
+                  </FormAccion>
+                ))}
+              {leido.preguntas.map((q, k) => (
+                <FormAccion key={`${k}-${q.pregunta}`} accion={responderPregunta.bind(null, c.id, i.id, lp.id, k)} etiqueta="Responder" clase="space-y-2">
+                  <p className="text-sm">{q.pregunta}</p>
+                  <div className="flex flex-wrap items-center gap-3 text-sm">
+                    {q.opciones.map((o) => (
+                      <label key={o.valor} className="flex items-center gap-1">
+                        <input type="radio" name="valor" value={o.valor} />
+                        {o.etiqueta}
+                      </label>
+                    ))}
+                    {q.campo !== 'aceptaCartaCredito' && <input name="otro" className="campo num w-28" inputMode="decimal" placeholder="Otro valor" aria-label="Otro valor" />}
+                  </div>
+                </FormAccion>
+              ))}
+            </div>
+          )}
+          {leido && leido.respuestas.length > 0 && (
+            <ul className="text-sm text-[var(--texto-suave)] list-disc pl-5">
+              {leido.respuestas.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+          )}
           {leido && leido.dudas.length > 0 && (
             <>
               <p className="text-sm font-medium">Requiere revisión:</p>
@@ -127,7 +170,7 @@ export default async function PaginaCotizacion({
         </section>
       )}
 
-      <FormAccion accion={registrarCotizacion.bind(null, c.id, i.id)} etiqueta="Guardar cotización" clase="space-y-5">
+      <FormAccion key={leido ? leido.respuestas.length : 'guardada'} accion={registrarCotizacion.bind(null, c.id, i.id)} etiqueta="Guardar cotización" clase="space-y-5">
         {lp && <input type="hidden" name="lecturaId" value={lp.id} />}
         <section className="panel p-5 grid gap-3 sm:grid-cols-3">
           <label className="text-sm space-y-1">
