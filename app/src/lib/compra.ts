@@ -137,3 +137,15 @@ export function validarCambio(de: string, a: string, nota: string | null | undef
 }
 
 export const etapasDelCamino = CAMINO
+
+/**
+ * Una OC no se borra: se anula. Su número ya lo vio el proveedor y no puede
+ * desaparecer de la numeración. Con un pago registrado ya salió plata, y eso
+ * se resuelve con el proveedor, no anulando el papel.
+ */
+export function validarAnulacion(orden: { anulada: boolean; pagos: number }, motivo: string | null): string | null {
+  if (orden.anulada) return 'La orden ya está anulada'
+  if (orden.pagos > 0) return 'La orden tiene pagos registrados: no se puede anular'
+  if (!motivo || !motivo.trim()) return 'Ingresa el motivo de la anulación'
+  return null
+}

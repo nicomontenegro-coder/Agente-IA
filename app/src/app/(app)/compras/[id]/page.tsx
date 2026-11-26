@@ -10,7 +10,7 @@ import { codigo } from '@/lib/codigos'
 import { ETIQUETA_ETAPA, ETAPAS_COMPRA, SIGUE_ETAPA } from '@/lib/compra'
 import { totalesOrden } from '@/lib/documentos'
 import { numero, fecha, conUnidad } from '@/lib/formato'
-import { invitarProveedor, marcarDeclino, registrarPago, cambiarEtapa, guardarMedida, subirCotizacion } from '@/app/acciones/compras'
+import { invitarProveedor, marcarDeclino, registrarPago, cambiarEtapa, guardarMedida, subirCotizacion, anularOrden } from '@/app/acciones/compras'
 import { hayLectorIa } from '@/lib/leer-cotizacion'
 
 export const dynamic = 'force-dynamic'
@@ -379,7 +379,13 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
                   <Link href={`/imprimir/oc/${o.id}?idioma=es`} className="text-sm text-[var(--acento)] hover:underline">
                     Ver en español
                   </Link>
+                  {o.anuladaEl && <Chip tono="malo">Anulada</Chip>}
                 </div>
+                {o.anuladaEl && (
+                  <p className="text-sm text-[var(--texto-suave)]">
+                    Anulada el {fecha(o.anuladaEl)}: {o.motivoAnulacion}
+                  </p>
+                )}
                 {o.pagos.length > 0 && (
                   <ul className="text-sm text-[var(--texto-suave)]">
                     {o.pagos.map((p) => (
@@ -391,6 +397,8 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
                     ))}
                   </ul>
                 )}
+                {!o.anuladaEl && (
+                <>
                 <FormAccion accion={registrarPago.bind(null, c.id, o.id)} etiqueta="Registrar pago" clase="flex gap-2 items-end flex-wrap" limpiar>
                   <label className="text-sm space-y-1">
                     <span className="font-medium">Pago</span>
@@ -409,6 +417,20 @@ export default async function PaginaCompra({ params }: { params: Promise<{ id: s
                     <input name="fecha" type="date" className="campo" />
                   </label>
                 </FormAccion>
+                {o.pagos.length === 0 && (
+                  <details className="text-sm">
+                    <summary className="cursor-pointer text-[var(--texto-suave)]">Anular orden</summary>
+                    <FormAccion accion={anularOrden.bind(null, c.id, o.id)} etiqueta="Anular orden" clase="flex gap-2 items-end flex-wrap pt-2">
+                      <label className="text-sm space-y-1 grow">
+                        <span className="font-medium">Motivo</span>
+                        <input name="motivo" className="campo" placeholder="Emitida por error, cambio de proveedor…" required />
+                      </label>
+                    </FormAccion>
+                    <p className="text-xs text-[var(--texto-tenue)] pt-1">La orden conserva su número y queda marcada como anulada. Se puede emitir una nueva.</p>
+                  </details>
+                )}
+                </>
+                )}
               </div>
             )
           })}

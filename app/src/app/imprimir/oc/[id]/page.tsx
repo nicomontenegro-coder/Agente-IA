@@ -40,6 +40,7 @@ export default async function ImprimirOC({ params, searchParams }: { params: Pro
         body { background: #e5e7eb; }
         .hoja { max-width: 210mm; margin: 16px auto; background: #fff; padding: 14mm; color: #1f2937; font-size: 10pt; }
         .hoja h1 { font-size: 18pt; color: #1d4ed8; margin: 0; text-align: right; }
+        .hoja .anulada { display: inline-block; margin: 4px 0; padding: 2px 10px; border: 2px solid #b91c1c; color: #b91c1c; font-weight: 700; letter-spacing: 1px; }
         .hoja h2 { font-size: 10pt; color: #fff; background: #0f766e; padding: 4px 8px; border-radius: 4px; margin: 12px 0 6px; }
         .hoja h2.regla { background: #b45309; }
         .hoja table { width: 100%; border-collapse: collapse; font-size: 9pt; }
@@ -62,6 +63,11 @@ export default async function ImprimirOC({ params, searchParams }: { params: Pro
         </div>
         <div style={{ textAlign: 'right' }}>
           <h1>{t.titulo}</h1>
+          {o.anuladaEl && (
+            <div className="anulada">
+              {idioma === 'en' ? 'VOID' : 'ANULADA'} · {fechaDoc(o.anuladaEl, idioma)}
+            </div>
+          )}
           <div>
             <strong>{cod}</strong> · {t.fecha}: {fechaDoc(o.fecha, idioma)}
           </div>

@@ -28,11 +28,13 @@ const leer = (id: string) => db.compra.findUnique({ where: { id }, include: INCL
 
 /** Lo registrado que permite despejar la etapa. */
 export function hechosDe(c: CompraFila): HechosCompra {
-  const pagos = c.ordenes.flatMap((o) => o.pagos)
+  // Una OC anulada no cuenta: la compra vuelve a la etapa que tenía sin ella.
+  const vigentes = c.ordenes.filter((o) => !o.anuladaEl)
+  const pagos = vigentes.flatMap((o) => o.pagos)
   return {
     invitacionesEnviadas: c.invitaciones.filter((i) => i.enviadaEl).length,
     cotizacionesRecibidas: c.invitaciones.filter((i) => i.cotizacion).length,
-    ocEmitida: c.ordenes.length > 0,
+    ocEmitida: vigentes.length > 0,
     primerPago: pagos.some((p) => p.tipo === 'CARTA_CREDITO' || p.tipo === 'ANTICIPO'),
     embarcada: false,
     segundoPago: pagos.some((p) => p.tipo === 'SALDO'),

@@ -3,7 +3,7 @@
  * Caso: la tubería preaislada de Lvzhou para Magallanes.
  */
 
-import { etapaCompra, validarCambio, tipoDeCambio, type HechosCompra } from './compra'
+import { etapaCompra, validarCambio, tipoDeCambio, validarAnulacion, type HechosCompra } from './compra'
 import { igual, grupo, terminar } from './prueba'
 
 const nada: HechosCompra = {
@@ -69,5 +69,11 @@ igual(
   'Ingresa el motivo para retroceder la etapa'
 )
 igual('una etapa inventada no se acepta', validarCambio('NECESIDAD', 'APURADA', null), 'Etapa desconocida')
+
+grupo('Anular una orden de compra')
+igual('una OC emitida por prueba, sin pagos, se anula con motivo', validarAnulacion({ anulada: false, pagos: 0 }, 'Emitida para probar la app'), null)
+igual('sin motivo no se anula', validarAnulacion({ anulada: false, pagos: 0 }, '  '), 'Ingresa el motivo de la anulación')
+igual('con la carta de crédito ya registrada no se anula', validarAnulacion({ anulada: false, pagos: 1 }, 'Cambio de proveedor'), 'La orden tiene pagos registrados: no se puede anular')
+igual('no se anula dos veces', validarAnulacion({ anulada: true, pagos: 0 }, 'otra vez'), 'La orden ya está anulada')
 
 terminar()

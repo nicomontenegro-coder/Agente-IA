@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 import { db } from '@/lib/db'
 import { siguienteNumero, compraCompleta } from '@/lib/compras-db'
-import { validarCambio } from '@/lib/compra'
+import { validarCambio, validarAnulacion } from '@/lib/compra'
 import { INCOTERM_LABEL } from '@/lib/incoterms'
 import { leerNumero } from '@/lib/numeros'
 import { guardarPdf, esPdf, MAXIMO_PDF } from '@/lib/archivos'
@@ -333,6 +333,19 @@ export async function emitirOrden(compraId: string, cotizacionId: string, _e: Es
   })
   refrescar(compraId)
   redirect(`/imprimir/oc/${o.id}`)
+}
+
+/** Anula una OC: queda con su número y el motivo, y deja de contar para la etapa. */
+export async function anularOrden(compraId: string, ordenId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const o = await db.ordenCompra.findUnique({ where: { id: ordenId }, include: { pagos: true } })
+  if (!o || o.compraId !== compraId) return { error: 'La orden no corresponde a esta compra' }
+  const motivo = texto(datos.get('motivo'))
+  const error = validarAnulacion({ anulada: !!o.anuladaEl, pagos: o.pagos.length }, motivo)
+  if (error) return { error }
+  await db.ordenCompra.update({ where: { id: ordenId }, data: { anuladaEl: new Date(), motivoAnulacion: motivo } })
+  refrescar(compraId)
+  revalidatePath(`/imprimir/oc/${ordenId}`)
+  return { ok: 'Orden anulada' }
 }
 
 export async function registrarPago(compraId: string, ordenId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
