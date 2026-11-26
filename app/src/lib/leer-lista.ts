@@ -30,7 +30,7 @@ export type ResultadoLista = { ok: true; lectura: LecturaLista } | { ok: false; 
 export async function leerLista(pdfBase64: string, nombreArchivo = ''): Promise<ResultadoLista> {
   if (process.env.GESI_LECTOR_PRUEBA === '1') {
     const { listaDePrueba } = await import('./lector-prueba')
-    return { ok: true, lectura: listaDePrueba(nombreArchivo) }
+    return { ok: true, lectura: listaDePrueba() }
   }
   if (!hayLectorIa()) return { ok: false, error: 'Lectura automática no disponible en este servidor' }
   try {

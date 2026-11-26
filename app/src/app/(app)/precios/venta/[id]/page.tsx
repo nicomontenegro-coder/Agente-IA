@@ -3,9 +3,10 @@ import { notFound } from 'next/navigation'
 
 import { Encabezado, Volver } from '@/componentes/ui'
 import FormAccion from '@/componentes/form-accion'
+import TablaInteractiva from '@/componentes/tabla-interactiva'
 import { db } from '@/lib/db'
 import { fecha, numero } from '@/lib/formato'
-import { filasDeVenta, vigencia, familiasDe, pisoDeVenta, porSeccion, precioCanal, margenConDescuento } from '@/lib/lista-venta'
+import { filasDeVenta, vigencia, familiasDe, pisoDeVenta, precioCanal, margenConDescuento } from '@/lib/lista-venta'
 import { guardarListaVenta } from '@/app/acciones/precios'
 
 export const dynamic = 'force-dynamic'
@@ -167,51 +168,47 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
           <p className="px-4 py-3 text-sm text-[var(--texto-suave)]">Ingresa el margen de al menos una familia.</p>
         ) : (
           <>
-          <table className="tabla">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Medida</th>
-                <th>Vende por</th>
-                <th className="text-right">FOB {l.moneda}</th>
-                <th className="text-right">Landed CLP</th>
-                <th className="text-right">Precio lista</th>
-                {v.canales.map((c) => (
-                  <th key={c.id} className="text-right">
-                    {c.nombre} −{numero(c.descuentoPct, c.descuentoPct % 1 ? 1 : 0)}%
-                  </th>
-                ))}
-                {v.margenMinimoPct != null && <th className="text-right">Precio mínimo</th>}
-                {v.margenMinimoPct != null && <th className="text-right">Desc. máx.</th>}
-              </tr>
-            </thead>
-            {porSeccion(filas).map((g) => (
-              <tbody key={g.seccion}>
-                <tr>
-                  <td colSpan={6 + v.canales.length + (v.margenMinimoPct != null ? 2 : 0)} className="font-semibold bg-[var(--panel-alt)]">
-                    {g.seccion}
-                  </td>
-                </tr>
-                {g.filas.map((f, k) => (
-                  <tr key={k}>
-                    <td>{f.descripcion}</td>
-                    <td className="num">{f.especificacion ?? '—'}</td>
-                    <td>{f.unidadVenta}</td>
-                    <td className="text-right num">{numero(f.fobVenta, 3)}</td>
-                    <td className="text-right num">{numero(f.landedClp, 0)}</td>
-                    <td className="text-right num font-semibold">{numero(f.precioClp, 0)}</td>
-                    {v.canales.map((c) => (
-                      <td key={c.id} className="text-right num">
-                        {numero(precioCanal(f.precioClp, c.descuentoPct), 0)}
-                      </td>
-                    ))}
-                    {v.margenMinimoPct != null && <td className="text-right num">{numero(pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct)!.precioMinimo, 0)}</td>}
-                    {v.margenMinimoPct != null && <td className="text-right num">{numero(pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct)!.descuentoMaxPct, 1)}%</td>}
-                  </tr>
-                ))}
-              </tbody>
-            ))}
-          </table>
+          <TablaInteractiva
+            filtrarPor="seccion"
+            etiquetaFiltro="Sección"
+            columnas={[
+              { clave: 'producto', titulo: 'Producto' },
+              { clave: 'medida', titulo: 'Medida' },
+              { clave: 'vende', titulo: 'Vende por' },
+              { clave: 'fob', titulo: `FOB ${l.moneda}`, derecha: true },
+              { clave: 'landed', titulo: 'Landed CLP', derecha: true },
+              { clave: 'lista', titulo: 'Precio lista', derecha: true, destacada: true },
+              ...v.canales.map((c) => ({ clave: `canal-${c.id}`, titulo: `${c.nombre} −${numero(c.descuentoPct, c.descuentoPct % 1 ? 1 : 0)}%`, derecha: true })),
+              ...(v.margenMinimoPct != null
+                ? [
+                    { clave: 'minimo', titulo: 'Precio mínimo', derecha: true },
+                    { clave: 'desc', titulo: 'Desc. máx.', derecha: true }
+                  ]
+                : [])
+            ]}
+            filas={filas.map((f, k) => {
+              const piso = v.margenMinimoPct != null ? pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct) : null
+              return {
+                id: String(k),
+                seccion: f.seccion,
+                celdas: {
+                  producto: { texto: f.descripcion, valor: f.descripcion },
+                  medida: { texto: f.especificacion ?? '—', valor: f.especificacion },
+                  vende: { texto: f.unidadVenta, valor: f.unidadVenta },
+                  fob: { texto: numero(f.fobVenta, 3), valor: f.fobVenta },
+                  landed: { texto: numero(f.landedClp, 0), valor: f.landedClp },
+                  lista: { texto: numero(f.precioClp, 0), valor: f.precioClp },
+                  ...Object.fromEntries(v.canales.map((c) => [`canal-${c.id}`, { texto: numero(precioCanal(f.precioClp, c.descuentoPct), 0), valor: precioCanal(f.precioClp, c.descuentoPct) }])),
+                  ...(piso
+                    ? {
+                        minimo: { texto: numero(piso.precioMinimo, 0), valor: piso.precioMinimo },
+                        desc: { texto: `${numero(piso.descuentoMaxPct, 1)}%`, valor: piso.descuentoMaxPct }
+                      }
+                    : {})
+                }
+              }
+            })}
+          />
           {v.canales.length > 0 && (
             <p className="px-4 py-2 text-xs text-[var(--texto-tenue)]">
               Margen que deja cada canal:{' '}

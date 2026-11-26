@@ -8,6 +8,7 @@ import { vigencia, familiasDe } from '@/lib/lista-venta'
 import { crearListaVenta } from '@/app/acciones/precios'
 import { enviarMensaje, aprobarPropuesta, descartarPropuesta } from '@/app/acciones/asistente'
 import FormAccion from '@/componentes/form-accion'
+import TablaInteractiva from '@/componentes/tabla-interactiva'
 import { contextoLista } from '@/lib/asistente'
 import { hayLectorIa } from '@/lib/leer-cotizacion'
 import type { Cambio } from '@/lib/propuestas'
@@ -137,35 +138,31 @@ export default async function PaginaLista({ params }: { params: Promise<{ id: st
         )}
       </section>
 
-      <section className="panel scroll-x">
-        <h2 className="font-semibold text-sm px-4 pt-3 pb-2">Productos ({familias.map((f) => `${f.familia}: ${f.productos}`).join(' · ')})</h2>
-        <table className="tabla">
-          <thead>
-            <tr>
-              <th>Familia</th>
-              <th>Producto</th>
-              <th>Medida</th>
-              {hayPn && <th>PN</th>}
-              <th>Unidad</th>
-              <th className="text-right">Precio {l.moneda}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {l.items.map((i) => (
-              <tr key={i.id}>
-                <td className="text-sm text-[var(--texto-suave)]">{i.familia}</td>
-                <td>
-                  {i.descripcion}
-                  {i.grupo && <div className="text-xs text-[var(--texto-tenue)]">{i.grupo}</div>}
-                </td>
-                <td className="num">{i.especificacion ?? '—'}</td>
-                {hayPn && <td className="text-sm">{i.pn ?? '—'}</td>}
-                <td>{i.unidad}</td>
-                <td className="text-right num">{i.precio != null ? numero(i.precio, 3) : <span className="text-[var(--texto-tenue)]">sin precio</span>}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <section className="panel">
+        <h2 className="font-semibold text-sm px-4 pt-3">Productos ({familias.map((f) => `${f.familia}: ${f.productos}`).join(' · ')})</h2>
+        <TablaInteractiva
+          filtrarPor="familia"
+          etiquetaFiltro="Familia"
+          columnas={[
+            { clave: 'familia', titulo: 'Familia' },
+            { clave: 'producto', titulo: 'Producto' },
+            { clave: 'medida', titulo: 'Medida' },
+            ...(hayPn ? [{ clave: 'pn', titulo: 'PN' }] : []),
+            { clave: 'unidad', titulo: 'Unidad' },
+            { clave: 'precio', titulo: `Precio ${l.moneda}`, derecha: true }
+          ]}
+          filas={l.items.map((i) => ({
+            id: i.id,
+            celdas: {
+              familia: { texto: i.familia, valor: i.familia },
+              producto: { texto: i.descripcion, valor: i.descripcion, sub: i.grupo ?? undefined },
+              medida: { texto: i.especificacion ?? '—', valor: i.especificacion },
+              pn: { texto: i.pn ?? '—', valor: i.pn },
+              unidad: { texto: i.unidad, valor: i.unidad },
+              precio: { texto: i.precio != null ? numero(i.precio, 3) : 'sin precio', valor: i.precio }
+            }
+          }))}
+        />
       </section>
     </div>
   )

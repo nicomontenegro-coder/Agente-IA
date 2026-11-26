@@ -94,7 +94,7 @@ function listaLvzhou(pedido: LineaPedida[]): LecturaCotizacion {
 }
 
 /** Un extracto real de la lista de Lvzhou (05-11-2026): tubos y fittings, con una celda vacía. */
-export function listaDePrueba(_nombreArchivo = ''): import('./lista-esquema').LecturaLista {
+export function listaDePrueba(): import('./lista-esquema').LecturaLista {
   const tubo = (e: string, precio: number | null) => ({ familia: 'Tubería PPR', grupo: 'PPR cold & hot water pipe', descripcion: 'Tubo PPR', especificacion: e, unidad: 'm', precio })
   const fit = (d: string, g: string, e: string, precio: number | null) => ({ familia: 'Fittings PPR', grupo: g, descripcion: d, especificacion: e, unidad: 'pieza', precio })
   return {
