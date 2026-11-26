@@ -9,6 +9,7 @@ const ENLACES = [
   { href: '/compras', label: 'Compras' },
   { href: '/proveedores', label: 'Proveedores' },
   { href: '/productos', label: 'Productos' },
+  { href: '/precios', label: 'Precios' },
   { href: '/ajustes', label: 'Ajustes' }
 ]
 

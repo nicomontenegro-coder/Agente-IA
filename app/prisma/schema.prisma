@@ -67,6 +67,7 @@ model Proveedor {
   familias     ProveedorFamilia[]
   certificados Certificado[]
   invitaciones Invitacion[]
+  listas       ListaPrecios[]
 }
 
 /// Tabla intermedia: qué familias trabaja cada proveedor (muchos a muchos).
@@ -293,4 +294,79 @@ model Pago {
 model Correlativo {
   tipo  String @id
   ultimo Int   @default(0)
+}
+
+// ───────────────────────────── Listas de precios ─────────────────────────────
+
+/// La lista de precios general de un proveedor (su catálogo), tal como la
+/// mandó: no responde a una compra. Alimenta el costo estimado y la lista de
+/// venta. Se guarda con su fecha y validez: vencida no se borra, porque dice
+/// con qué precios se decidió.
+model ListaPrecios {
+  id            String   @id @default(cuid())
+  proveedorId   String
+  proveedor     Proveedor @relation(fields: [proveedorId], references: [id], onDelete: Cascade)
+  archivo       String
+  archivoNombre String
+  fecha         DateTime
+  validezDias   Int?
+  moneda        String   @default("USD")
+  incoterm      String?
+  lugar         String?
+  /// Lo que la lectura no pudo leer con seguridad.
+  notas         String?
+  creadoEn      DateTime @default(now())
+
+  items  ListaPreciosItem[]
+  ventas ListaVenta[]
+}
+
+model ListaPreciosItem {
+  id             String       @id @default(cuid())
+  listaId        String
+  lista          ListaPrecios @relation(fields: [listaId], references: [id], onDelete: Cascade)
+  posicion       Int
+  /// Familia amplia para el costo logístico: tubería, fitting, válvula…
+  familia        String
+  /// La sección del documento: «PPR cold & hot water pipe», «45° Elbow».
+  grupo          String?
+  descripcion    String
+  especificacion String?
+  unidad         String
+  /// Null si la lista deja la celda en blanco (se cotiza a pedido).
+  precio         Float?
+}
+
+/// Una lista de venta (por ejemplo, la preventa de un embarque) armada desde
+/// una lista del proveedor. Lo decidido se congela: guarda su tipo de cambio,
+/// sus factores y sus márgenes.
+model ListaVenta {
+  id             String       @id @default(cuid())
+  listaPreciosId String
+  listaPrecios   ListaPrecios @relation(fields: [listaPreciosId], references: [id], onDelete: Cascade)
+  titulo         String
+  /// Pesos por dólar con que se calcularon los precios.
+  tipoCambio     Float?
+  entrega        String?
+  condiciones    String?
+  validezDias    Int?
+  creadoEn       DateTime     @default(now())
+  actualizadoEn  DateTime     @updatedAt
+
+  familias ListaVentaFamilia[]
+}
+
+model ListaVentaFamilia {
+  id           String     @id @default(cuid())
+  listaVentaId String
+  listaVenta   ListaVenta @relation(fields: [listaVentaId], references: [id], onDelete: Cascade)
+  familia      String
+  /// Costo puesto en bodega ÷ FOB. Sin factor, la familia no tiene precio.
+  factor       Float?
+  /// De dónde salió el factor: «costeo de octubre, Excel», «GESI-C12 de Importa».
+  factorOrigen String?
+  /// Margen sobre el precio de venta, en %. Sin margen, la familia no se ofrece.
+  margenPct    Float?
+
+  @@unique([listaVentaId, familia])
 }

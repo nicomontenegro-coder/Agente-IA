@@ -92,3 +92,23 @@ function listaLvzhou(pedido: LineaPedida[]): LecturaCotizacion {
     dudas: ['Es una lista de precios general, no una cotización de esta compra: no trae cantidades ni total.']
   }
 }
+
+/** Un extracto real de la lista de Lvzhou (05-11-2026): tubos y fittings, con una celda vacía. */
+export function listaDePrueba(_nombreArchivo = ''): import('./lista-esquema').LecturaLista {
+  const tubo = (e: string, precio: number | null) => ({ familia: 'Tubería PPR', grupo: 'PPR cold & hot water pipe', descripcion: 'Tubo PPR', especificacion: e, unidad: 'm', precio })
+  const fit = (d: string, g: string, e: string, precio: number | null) => ({ familia: 'Fittings PPR', grupo: g, descripcion: d, especificacion: e, unidad: 'pieza', precio })
+  return {
+    proveedor: 'Zhejiang Lvzhou Pipe Technology Co., Ltd',
+    fecha: '2026-11-05',
+    validezDias: 10,
+    moneda: 'USD',
+    incoterm: 'FOB',
+    lugar: 'Shanghai',
+    items: [
+      tubo('20×2.3', 0.262), tubo('25×2.8', 0.402), tubo('20×2.8', 0.311), tubo('25×3.5', 0.496), tubo('110×15.1', null),
+      fit('Unión recta', 'Straight connector', '20', 0.031), fit('Unión recta', 'Straight connector', '25', 0.049),
+      fit('Codo 45°', '45° Elbow', '20', 0.028), fit('Codo 90°', '90° Elbow', '20', 0.039), fit('Codo 90°', '90° Elbow', '25', 0.06)
+    ],
+    dudas: ['Los precios de fittings de cobre o bronce se reconfirman al confirmar el pedido.']
+  }
+}
