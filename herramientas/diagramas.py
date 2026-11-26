@@ -709,11 +709,40 @@ def bpmn_precios():
         s.append(texto(40, 565 + k * 24, '• ' + tx if not tx.startswith('   ') else tx, 12.5, ancla='start'))
     return guardar('bpmn-precios', s, W, H)
 
+def costo_estimado():
+    W, H = 1500, 760
+    s = lienzo(W, H, 'El costo landed estimado: un dato que alimenta a varios procesos', 'Se calcula en un solo lugar y cada proceso lo consulta · cada número dice de dónde viene')
+    s.append(texto(230, 120, 'De dónde sale', 15, 'bold'))
+    s.append(texto(1270, 120, 'Para qué sirve', 15, 'bold'))
+    fuentes = [(['Lista de precios', 'del proveedor (FOB)'], 'Lvzhou, 05-11-2026, vence en 10 días'),
+               (['Cotización', 'de una compra'], 'Ridge, galpón, 24-11-2026'),
+               (['Factor de internación', 'por familia'], 'del costeo real del último embarque')]
+    for k, (t, sub) in enumerate(fuentes):
+        y = 160 + k * 150
+        s.append(caja(90, y, 280, 80, t, fondo='#f3f7fb', tam=14))
+        s.append(texto(230, y + 100, sub, 11.5, color=SUAVE))
+        s.append(flecha([(370, y + 40), (560, 385)]))
+    s.append(caja(560, 300, 380, 170, ['Costo landed estimado', 'por producto'], fondo='#fff7ed', borde='#b45309', tam=17, peso='bold', grosor=2.4))
+    s.append(texto(750, 430, 'FOB × factor de su familia', 12.5, color=SUAVE))
+    s.append(texto(750, 450, 'con fecha, fuente y vigencia', 12.5, color=SUAVE))
+    usos = [(['Decidir la compra'], 'comparar cotizaciones por landed, no por FOB'),
+            (['Precio de venta'], 'lista de venta y ofertas a clientes'),
+            (['Evaluar mercado'], '¿con qué margen entro contra el precio de la competencia?'),
+            (['Negociar'], 'cuánto puedo pagar como máximo al proveedor')]
+    for k, (t, sub) in enumerate(usos):
+        y = 140 + k * 135
+        s.append(flecha([(940, 385), (1130, y + 38)]))
+        s.append(caja(1130, y, 280, 76, t, fondo='#ecfdf5', borde='#0f766e', tam=14))
+        s.append(texto(1270, y + 96, sub, 11.5, color=SUAVE))
+    s.append(texto(W / 2, H - 60, 'Si cada proceso calculara su propio landed, el mismo tubo tendría tres costos distintos según la pantalla (regla 1 de Importa).', 13))
+    s.append(texto(W / 2, H - 34, 'Una estimación vencida no se borra: queda con su fecha, para saber con qué número se decidió (lo decidido se congela).', 13, color=SUAVE))
+    return guardar('costo-estimado', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia(), formato_oc(), bpmn_precios()]
+              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
