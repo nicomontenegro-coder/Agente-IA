@@ -1,12 +1,13 @@
 import { Encabezado } from '@/componentes/ui'
 import FormAccion from '@/componentes/form-accion'
-import { empresa } from '@/lib/compras-db'
-import { guardarEmpresa } from '@/app/acciones/datos'
+import { empresa, ultimoNumero } from '@/lib/compras-db'
+import { guardarEmpresa, guardarNumeracion } from '@/app/acciones/datos'
 
 export const dynamic = 'force-dynamic'
 
 export default async function PaginaAjustes() {
   const e = await empresa()
+  const proximaOc = (await ultimoNumero('orden')) + 1
   const campo = (name: string, etiqueta: string, valor: string | number | null, ayuda?: string) => (
     <label className="text-sm space-y-1">
       <span className="font-medium">{etiqueta}</span>
@@ -28,6 +29,13 @@ export default async function PaginaAjustes() {
           {campo('garantiaMeses', 'Garantía que se pide (meses)', e.garantiaMeses)}
           {campo('anticipoPct', 'Anticipo por defecto en T/T (%)', e.anticipoPct, 'Se escribe 30, no 0,3')}
         </div>
+      </FormAccion>
+      <FormAccion accion={guardarNumeracion} etiqueta="Guardar numeración" clase="panel p-5 space-y-3">
+        <label className="text-sm space-y-1 block max-w-xs">
+          <span className="font-medium">Número de la próxima OC</span>
+          <input name="proximoOrden" className="campo num" inputMode="numeric" defaultValue={proximaOc} />
+          <span className="block text-xs text-[var(--texto-tenue)]">Solo puede aumentar, para no repetir números.</span>
+        </label>
       </FormAccion>
     </div>
   )

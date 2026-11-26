@@ -121,3 +121,16 @@ export async function siguienteNumero(tipo: string): Promise<number> {
 export async function empresa() {
   return db.empresa.upsert({ where: { id: 1 }, create: { id: 1 }, update: {} })
 }
+
+/**
+ * El último número usado de un correlativo: el mayor entre el contador y lo
+ * que hay en la tabla, por si alguno quedó atrás.
+ */
+export async function ultimoNumero(tipo: 'compra' | 'orden'): Promise<number> {
+  const contador = (await db.correlativo.findUnique({ where: { tipo } }))?.ultimo ?? 0
+  const enTabla =
+    tipo === 'orden'
+      ? (await db.ordenCompra.aggregate({ _max: { numero: true } }))._max.numero ?? 0
+      : (await db.compra.aggregate({ _max: { numero: true } }))._max.numero ?? 0
+  return Math.max(contador, enTabla)
+}

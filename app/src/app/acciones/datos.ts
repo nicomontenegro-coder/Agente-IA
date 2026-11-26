@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 
 import { db } from '@/lib/db'
 import { TIPOS_CERTIFICADO } from '@/lib/proveedores'
+import { validarProximoNumero } from '@/lib/codigos'
+import { ultimoNumero } from '@/lib/compras-db'
 import type { EstadoForm } from './compras'
 
 const texto = (v: FormDataEntryValue | null) => {
@@ -107,4 +109,14 @@ export async function guardarEmpresa(_e: EstadoForm, datos: FormData): Promise<E
   await db.empresa.upsert({ where: { id: 1 }, create: { id: 1, ...data }, update: data })
   revalidatePath('/ajustes')
   return { ok: 'Datos guardados' }
+}
+
+/** Desde qué número parten las órdenes de compra (por ejemplo, 1001). */
+export async function guardarNumeracion(_e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const proximo = entero(datos.get('proximoOrden'))
+  const error = validarProximoNumero(proximo, await ultimoNumero('orden'))
+  if (error) return { error }
+  await db.correlativo.upsert({ where: { tipo: 'orden' }, create: { tipo: 'orden', ultimo: proximo! - 1 }, update: { ultimo: proximo! - 1 } })
+  revalidatePath('/ajustes')
+  return { ok: `La próxima OC será GESI-OC${proximo}` }
 }
