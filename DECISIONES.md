@@ -46,3 +46,15 @@ Nico pidió implementar el diseño sin esperar más revisiones, para avanzar. Se
 la primera mitad del P2P: compras con varios productos, RFQ en inglés y español a varios
 proveedores, cotizaciones con filtros y comparativa, y orden de compra imprimible con el formato
 GESI. La revisión guiada del modelo (paso 1 de 5) queda pendiente y se retoma con la app funcionando.
+
+## 2026-11-26 — Migración por valor, y listas de precios en la app nueva
+
+- **Importa no recibe funciones nuevas.** Todo lo nuevo se construye en la app nueva (compras.gesi.cl).
+- **Se migra por valor, no por un orden fijo** (patrón estrangulador): primero lo que más urge al negocio.
+  Tres reglas: una función vive en una sola app a la vez; lo que se mueve, se mueve completo y se apaga en
+  Importa; las dependencias se resuelven con un puente explícito (por ejemplo, el factor de internación
+  se ingresa a mano diciendo de qué costeo salió, hasta que el costeo se migre).
+- **Lo que urge hoy: prospectar y ofertar la preventa del embarque de Lvzhou.** Se construyó la lectura de
+  listas de precios de proveedores y la lista de venta (factor y margen por familia, documento para clientes).
+- El costo landed estimado es un dato central que usan varios procesos (decidir compra, precio de venta,
+  evaluar mercado, negociar): ver `lecciones/img/costo-estimado.png`.
