@@ -7,7 +7,7 @@
  * los ingresa Nico.
  */
 
-import { precioVenta, vigencia, familiasDe, filasDeVenta, type ParametrosFamilia } from './lista-venta'
+import { precioVenta, vigencia, familiasDe, filasDeVenta, pisoDeVenta, type ParametrosFamilia } from './lista-venta'
 import { igual, grupo, terminar } from './prueba'
 
 const tubos: ParametrosFamilia = { factor: 1.45, margenPct: 35 }
@@ -57,5 +57,15 @@ igual('por tira de 4 m: el FOB de la tira es 0,311 × 4 = 1,244', porTira[0].fob
 igual('landed de la tira: 1,244 × 1,45 × 950 = 1.714 pesos', Math.round(porTira[0].landedClp), 1714)
 igual('precio de la tira con 35% de margen: 2.636', [porTira[0].unidadVenta, porTira[0].precioClp], ['tira de 4 m', 2636])
 igual('el codo sigue por pieza: 0,039 × 1,45 × 950 ÷ 0,6 = 90', [porTira[1].unidadVenta, porTira[1].precioClp], ['pieza', 90])
+
+grupo('Descuento máximo para cuidar el margen mínimo')
+const lista65 = precioVenta(1.244, { factor: 1.45, margenPct: 65 }, 950)!
+igual('tira 20×2.8 con 65% de margen: lista $4.896 (costo exacto 1.713,61 ÷ 0,35)', lista65.precioClp, 4896)
+const piso = pisoDeVenta(lista65.landedClp, lista65.precioClp, 35)!
+igual('el precio mínimo con 35% de margen es $2.637', piso.precioMinimo, 2637)
+igual('el descuento máximo es 46,1%, no 30%: los márgenes no se restan', piso.descuentoMaxPct, 46.1)
+igual('vendiendo al precio mínimo el margen es 35%', Math.round((1 - lista65.landedClp / piso.precioMinimo) * 100), 35)
+igual('si el margen de lista ya es menor que el mínimo, no hay descuento', pisoDeVenta(1714, 2000, 35)?.descuentoMaxPct, 0)
+igual('sin margen mínimo no hay piso', pisoDeVenta(1714, 4897, null), null)
 
 terminar()

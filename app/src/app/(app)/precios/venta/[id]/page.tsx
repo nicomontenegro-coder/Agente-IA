@@ -5,7 +5,7 @@ import { Encabezado, Volver } from '@/componentes/ui'
 import FormAccion from '@/componentes/form-accion'
 import { db } from '@/lib/db'
 import { fecha, numero } from '@/lib/formato'
-import { filasDeVenta, vigencia, familiasDe } from '@/lib/lista-venta'
+import { filasDeVenta, vigencia, familiasDe, pisoDeVenta } from '@/lib/lista-venta'
 import { guardarListaVenta } from '@/app/acciones/precios'
 
 export const dynamic = 'force-dynamic'
@@ -54,6 +54,11 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
           <label className="text-sm space-y-1">
             <span className="font-medium">De dónde sale el factor</span>
             <input name="factorOrigen" className="campo" defaultValue={v.factorOrigen ?? ''} placeholder="Costeo embarque octubre (Excel)" />
+          </label>
+          <label className="text-sm space-y-1">
+            <span className="font-medium">Margen mínimo %</span>
+            <input name="margenMinimo" className="campo num" inputMode="decimal" defaultValue={fmt(v.margenMinimoPct)} placeholder="35" />
+            <span className="block text-xs text-[var(--texto-tenue)]">El piso al negociar: fija el precio mínimo y el descuento máximo de cada producto.</span>
           </label>
           <label className="text-sm space-y-1">
             <span className="font-medium">Validez de la lista de venta (días)</span>
@@ -117,7 +122,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
         <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-[var(--borde)]">
           <div>
             <h2 className="font-semibold text-sm">Precios calculados · {filas.length} de {l.items.length} productos</h2>
-            <p className="text-xs text-[var(--texto-tenue)]">Uso interno: costos y márgenes no aparecen en el documento para clientes.</p>
+            <p className="text-xs text-[var(--texto-tenue)]">Uso interno: costos, márgenes, precio mínimo y descuento máximo no aparecen en el documento para clientes.</p>
           </div>
           {filas.length > 0 && (
             <Link href={`/imprimir/lista/${v.id}`} className="btn btn-primario">
@@ -139,7 +144,9 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
                 <th className="text-right">FOB {l.moneda}</th>
                 <th className="text-right">Landed {l.moneda}</th>
                 <th className="text-right">Landed CLP</th>
-                <th className="text-right">Precio venta CLP</th>
+                <th className="text-right">Precio lista CLP</th>
+                {v.margenMinimoPct != null && <th className="text-right">Precio mínimo</th>}
+                {v.margenMinimoPct != null && <th className="text-right">Desc. máx.</th>}
               </tr>
             </thead>
             <tbody>
@@ -155,6 +162,8 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
                   <td className="text-right num">{numero(f.landedUsd, 3)}</td>
                   <td className="text-right num">{numero(f.landedClp, 0)}</td>
                   <td className="text-right num font-semibold">{numero(f.precioClp, 0)}</td>
+                  {v.margenMinimoPct != null && <td className="text-right num">{numero(pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct)!.precioMinimo, 0)}</td>}
+                  {v.margenMinimoPct != null && <td className="text-right num">{numero(pisoDeVenta(f.landedClp, f.precioClp, v.margenMinimoPct)!.descuentoMaxPct, 1)}%</td>}
                 </tr>
               ))}
             </tbody>

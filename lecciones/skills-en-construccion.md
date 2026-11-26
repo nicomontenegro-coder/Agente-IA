@@ -33,6 +33,8 @@ Cada regla dice de qué error salió: así se entiende por qué existe.
 | El margen es sobre el precio de venta, no markup: precio = costo ÷ (1 − margen). | Misma convención que las ofertas de Importa. |
 | Una lista de proveedor vencida no se borra: queda con su fecha, y se avisa antes de vender sobre ella. | Lvzhou: lista del 05-11 con 10 días de validez. |
 | Al cliente nunca se le muestran costos, factores ni márgenes. | Regla de Importa. |
+| Los márgenes no se restan: con 65% de lista y 35% mínimo, el descuento máximo es 1 − 0,35 ÷ 0,65 = 46,2%, no 30%. Lo calcula la app. | Preventa Lvzhou: lista a 65% y descuentos hasta un piso de 35%. |
+| El tubo se cotiza por metro y se vende por tira de 4 m: el costo de la tira es el del metro × 4, y el margen va encima. | Lista de Lvzhou: el «precio de venta» por metro no servía para el cliente. |
 
 ## Herramientas del asistente (Precios, 26-11-2026)
 

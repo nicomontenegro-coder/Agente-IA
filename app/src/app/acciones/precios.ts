@@ -74,6 +74,8 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
   const factorOrigen = texto(datos.get('factorOrigen'))
   if (factor != null && factor < 1) return { error: 'El factor no puede ser menor que 1: el costo puesto en bodega nunca es menor que el FOB' }
   if (factor != null && !factorOrigen) return { error: 'Indica de dónde sale el factor' }
+  const margenMinimoPct = numero(datos.get('margenMinimo'))
+  if (margenMinimoPct != null && (margenMinimoPct < 0 || margenMinimoPct >= 100)) return { error: 'El margen mínimo debe estar entre 0 y 99%' }
   const familias = datos.getAll('familia')
   const margenes = datos.getAll('margen')
   const unidades = datos.getAll('unidadVenta')
@@ -87,6 +89,9 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
   for (const f of filas) {
     if (f.margenPct != null && (f.margenPct < 0 || f.margenPct >= 100)) return { error: `${f.familia}: el margen debe estar entre 0 y 99%` }
     if (f.unidadVenta && !(f.contenido && f.contenido > 0)) return { error: `${f.familia}: indica cuánto trae cada ${f.unidadVenta}` }
+    if (f.margenPct != null && margenMinimoPct != null && f.margenPct < margenMinimoPct) {
+      return { error: `${f.familia}: el margen de lista (${f.margenPct}%) es menor que el margen mínimo (${margenMinimoPct}%): no quedaría espacio para descuentos` }
+    }
     if (!f.unidadVenta && f.contenido != null) return { error: `${f.familia}: indica la unidad de venta (por ejemplo, tira de 4 m)` }
   }
   await db.$transaction([
@@ -97,6 +102,7 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
         tipoCambio,
         factor,
         factorOrigen,
+        margenMinimoPct,
         entrega: texto(datos.get('entrega')),
         condiciones: texto(datos.get('condiciones')),
         validezDias: (() => { const d = numero(datos.get('validezDias')); return d == null ? null : Math.round(d) })()

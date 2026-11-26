@@ -353,6 +353,8 @@ model ListaVenta {
   factor         Float?
   /// De dónde salió el factor: «costeo de octubre, Excel», «GESI-C12 de Importa».
   factorOrigen   String?
+  /// Margen que nunca se cruza al dar descuentos, en %: fija el precio mínimo.
+  margenMinimoPct Float?
   entrega        String?
   condiciones    String?
   validezDias    Int?

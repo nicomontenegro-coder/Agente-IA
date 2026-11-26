@@ -97,3 +97,16 @@ export function filasDeVenta<T extends ItemLista>(
     return p ? [{ ...i, ...p, fobVenta, unidadVenta: porUnidad ? f.unidadVenta! : i.unidad }] : []
   })
 }
+
+/**
+ * El piso de una negociación: el precio con el margen mínimo, y cuánto se
+ * puede descontar del precio de lista sin bajar de él. Los márgenes son sobre
+ * el precio, así que no se restan: con 65% de lista y 35% mínimo, el descuento
+ * máximo es 46,2%, no 30%.
+ */
+export function pisoDeVenta(landedClp: number, precioLista: number, margenMinimoPct: number | null): { precioMinimo: number; descuentoMaxPct: number } | null {
+  if (margenMinimoPct == null || margenMinimoPct < 0 || margenMinimoPct >= 100 || !(precioLista > 0)) return null
+  const precioMinimo = Math.ceil(landedClp / (1 - margenMinimoPct / 100))
+  if (precioMinimo > precioLista) return { precioMinimo, descuentoMaxPct: 0 }
+  return { precioMinimo, descuentoMaxPct: Math.floor((1 - precioMinimo / precioLista) * 1000) / 10 }
+}
