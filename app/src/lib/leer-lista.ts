@@ -27,7 +27,7 @@ const INSTRUCCIONES = `Lees listas de precios de proveedores para GESI, un impor
 
 export type ResultadoLista = { ok: true; lectura: LecturaLista } | { ok: false; error: string }
 
-export async function leerLista(pdfBase64: string, nombreArchivo = ''): Promise<ResultadoLista> {
+export async function leerLista(pdfBase64: string): Promise<ResultadoLista> {
   if (process.env.GESI_LECTOR_PRUEBA === '1') {
     const { listaDePrueba } = await import('./lector-prueba')
     return { ok: true, lectura: listaDePrueba() }

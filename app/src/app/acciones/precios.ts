@@ -26,7 +26,7 @@ export async function subirLista(_e: EstadoForm, datos: FormData): Promise<Estad
   const contenido = Buffer.from(await archivo.arrayBuffer())
   if (!esPdf(contenido)) return { error: 'El archivo no es un PDF válido' }
 
-  const r = await leerLista(contenido.toString('base64'), archivo.name)
+  const r = await leerLista(contenido.toString('base64'))
   if (!r.ok) return { error: r.error }
   const l = r.lectura
   if (l.items.length === 0) return { error: 'No se encontraron productos en el documento' }
