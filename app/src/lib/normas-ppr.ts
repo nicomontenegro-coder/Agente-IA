@@ -53,14 +53,22 @@ export function pnDeTubo(especificacion: string | null, norma = 'DIN 8077'): { s
 }
 
 /**
+ * El PN de un producto como se muestra en toda la app: el aprobado a mano si
+ * lo hay, y si no, el calculado de la medida. La lista del proveedor y las
+ * secciones de la lista de venta llaman a esta misma función, para no decir
+ * dos cosas distintas del mismo tubo.
+ */
+export function pnDe(especificacion: string | null, pnGuardado: string | null = null, norma = 'DIN 8077'): string | null {
+  if (pnGuardado) return pnGuardado
+  const r = pnDeTubo(especificacion, norma)
+  return r?.pn ? `${r.pn} (${r.norma})` : null
+}
+
+/**
  * Cómo se agrupa un producto en la lista de venta: los tubos por PN («Tubería
- * PPR · PN16»), como los busca el cliente; lo demás, por su familia. Un PN
- * aprobado a mano (guardado en el producto) manda sobre el calculado.
+ * PPR · PN16»), como los busca el cliente; lo demás, por su familia.
  */
 export function seccionDe(familia: string, especificacion: string | null, pnGuardado: string | null = null, norma = 'DIN 8077'): string {
-  const pn = pnGuardado ?? (() => {
-    const r = pnDeTubo(especificacion, norma)
-    return r?.pn ? `${r.pn} (${r.norma})` : null
-  })()
+  const pn = pnDe(especificacion, pnGuardado, norma)
   return pn ? `${familia} · ${pn}` : familia
 }

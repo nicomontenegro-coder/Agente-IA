@@ -5,6 +5,7 @@ import { Encabezado, Volver, Chip } from '@/componentes/ui'
 import { db } from '@/lib/db'
 import { fecha, numero } from '@/lib/formato'
 import { vigencia, familiasDe } from '@/lib/lista-venta'
+import { pnDe } from '@/lib/normas-ppr'
 import { crearListaVenta } from '@/app/acciones/precios'
 import { enviarMensaje, aprobarPropuesta, descartarPropuesta } from '@/app/acciones/asistente'
 import FormAccion from '@/componentes/form-accion'
@@ -30,7 +31,7 @@ export default async function PaginaLista({ params }: { params: Promise<{ id: st
     db.propuesta.findMany({ where: { contexto, estado: 'PENDIENTE' }, orderBy: { creadoEn: 'asc' } })
   ])
   const nombreItem = new Map(l.items.map((i) => [i.id, `${i.descripcion} ${i.especificacion ?? ''}`.trim()]))
-  const hayPn = l.items.some((i) => i.pn)
+  const hayPn = l.items.some((i) => pnDe(i.especificacion, i.pn))
   return (
     <div className="space-y-5">
       <Volver href="/precios">Listas de precios</Volver>
@@ -157,7 +158,7 @@ export default async function PaginaLista({ params }: { params: Promise<{ id: st
               familia: { texto: i.familia, valor: i.familia },
               producto: { texto: i.descripcion, valor: i.descripcion, sub: i.grupo ?? undefined },
               medida: { texto: i.especificacion ?? '—', valor: i.especificacion },
-              pn: { texto: i.pn ?? '—', valor: i.pn },
+              pn: { texto: pnDe(i.especificacion, i.pn) ?? '—', valor: pnDe(i.especificacion, i.pn) },
               unidad: { texto: i.unidad, valor: i.unidad },
               precio: { texto: i.precio != null ? numero(i.precio, 3) : 'sin precio', valor: i.precio }
             }

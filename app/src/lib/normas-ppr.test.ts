@@ -5,7 +5,7 @@
  * Casos reales: los tres grupos de tubos de la lista de Lvzhou (05-11-2026).
  */
 
-import { leerMedida, pnDeTubo, seccionDe } from './normas-ppr'
+import { leerMedida, pnDeTubo, seccionDe, pnDe } from './normas-ppr'
 import { igual, grupo, terminar } from './prueba'
 
 grupo('Leer la medida')
@@ -28,5 +28,10 @@ igual('el 20×3.4 va en PN20', seccionDe('Tubería PPR', '20×3.4'), 'Tubería P
 igual('el 20×2.3 no tiene PN en la norma: queda en la familia', seccionDe('Tubería PPR', '20×2.3'), 'Tubería PPR')
 igual('un fitting queda en su familia', seccionDe('Fittings PPR', '20'), 'Fittings PPR')
 igual('un PN aprobado a mano manda', seccionDe('Tubería PPR', '20×2.3', 'PN16 (otra norma)'), 'Tubería PPR · PN16 (otra norma)')
+
+grupo('El PN que se muestra')
+igual('sin aprobar, se calcula de la medida', pnDe('20×2.8'), 'PN16 (DIN 8077)')
+igual('el aprobado a mano manda', pnDe('20×2.8', 'PN20 (otra norma)'), 'PN20 (otra norma)')
+igual('un fitting no tiene PN', pnDe('20'), null)
 
 terminar()
