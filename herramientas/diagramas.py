@@ -683,11 +683,37 @@ def formato_oc():
     s.append(texto(W / 2, H - 58, 'Formato de la orden de compra GESI · el documento sale en inglés; la app lo muestra también en español', 12, color=SUAVE))
     return guardar('formato-oc', s, W, H)
 
+def bpmn_precios():
+    W, H = 1560, 690
+    s = lienzo(W, H, 'BPMN — Fijar precios de venta desde la lista de un proveedor (borrador)', 'Propuesta para revisar · no es parte del P2P: no hay compra, hay catálogo')
+    carriles = [('Nico', 80, 230, '#f3f7fb'), ('Agente GESI', 230, 360, '#ffffff'), ('Proveedor', 360, 490, '#f3f7fb')]
+    s += pool(20, 1540, carriles, 'Fijar precios')
+    n, a, p = 155, 295, 425
+    s += [inicio(110, p, ['Lista', 'recibida']),
+          flecha([(126, p), (166, p)]), tarea(168, p, ['Enviar lista', 'de precios']),
+          flecha([(292, p), (306, p), (306, a), (326, a)]), tarea(328, a, ['Leer la lista', 'completa'], sub=True),
+          flecha([(452, a), (484, a)]), tarea(486, a, ['Asociar a productos', 'y familias'], w=140),
+          flecha([(626, a), (640, a), (640, n), (658, n)]), tarea(660, n, ['Elegir costeo', 'de referencia']),
+          flecha([(784, n), (798, n), (798, a), (816, a)]), tarea(818, a, ['Calcular landed', 'estimado'], w=140, h=60, sub=True, resalte=True),
+          flecha([(958, a), (972, a), (972, n), (990, n)]), tarea(992, n, ['Fijar margen', 'por familia']),
+          flecha([(1116, n), (1154, n)]), compuerta(1180, n, '¿Precio competitivo?'),
+          flecha([(1180, n + 26), (1180, n + 50), (1054, n + 50), (1054, n + 26)], 'No: ajustar', 60, 14),
+          flecha([(1206, n), (1258, n)], 'Sí', 0, -12), tarea(1260, n, ['Publicar lista', 'de venta']),
+          flecha([(1384, n), (1430, n)]), fin(1448, n, ['Lista', 'vigente'])]
+    s.append(texto(40, 535, 'Notas', 14, 'bold', ancla='start'))
+    notas = ['Leer la lista completa [+]: todos los productos, con su unidad (metro, pieza), validez y moneda. La IA lee; la app verifica.',
+             'Calcular landed estimado [+]: precio FOB × factor de sobrecosto del costeo de referencia. Un factor por familia: el flete se cobra por volumen,',
+             '   y un tubo (mucho aire por dólar) carga más flete que un codo. Un solo factor para todo encarece los codos y abarata los tubos.',
+             'La lista de venta vence con la del proveedor (10 días en Lvzhou) o si el dólar se mueve: entonces se recalcula, no se reescribe a mano.']
+    for k, tx in enumerate(notas):
+        s.append(texto(40, 565 + k * 24, '• ' + tx if not tx.startswith('   ') else tx, 12.5, ancla='start'))
+    return guardar('bpmn-precios', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia(), formato_oc()]
+              tabla_intermedia(), formato_oc(), bpmn_precios()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
