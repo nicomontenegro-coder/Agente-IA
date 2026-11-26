@@ -21,10 +21,10 @@ import {
  * Atajarlo acá convierte esa caída en un aviso que se puede leer. Y como el
  * costeo se guarda solo en el navegador, recargar ya no cuesta nada.
  */
-const DE_OTRA_VERSION = /Failed to find Server Action|older or newer deployment|Connection closed|Failed to fetch/i
+const DE_OTRA_VERSION = /Failed to find Server Action|was not found on the server|older or newer deployment|Connection closed|Failed to fetch/i
 
 export const AVISO_VERSION =
-  'Esta pestaña quedó de una versión anterior de la app. Recarga la página (Cmd+Shift+R) y vuelve a guardar: lo que escribiste se recupera solo.'
+  'La aplicación se actualizó. Recarga la página (Cmd+R) y vuelve a guardar.'
 
 /**
  * Envía un formulario a una Server Action sin que React lo vacíe.
