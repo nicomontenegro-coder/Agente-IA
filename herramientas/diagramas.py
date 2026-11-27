@@ -885,11 +885,35 @@ def bpmn_vender():
         s.append(texto(40, 565 + k * 24, '• ' + tx, 12.5, ancla='start'))
     return guardar('bpmn-vender', s, W, H)
 
+def cliente_sucursales():
+    W, H = 1500, 640
+    s = lienzo(W, H, 'Cliente con varias sucursales', 'Quién compra (el cliente) se separa de dónde se entrega (la sucursal)')
+    def ent(x, y, nombre, attrs, c='#0f766e'):
+        s.append(caja(x, y, 300, 40, [nombre], c, c, 13.5, 'bold', rx=8, color='#ffffff'))
+        h = 26 * len(attrs) + 10
+        s.append(f'<rect x="{x}" y="{y + 40}" width="300" height="{h}" fill="#ffffff" stroke="{c}" stroke-width="1.4"/>')
+        for k, a in enumerate(attrs):
+            s.append(texto(x + 12, y + 58 + k * 26, a, 11.5, 'bold' if a.startswith(('PK', 'FK', 'UK')) else 'normal', ancla='start'))
+    ent(120, 110, 'Cliente  (quién compra)', ['PK id', 'UK rut · razón social', 'FK canal_id', 'etapa del embudo · próxima acción', 'gestiones · cotizaciones'])
+    ent(700, 90, 'Sucursal Punta Arenas', ['PK id · FK cliente_id', 'ciudad · dirección', 'contacto · teléfono del local'], '#1d4ed8')
+    ent(700, 300, 'Sucursal Puerto Natales', ['PK id · FK cliente_id', 'ciudad · dirección', 'contacto · teléfono del local'], '#1d4ed8')
+    s.append(f'<path d="M420,180 L700,150" stroke="{TINTA}" stroke-width="1.7" fill="none"/>')
+    s.append(f'<path d="M420,200 L700,360" stroke="{TINTA}" stroke-width="1.7" fill="none"/>')
+    s.append(texto(440, 170, '1', 13, 'bold', color='#b45309'))
+    s.append(texto(680, 140, 'N', 13, 'bold', color='#b45309'))
+    s.append(texto(1200, 170, 'La cotización va al cliente, con', 12.5, ancla='start'))
+    s.append(texto(1200, 192, 'una sucursal como lugar de entrega.', 12.5, ancla='start'))
+    s.append(texto(1200, 236, 'Una gestión puede decir en qué', 12.5, ancla='start'))
+    s.append(texto(1200, 258, 'local fue la visita.', 12.5, ancla='start'))
+    s.append(texto(W / 2, 520, 'Mismo RUT = mismo cliente, con sus sucursales. RUT distinto (por ejemplo, una franquicia) = otro cliente.', 13))
+    s.append(texto(W / 2, 548, 'Al fusionar dos fichas con ciudades distintas, las dos ciudades quedan como sucursales: no hay que elegir una.', 13, color=SUAVE))
+    return guardar('cliente-sucursales', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr(), familias_opciones(), modelo_clientes(), bpmn_vender()]
+              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr(), familias_opciones(), modelo_clientes(), bpmn_vender(), cliente_sucursales()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)

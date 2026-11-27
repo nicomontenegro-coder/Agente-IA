@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="640" viewBox="0 0 1500 640">
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="1500" height="640" fill="#ffffff"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="750.0" y="30.0">Cliente con varias sucursales</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="750.0" y="56.0">Quién compra (el cliente) se separa de dónde se entrega (la sucursal)</tspan></text>
+<rect x="120" y="110" width="300" height="40" rx="8" fill="#0f766e" stroke="#0f766e" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="270.0" y="130.0">Cliente  (quién compra)</tspan></text>
+<rect x="120" y="150" width="300" height="140" fill="#ffffff" stroke="#0f766e" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="132" y="168.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="132" y="194.0">UK rut · razón social</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="132" y="220.0">FK canal_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="132" y="246.0">etapa del embudo · próxima acción</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="132" y="272.0">gestiones · cotizaciones</tspan></text>
+<rect x="700" y="90" width="300" height="40" rx="8" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="850.0" y="110.0">Sucursal Punta Arenas</tspan></text>
+<rect x="700" y="130" width="300" height="88" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="712" y="148.0">PK id · FK cliente_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="712" y="174.0">ciudad · dirección</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="712" y="200.0">contacto · teléfono del local</tspan></text>
+<rect x="700" y="300" width="300" height="40" rx="8" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="850.0" y="320.0">Sucursal Puerto Natales</tspan></text>
+<rect x="700" y="340" width="300" height="88" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="712" y="358.0">PK id · FK cliente_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="712" y="384.0">ciudad · dirección</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="712" y="410.0">contacto · teléfono del local</tspan></text>
+<path d="M420,180 L700,150" stroke="#1f2937" stroke-width="1.7" fill="none"/>
+<path d="M420,200 L700,360" stroke="#1f2937" stroke-width="1.7" fill="none"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="440" y="170.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="680" y="140.0">N</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1200" y="170.0">La cotización va al cliente, con</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1200" y="192.0">una sucursal como lugar de entrega.</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1200" y="236.0">Una gestión puede decir en qué</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1200" y="258.0">local fue la visita.</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="750.0" y="520.0">Mismo RUT = mismo cliente, con sus sucursales. RUT distinto (por ejemplo, una franquicia) = otro cliente.</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="750.0" y="548.0">Al fusionar dos fichas con ciudades distintas, las dos ciudades quedan como sucursales: no hay que elegir una.</tspan></text>
+</svg>
