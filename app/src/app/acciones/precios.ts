@@ -8,6 +8,7 @@ import { leerNumero } from '@/lib/numeros'
 import { guardarPdf, esPdf, MAXIMO_PDF } from '@/lib/archivos'
 import { leerLista } from '@/lib/leer-lista'
 import { familiasDe, margenConDescuento } from '@/lib/lista-venta'
+import { proponerProducto, validarAtributos } from '@/lib/clases'
 import type { EstadoForm } from './compras'
 
 const texto = (v: FormDataEntryValue | null) => {
@@ -133,4 +134,38 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
   ])
   revalidatePath(`/precios/venta/${ventaId}`)
   return { ok: 'Lista guardada' }
+}
+
+/**
+ * Crea los productos GESI que propone la lista y enlaza cada ítem del
+ * proveedor con el suyo. Si el producto ya existe (mismo nombre), solo se
+ * enlaza: el mismo tubo de dos proveedores apunta al mismo producto GESI, y
+ * así se pueden comparar. Lo que no se reconoce queda sin enlazar.
+ */
+export async function crearProductosDesdeLista(listaId: string): Promise<void> {
+  const items = await db.listaPreciosItem.findMany({ where: { listaId, productoId: null } })
+  const clases = await db.clase.findMany({ include: { atributos: true, familia: true } })
+  for (const i of items) {
+    const p = proponerProducto(i)
+    if (!p) continue
+    const clase = clases.find((c) => c.nombre === p.clase)
+    if (!clase || validarAtributos(clase.atributos, p.atributos).length) continue
+    const existente = await db.producto.findFirst({ where: { nombre: p.nombre } })
+    const producto =
+      existente ??
+      (await db.producto.create({
+        data: {
+          nombre: p.nombre,
+          unidad: p.clase === 'Tubo' ? 'm' : 'u',
+          familiaId: clase.familiaId,
+          claseId: clase.id,
+          modelo: p.modelo,
+          atributos: JSON.stringify(p.atributos)
+        }
+      }))
+    await db.listaPreciosItem.update({ where: { id: i.id }, data: { productoId: producto.id } })
+  }
+  revalidatePath(`/precios/${listaId}`)
+  revalidatePath('/productos')
+  redirect(`/precios/${listaId}`)
 }

@@ -46,6 +46,12 @@ export default async function PaginaLista({ params }: { params: Promise<{ id: st
             Abrir {l.archivoNombre} ↗
           </a>
         </div>
+        <p>
+          Productos GESI: {l.items.filter((i) => i.productoId).length} de {l.items.length} ítems enlazados ·{' '}
+          <Link href={`/precios/${l.id}/productos`} className="text-[var(--acento)] underline">
+            Revisar y enlazar
+          </Link>
+        </p>
         {v.vencida && <p className="text-[var(--alerta)]">Los precios pueden haber cambiado: confírmalos con el proveedor antes de vender sobre ellos.</p>}
         {sinPrecio > 0 && <p className="text-[var(--texto-suave)]">{sinPrecio} medidas sin precio en la lista: no se incluyen en las listas de venta.</p>}
         {l.notas && (

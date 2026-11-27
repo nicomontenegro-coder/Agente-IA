@@ -27,11 +27,48 @@ model Empresa {
 }
 
 /// Familia de productos: un proveedor trabaja una o varias.
+/// Familia de productos, según UNSPSC a escala GESI: «Tuberías y fittings»
+/// (4017), dentro del segmento 40. Los proveedores trabajan familias.
 model Familia {
-  id          String             @id @default(cuid())
-  nombre      String             @unique
-  productos   Producto[]
-  proveedores ProveedorFamilia[]
+  id           String             @id @default(cuid())
+  nombre       String             @unique
+  segmento     String?
+  codigoUnspsc String?
+  productos    Producto[]
+  proveedores  ProveedorFamilia[]
+  clases       Clase[]
+}
+
+/// Clase de producto (Tubo, Fitting): productos que se describen con los mismos
+/// atributos. Sus atributos son datos: se corrigen sin tocar el programa.
+model Clase {
+  id        String          @id @default(cuid())
+  familiaId String
+  familia   Familia         @relation(fields: [familiaId], references: [id], onDelete: Cascade)
+  nombre    String
+  atributos ClaseAtributo[]
+  productos Producto[]
+
+  @@unique([familiaId, nombre])
+}
+
+model ClaseAtributo {
+  id          String  @id @default(cuid())
+  claseId     String
+  clase       Clase   @relation(fields: [claseId], references: [id], onDelete: Cascade)
+  posicion    Int
+  clave       String
+  nombre      String
+  /// NUMERO, OPCION o TEXTO.
+  tipo        String
+  unidad      String?
+  /// Para OPCION: los valores posibles, separados por coma.
+  opciones    String?
+  /// «tipo=reducción,tee»: solo aplica (y se exige) para esos tipos.
+  soloSi      String?
+  obligatorio Boolean @default(false)
+
+  @@unique([claseId, clave])
 }
 
 model Producto {
@@ -46,8 +83,15 @@ model Producto {
   certificacionLocal String?
   familiaId      String?
   familia        Familia? @relation(fields: [familiaId], references: [id], onDelete: SetNull)
+  /// Clase y modelo: «Fitting» › «Codo 90° PPR». El producto es la variante (la medida).
+  claseId        String?
+  clase          Clase?   @relation(fields: [claseId], references: [id], onDelete: SetNull)
+  modelo         String?
+  /// Valores de los atributos de la clase, en JSON: { "tipo": "codo 90°", "dn": 20 }.
+  atributos      String?
   creadoEn       DateTime @default(now())
   lineas         CompraLinea[]
+  ofertas        ListaPreciosItem[]
 }
 
 model Proveedor {
@@ -337,6 +381,9 @@ model ListaPreciosItem {
   precio         Float?
   /// Presión nominal según la norma indicada, por ejemplo «PN16 (DIN 8077)».
   pn             String?
+  /// Equivalencia: el producto GESI que es este ítem del proveedor.
+  productoId     String?
+  producto       Producto?    @relation(fields: [productoId], references: [id], onDelete: SetNull)
 }
 
 /// Una lista de venta (por ejemplo, la preventa de un embarque) armada desde

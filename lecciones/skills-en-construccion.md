@@ -24,6 +24,16 @@ Cada regla dice de qué error salió: así se entiende por qué existe.
 | El PN no se adivina: SDR = diámetro ÷ espesor, y la serie y el PN salen de la tabla de la norma. Lo calcula la app, no la IA. | Lvzhou: la lista no dice PN; la IA eligió 20×2.8 «por espesor». |
 | Decir siempre según qué norma: el mismo tubo puede llamarse PN16 en una norma y «PN20» en otra (por verificar con las normas). | Conversación del 26-11-2026, antes de construir el cálculo. |
 
+## Skill: Clasificar productos
+
+| Regla | De dónde salió |
+|---|---|
+| Jerarquía UNSPSC a escala GESI: segmento 40 → familia 4017 «Tuberías y fittings» → clase (Tubo, Fitting) → modelo → variante (la medida, que tiene precio). | Nico: «el estándar de la industria a nuestra escala». |
+| Una clase agrupa productos que se describen con los mismos atributos; se parte por atributos distintos, no por cantidad de miembros. | Lvzhou trae más de 200 ítems PPR. |
+| El tipo de fitting, el material y la unión son atributos: sumar PVC o bronce no agrega clases. | Nico: «los fittings son los fittings». |
+| Un ítem de proveedor solo se clasifica si se puede afirmar (tubo con diámetro×espesor, fitting de tipo conocido con su medida). Lo demás queda sin clasificar: no se adivina. | 94 fittings metálicos y 27 válvulas sin clase todavía. |
+| El mismo producto de dos proveedores apunta al mismo producto GESI (equivalencia): así se comparan. | Lección 2: tabla intermedia. |
+
 ## Skill: Costo landed y precio de venta
 
 | Regla | De dónde salió |
