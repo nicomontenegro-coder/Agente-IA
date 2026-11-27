@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="720" viewBox="0 0 1500 720">
+<defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="1500" height="720" fill="#ffffff"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#1f2937"><tspan x="750.0" y="30.0">Modelo de datos de clientes (propuesta para corregir)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="750.0" y="56.0">El canal deja de ser texto: es una tabla, y el cliente y la lista de venta apuntan a ella</tspan></text>
+<rect x="80" y="110" width="260" height="40" rx="8" fill="#b45309" stroke="#b45309" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="210.0" y="130.0">Canal de venta</tspan></text>
+<rect x="80" y="150" width="260" height="88" fill="#fff7ed" stroke="#b45309" stroke-width="2.2"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="92" y="168.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="92" y="194.0">nombre (ferretería, instalador…)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="92" y="220.0">lo editas tú: es dato</tspan></text>
+<rect x="620" y="110" width="260" height="40" rx="8" fill="#0f766e" stroke="#0f766e" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="750.0" y="130.0">Cliente</tspan></text>
+<rect x="620" y="150" width="260" height="166" fill="#ffffff" stroke="#0f766e" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="168.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="194.0">UK rut (único; puede faltar)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="220.0">nombre · ciudad · dirección</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="246.0">contacto · teléfono · correo</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="272.0">FK canal_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="298.0">etapa · próxima acción y fecha</tspan></text>
+<rect x="1160" y="110" width="260" height="40" rx="8" fill="#7c3aed" stroke="#7c3aed" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="1290.0" y="130.0">Gestión</tspan></text>
+<rect x="1160" y="150" width="260" height="140" fill="#ffffff" stroke="#7c3aed" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1172" y="168.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1172" y="194.0">FK cliente_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1172" y="220.0">fecha · canal (visita, llamada…)</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1172" y="246.0">qué pasó</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="1172" y="272.0">cambio de etapa (si hubo)</tspan></text>
+<rect x="80" y="450" width="260" height="40" rx="8" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="210.0" y="470.0">Descuento del canal</tspan></text>
+<rect x="80" y="490" width="260" height="114" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="92" y="508.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="92" y="534.0">FK lista_venta_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="92" y="560.0">FK canal_id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="92" y="586.0">descuento %</tspan></text>
+<rect x="620" y="450" width="260" height="40" rx="8" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.6"/><text font-family="DejaVu Sans, Arial, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff"><tspan x="750.0" y="470.0">Lista de venta</tspan></text>
+<rect x="620" y="490" width="260" height="88" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.4"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="508.0">PK id</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="534.0">factor · tipo de cambio</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="11.5" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#1f2937"><tspan x="632" y="560.0">margen mínimo</tspan></text>
+<path d="M340,200 L620,200" stroke="#1f2937" stroke-width="1.7" fill="none"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="354" y="190.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="604" y="190.0">N</tspan></text>
+<path d="M880,200 L1160,200" stroke="#1f2937" stroke-width="1.7" fill="none"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="894" y="190.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="1144" y="190.0">N</tspan></text>
+<path d="M210,220 L210,450" stroke="#1f2937" stroke-width="1.7" fill="none"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="222" y="236.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="222" y="440.0">N</tspan></text>
+<path d="M340,520 L620,520" stroke="#1f2937" stroke-width="1.7" fill="none"/>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="354" y="510.0">N</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#b45309"><tspan x="604" y="510.0">1</tspan></text>
+<text font-family="DejaVu Sans, Arial, sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4b5563"><tspan x="750.0" y="680.0">UK = clave única natural (el RUT identifica a la empresa; el nombre puede escribirse de muchas formas). PK y FK, como en la Lección 2.</tspan></text>
+</svg>

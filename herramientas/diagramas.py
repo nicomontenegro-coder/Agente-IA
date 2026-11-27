@@ -827,11 +827,38 @@ def familias_opciones():
     s.append(caja(330, 800 - 0, 1040, 44, ['En las dos, la clase es material + función (Fitting PVC) y el tipo (codo, tee…) es un atributo, como decidiste para PPR.'], fondo='#ffffff', borde='#1d4ed8', tam=13))
     return guardar('familias-opciones', s, W, H)
 
+def modelo_clientes():
+    W, H = 1500, 720
+    s = lienzo(W, H, 'Modelo de datos de clientes (propuesta para corregir)', 'El canal deja de ser texto: es una tabla, y el cliente y la lista de venta apuntan a ella')
+    def ent(x, y, nombre, attrs, c='#0f766e', destacar=False):
+        borde = '#b45309' if destacar else c
+        s.append(caja(x, y, 260, 40, [nombre], borde, borde, 13.5, 'bold', rx=8, color='#ffffff'))
+        h = 26 * len(attrs) + 10
+        s.append(f'<rect x="{x}" y="{y + 40}" width="260" height="{h}" fill="{"#fff7ed" if destacar else "#ffffff"}" stroke="{borde}" stroke-width="{2.2 if destacar else 1.4}"/>')
+        for k, a in enumerate(attrs):
+            peso = 'bold' if a.startswith(('PK', 'FK', 'UK')) else 'normal'
+            s.append(texto(x + 12, y + 58 + k * 26, a, 11.5, peso, ancla='start'))
+    def rel(p1, p2, a, b, ea, eb):
+        s.append(f'<path d="M{p1[0]},{p1[1]} L{p2[0]},{p2[1]}" stroke="{TINTA}" stroke-width="1.7" fill="none"/>')
+        s.append(texto(p1[0] + ea[0], p1[1] + ea[1], a, 13, 'bold', color='#b45309'))
+        s.append(texto(p2[0] + eb[0], p2[1] + eb[1], b, 13, 'bold', color='#b45309'))
+    ent(80, 110, 'Canal de venta', ['PK id', 'nombre (ferretería, instalador…)', 'lo editas tú: es dato'], destacar=True)
+    ent(620, 110, 'Cliente', ['PK id', 'UK rut (único; puede faltar)', 'nombre · ciudad · dirección', 'contacto · teléfono · correo', 'FK canal_id', 'etapa · próxima acción y fecha'])
+    ent(1160, 110, 'Gestión', ['PK id', 'FK cliente_id', 'fecha · canal (visita, llamada…)', 'qué pasó', 'cambio de etapa (si hubo)'], '#7c3aed')
+    ent(80, 450, 'Descuento del canal', ['PK id', 'FK lista_venta_id', 'FK canal_id', 'descuento %'], '#1d4ed8')
+    ent(620, 450, 'Lista de venta', ['PK id', 'factor · tipo de cambio', 'margen mínimo'], '#1d4ed8')
+    rel((340, 200), (620, 200), '1', 'N', (14, -10), (-16, -10))
+    rel((880, 200), (1160, 200), '1', 'N', (14, -10), (-16, -10))
+    rel((210, 220), (210, 450), '1', 'N', (12, 16), (12, -10))
+    rel((340, 520), (620, 520), 'N', '1', (14, -10), (-16, -10))
+    s.append(texto(W / 2, 680, 'UK = clave única natural (el RUT identifica a la empresa; el nombre puede escribirse de muchas formas). PK y FK, como en la Lección 2.', 12.5, color=SUAVE))
+    return guardar('modelo-clientes', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr(), familias_opciones()]
+              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr(), familias_opciones(), modelo_clientes()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
