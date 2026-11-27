@@ -58,3 +58,11 @@ GESI. La revisión guiada del modelo (paso 1 de 5) queda pendiente y se retoma c
   listas de precios de proveedores y la lista de venta (factor y margen por familia, documento para clientes).
 - El costo landed estimado es un dato central que usan varios procesos (decidir compra, precio de venta,
   evaluar mercado, negociar): ver `lecciones/img/costo-estimado.png`.
+
+## 2026-11-27 — Base de conocimiento de productos
+
+- Se copia la **estructura** de los estándares de la industria (GS1 GPC / UNSPSC: 4 niveles; ETIM: atributos
+  fijos por clase), no su contenido: **Segmento → Familia → Clase → Producto**, cada clase con su lista de atributos.
+- La jerarquía, las clases, los atributos y las equivalencias (producto GESI ↔ producto de cada proveedor) son
+  **datos en la base**. Solo las reglas (PN según norma, qué fitting calza con qué tubo) van a código o skills.
+- Se parte solo con **Tubo PPR** y **Fitting PPR**. Borrador en `lecciones/img/clases-ppr.png`, pendiente de aprobación.

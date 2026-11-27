@@ -773,11 +773,28 @@ def base_productos():
     s.append(texto(W / 2, H - 50, 'En la industria, el sistema que guarda todo esto se llama PIM (gestión de información de producto).', 13, color=SUAVE))
     return guardar('base-productos', s, W, H)
 
+def clases_ppr():
+    W, H = 1600, 900
+    s = lienzo(W, H, 'Borrador para aprobar: las dos primeras clases de la base de productos GESI', 'Segmento → Familia → Clase → Producto · los atributos marcados con * los calcula la app, no se escriben')
+    s.append(caja(620, 100, 360, 56, ['Segmento: Materiales de construcción'], fondo='#e5e7eb', tam=14, peso='bold'))
+    s.append(flecha([(800, 156), (800, 186)]))
+    s.append(caja(620, 188, 360, 56, ['Familia: Sistemas de cañerías PPR'], fondo='#f3f7fb', tam=14, peso='bold'))
+    s.append(flecha([(760, 244), (390, 290)]))
+    s.append(flecha([(840, 244), (1210, 290)]))
+    tubo = ['Clase: Tubo PPR', '', 'Diámetro exterior (DN), mm', 'Espesor de pared, mm', 'SDR *  ·  Serie *', 'PN * (con su norma)', 'Largo de tira, m', 'Tipo: desnudo · preaislado', 'Uso: agua fría · agua caliente', 'Norma de fabricación', 'Código arancelario']
+    fit = ['Clase: Fitting PPR', '', 'Tipo: codo 90° · codo 45° · tee · unión ·', 'reducción · terminal · tapón', 'Diámetro 1 (DN), mm', 'Diámetro 2, mm (reducciones y tees)', 'Rosca: sin · hembra · macho, y medida', 'Inserto: sin · bronce · acero', 'Unidad de venta: pieza', 'Calza con: tubo del mismo DN *', 'Código arancelario']
+    s.append(caja(150, 292, 480, 400, tubo, fondo='#fff7ed', borde='#b45309', tam=14, grosor=2.2))
+    s.append(caja(970, 292, 480, 400, fit, fondo='#fff7ed', borde='#b45309', tam=14, grosor=2.2))
+    s.append(texto(390, 720, 'Producto: «Tubo PPR 20 PN16, tira 4 m»', 13, 'bold'))
+    s.append(texto(1210, 720, 'Producto: «Codo 90° PPR 20»', 13, 'bold'))
+    s.append(caja(330, 760, 940, 80, ['Equivalencias (tabla intermedia): cada producto GESI se enlaza con el producto de cada proveedor que lo ofrece:', '«Tubo PPR 20 PN16» ↔ Lvzhou «PPR cold and hot water pipe 20×2.8» a US$0,311/m'], fondo='#ecfdf5', borde='#0f766e', tam=13))
+    return guardar('clases-ppr', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos()]
+              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
