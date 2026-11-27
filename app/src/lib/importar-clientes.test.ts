@@ -50,4 +50,10 @@ igual('un canal que no existe queda vacío, con aviso: no se inventa', prepararC
 igual('si se agrega el canal «Salmoneras», la misma fila ya se reconoce', canalDe('salmonera', [...CANALES, { id: 's', nombre: 'Salmoneras' }])?.id, 's')
 igual('con RUT, el nombre no identifica: «Austral» con otro RUT es otro cliente', prepararClientes(leerTabla('Nombre;RUT\nAustral;12.345.678-5'), [{ id: 'c1', nombre: 'Austral', rut: '76.123.456-0' }], CANALES)[0].estado, 'nuevo')
 
+grupo('Traer el embudo desde Importa')
+const deImporta = prepararClientes(leerTabla('Nombre\tTipo\tEtapa\tproximaAccion\nAustral\tferretería\tREUNION\tLlevar muestras\nNatales\t\tVisitado\t\nSur\t\tganadísimo\t'), [], CANALES)
+igual('la etapa se lee por su código o por su nombre', deImporta.map((x) => x.datos.etapa), ['REUNION', 'VISITADO', null])
+igual('una etapa desconocida se avisa y no se inventa', deImporta[2].avisos, ['Etapa «ganadísimo» no existe: queda en Identificado'])
+igual('la próxima acción viaja con el cliente', deImporta[0].datos.proximaAccion, 'Llevar muestras')
+
 terminar()

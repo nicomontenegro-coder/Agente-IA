@@ -6,6 +6,8 @@
  * Funciones puras.
  */
 
+import { ETAPAS_CLIENTE, ETIQUETA_ETAPA } from './embudo'
+
 export interface FilaCliente {
   nombre?: string | null
   rut?: string | null
@@ -16,6 +18,8 @@ export interface FilaCliente {
   telefono?: string | null
   email?: string | null
   notas?: string | null
+  etapa?: string | null
+  proximaAccion?: string | null
 }
 
 const normal = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
@@ -30,7 +34,9 @@ const ENCABEZADOS: Record<keyof FilaCliente, string[]> = {
   contacto: ['contacto', 'persona de contacto'],
   telefono: ['telefono', 'fono', 'celular', 'whatsapp'],
   email: ['email', 'correo', 'e-mail', 'mail'],
-  notas: ['notas', 'nota', 'observaciones', 'comentarios']
+  notas: ['notas', 'nota', 'observaciones', 'comentarios'],
+  etapa: ['etapa', 'estado'],
+  proximaAccion: ['proxima accion', 'proximaaccion', 'siguiente paso']
 }
 
 function campoDe(encabezado: string): keyof FilaCliente | null {
@@ -105,7 +111,7 @@ export interface ClienteExistente {
 export interface ClientePreparado {
   estado: 'nuevo' | 'actualiza' | 'repetido' | 'sin nombre'
   existenteId: string | null
-  datos: Required<{ [K in Exclude<keyof FilaCliente, 'canal'>]: string | null }> & { canalId: string | null }
+  datos: Required<{ [K in Exclude<keyof FilaCliente, 'canal' | 'etapa'>]: string | null }> & { canalId: string | null; etapa: string | null }
   /** El nombre del canal reconocido, para mostrarlo. */
   canal: string | null
   avisos: string[]
@@ -126,8 +132,14 @@ export function prepararClientes(filas: FilaCliente[], existentes: ClienteExiste
       canal = canalDe(f.canal, canales)
       if (!canal) avisos.push(`Canal «${f.canal}» no existe: queda sin canal (agrégalo en Ajustes si corresponde)`)
     }
+    // La etapa del embudo: por su código (IDENTIFICADO) o por su nombre (Reunión agendada).
+    let etapa: string | null = null
+    if (f.etapa) {
+      etapa = ETAPAS_CLIENTE.find((e) => normal(e) === normal(f.etapa!) || normal(ETIQUETA_ETAPA[e]) === normal(f.etapa!)) ?? null
+      if (!etapa) avisos.push(`Etapa «${f.etapa}» no existe: queda en Identificado`)
+    }
     const datos = {
-      nombre, rut, canalId: canal?.id ?? null,
+      nombre, rut, canalId: canal?.id ?? null, etapa, proximaAccion: f.proximaAccion ?? null,
       ciudad: f.ciudad ?? null, direccion: f.direccion ?? null, contacto: f.contacto ?? null,
       telefono: f.telefono ?? null, email: f.email ?? null, notas: f.notas ?? null
     }

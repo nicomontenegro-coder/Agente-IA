@@ -25,7 +25,7 @@ export async function importarClientes(_e: EstadoForm, datos: FormData): Promise
   let actualizados = 0
   for (const c of listos) {
     if (c.estado === 'nuevo') {
-      await db.cliente.create({ data: { ...c.datos, nombre: c.datos.nombre! } })
+      await db.cliente.create({ data: { ...c.datos, nombre: c.datos.nombre!, etapa: c.datos.etapa ?? 'IDENTIFICADO' } })
       creados++
     } else if (c.estado === 'actualiza') {
       // Solo completa lo que viene: un dato vacío en la tabla no borra lo que ya había.
