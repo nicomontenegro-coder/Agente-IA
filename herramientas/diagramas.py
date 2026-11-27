@@ -738,11 +738,46 @@ def costo_estimado():
     s.append(texto(W / 2, H - 34, 'Una estimación vencida no se borra: queda con su fecha, para saber con qué número se decidió (lo decidido se congela).', 13, color=SUAVE))
     return guardar('costo-estimado', s, W, H)
 
+def base_productos():
+    W, H = 1560, 900
+    s = lienzo(W, H, 'Base de conocimiento de productos: cómo se organiza habitualmente', 'Jerarquía (dónde va el producto) + atributos (cómo se describe) + reglas y documentos (qué se sabe de él)')
+    # Jerarquía a la izquierda
+    s.append(texto(250, 120, '1. La jerarquía (taxonomía)', 15, 'bold'))
+    niveles = [('Segmento', 'Materiales de construcción'), ('Familia', 'Sistemas de cañerías'), ('Clase', 'Tubos plásticos para agua'), ('Producto (bloque)', 'Tubo PPR')]
+    for k, (n, ej) in enumerate(niveles):
+        y = 150 + k * 105
+        s.append(caja(80, y, 340, 70, [n, ej], fondo='#f3f7fb', tam=13))
+        if k < len(niveles) - 1:
+            s.append(flecha([(250, y + 70), (250, y + 105)]))
+    s.append(texto(250, 595, 'Así lo hacen GS1 GPC y UNSPSC (4 niveles).', 11.5, color=SUAVE))
+    s.append(texto(250, 615, 'Tu «COFGE» es la misma idea que la biología.', 11.5, color=SUAVE))
+    # Atributos al centro
+    s.append(texto(780, 120, '2. Los atributos de la clase', 15, 'bold'))
+    s.append(caja(580, 150, 400, 330, ['Tubo PPR', '', 'DN (diámetro): 20 mm', 'Espesor de pared: 2,8 mm', 'SDR / serie: 7,4 / S3.2', 'PN: 16 (según DIN 8077)', 'Uso: agua fría y caliente', 'Largo de tira: 4 m', 'Norma, certificación', 'Código arancelario'], fondo='#fff7ed', borde='#b45309', tam=13.5, grosor=2.2))
+    s.append(texto(780, 510, 'Cada clase tiene su lista fija de atributos y unidades', 11.5, color=SUAVE))
+    s.append(texto(780, 530, '(así lo hace ETIM con productos técnicos).', 11.5, color=SUAVE))
+    s.append(flecha([(420, 465), (578, 320)]))
+    # Conocimiento a la derecha
+    s.append(texto(1280, 120, '3. Lo que se sabe del producto', 15, 'bold'))
+    saberes = [(['Reglas y normas'], 'SDR → serie → PN · un codo de 20 calza con tubo de 20', '#ecfdf5', '#0f766e'),
+               (['Equivalencias'], 'el 20×2.8 de Lvzhou = el «Tubo PPR 20 PN16» de GESI', '#ecfdf5', '#0f766e'),
+               (['Documentos'], 'fichas técnicas, certificados, normas en PDF', '#ecfdf5', '#0f766e')]
+    for k, (t, sub, f, b) in enumerate(saberes):
+        y = 150 + k * 125
+        s.append(caja(1110, y, 340, 70, t, fondo=f, borde=b, tam=14))
+        s.append(texto(1280, y + 92, sub, 11.5, color=SUAVE))
+        s.append(flecha([(982, 315), (1108, y + 35)]))
+    # Cómo lo usa el agente
+    s.append(caja(330, 680, 900, 110, ['Cómo lo usa el agente', 'La jerarquía y los atributos van en la base (el agente los consulta con herramientas) ·',
+                                       'las reglas van en código o skills · los documentos se buscan cuando hacen falta'], fondo='#ffffff', borde='#1d4ed8', tam=13.5, grosor=2))
+    s.append(texto(W / 2, H - 50, 'En la industria, el sistema que guarda todo esto se llama PIM (gestión de información de producto).', 13, color=SUAVE))
+    return guardar('base-productos', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado()]
+              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
