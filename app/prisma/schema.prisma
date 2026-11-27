@@ -465,3 +465,29 @@ model Propuesta {
   creadoEn    DateTime @default(now())
   resueltaEn  DateTime?
 }
+
+// ───────────────────────────── Clientes ─────────────────────────────
+
+/// Un cliente o prospecto. El tipo es su canal de venta (ferretería,
+/// instalador…): decide con qué precio se le cotiza.
+model Cliente {
+  id            String    @id @default(cuid())
+  nombre        String    @unique
+  rut           String?
+  tipo          String?
+  ciudad        String?
+  direccion     String?
+  contacto      String?
+  telefono      String?
+  email         String?
+  notas         String?
+  /// Embudo (src/lib/embudo.ts): IDENTIFICADO … GANADO, PERDIDO.
+  etapa         String    @default("IDENTIFICADO")
+  /// Por qué se perdió o por qué se corrigió la etapa.
+  notaEtapa     String?
+  /// Lo que hay que hacer con él, y cuándo. Sin esto un prospecto se enfría solo.
+  proximaAccion String?
+  proximaFecha  DateTime?
+  creadoEn      DateTime  @default(now())
+  actualizadoEn DateTime  @updatedAt
+}

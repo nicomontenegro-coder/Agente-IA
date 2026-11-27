@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useMemo, useState } from 'react'
 
 import { ordenar, coincide, type Valor } from '@/lib/ordenar'
@@ -15,6 +16,8 @@ export interface Fila {
   id: string
   /** Si las filas traen sección, la tabla las agrupa y ordena dentro de cada una. */
   seccion?: string
+  /** Si la fila lleva a otra pantalla, la primera columna es un enlace. */
+  enlace?: string
   /** Lo que se muestra (ya formateado) y el valor con que se ordena. */
   celdas: Record<string, { texto: string; valor: Valor; sub?: string }>
 }
@@ -94,11 +97,17 @@ export default function TablaInteractiva({ columnas, filas, filtrarPor, etiqueta
               )}
               {fs.map((f) => (
                 <tr key={f.id}>
-                  {columnas.map((c) => {
+                  {columnas.map((c, n) => {
                     const celda = f.celdas[c.clave]
                     return (
                       <td key={c.clave} className={`${c.derecha ? 'text-right num' : ''} ${c.destacada ? 'font-semibold' : ''}`}>
-                        {celda?.texto ?? '—'}
+                        {n === 0 && f.enlace ? (
+                          <Link href={f.enlace} className="font-medium hover:text-[var(--acento)]">
+                            {celda?.texto ?? '—'}
+                          </Link>
+                        ) : (
+                          celda?.texto ?? '—'
+                        )}
                         {celda?.sub && <div className="text-xs text-[var(--texto-tenue)] font-normal">{celda.sub}</div>}
                       </td>
                     )

@@ -4,9 +4,9 @@
  * respuestas y cruzar papeles.
  */
 
-export type TipoCodigo = 'compra' | 'orden'
+export type TipoCodigo = 'compra' | 'orden' | 'oferta'
 
-const LETRAS: Record<TipoCodigo, string> = { compra: 'CP', orden: 'OC' }
+const LETRAS: Record<TipoCodigo, string> = { compra: 'CP', orden: 'OC', oferta: 'OF' }
 
 export function codigo(tipo: TipoCodigo, numero: number | null | undefined): string | null {
   return numero ? `GESI-${LETRAS[tipo]}${numero}` : null
