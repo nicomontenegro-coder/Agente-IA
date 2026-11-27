@@ -774,39 +774,28 @@ def base_productos():
     return guardar('base-productos', s, W, H)
 
 def clases_ppr():
-    W, H = 1700, 1000
-    s = lienzo(W, H, 'Borrador para aprobar (v2): clases de la familia PPR, con variantes', 'Una clase = productos que se describen con los mismos atributos · * lo calcula la app, no se escribe')
-    s.append(caja(650, 95, 400, 50, ['Segmento: Materiales de construcción'], fondo='#e5e7eb', tam=13.5, peso='bold'))
-    s.append(flecha([(850, 145), (850, 170)]))
-    s.append(caja(650, 172, 400, 50, ['Familia: Sistemas de cañerías PPR'], fondo='#f3f7fb', tam=13.5, peso='bold'))
-    clases = [
-        ('Tubo PPR', ['DN · espesor · largo tira', 'desnudo / preaislado', 'SDR * · serie * · PN *']),
-        ('Codo', ['DN · ángulo 90° / 45°']),
-        ('Tee', ['DN · DN derivación', '(igual o reducida)']),
-        ('Unión / copla', ['DN']),
-        ('Reducción', ['DN mayor · DN menor']),
-        ('Terminal con inserto', ['DN · rosca H / M y medida', 'inserto bronce / acero']),
-        ('Válvula PPR', ['DN · tipo (bola, paso)']),
-        ('Tapón', ['DN'])
-    ]
-    ancho, sep, x0 = 185, 12, 30
-    for k, (nombre, attrs) in enumerate(clases):
-        x = x0 + k * (ancho + sep)
-        s.append(flecha([(850, 222), (x + ancho / 2, 290)]))
-        s.append(caja(x, 292, ancho, 150, [nombre, ''] + attrs, fondo='#fff7ed', borde='#b45309', tam=12, grosor=1.8))
-    s.append(texto(40, 485, 'Atributos comunes a todas las clases: material PPR · uso (agua fría/caliente) · norma de fabricación · código arancelario · «calza con» *', 12.5, ancla='start'))
-    # Modelo y variantes
-    s.append(texto(40, 540, 'Debajo de cada clase: el producto (modelo) y sus variantes (lo que tiene precio)', 14, 'bold', ancla='start'))
-    s.append(caja(80, 570, 300, 56, ['Clase: Codo'], fondo='#fff7ed', borde='#b45309', tam=13))
-    s.append(flecha([(230, 626), (230, 656)]))
-    s.append(caja(80, 658, 300, 56, ['Modelo: Codo 90° PPR'], fondo='#f3f7fb', tam=13))
+    W, H = 1600, 1000
+    s = lienzo(W, H, 'Borrador para aprobar (v3): familia PPR con dos clases', 'El tipo de fitting es un atributo, no una clase · * lo calcula la app, no se escribe')
+    s.append(caja(600, 95, 400, 50, ['Segmento: Materiales de construcción'], fondo='#e5e7eb', tam=13.5, peso='bold'))
+    s.append(flecha([(800, 145), (800, 170)]))
+    s.append(caja(600, 172, 400, 50, ['Familia: Sistemas de cañerías PPR'], fondo='#f3f7fb', tam=13.5, peso='bold'))
+    s.append(flecha([(760, 222), (400, 270)]))
+    s.append(flecha([(840, 222), (1200, 270)]))
+    tubo = ['Clase: Tubo PPR', '', 'Diámetro (DN), mm', 'Espesor de pared, mm', 'SDR * · serie * · PN *', 'Largo de tira, m', 'Desnudo / preaislado']
+    fit = ['Clase: Fitting PPR', '', 'Tipo: codo 90° · codo 45° · tee · copla ·', 'reducción · terminal · tapón', 'Diámetro (DN), mm', 'Diámetro 2, mm — solo reducción y tee reducida', 'Rosca H / M y medida — solo terminal', 'Inserto bronce / acero — solo terminal']
+    s.append(caja(150, 272, 500, 280, tubo, fondo='#fff7ed', borde='#b45309', tam=14, grosor=2.2))
+    s.append(caja(950, 272, 500, 280, fit, fondo='#fff7ed', borde='#b45309', tam=14, grosor=2.2))
+    s.append(texto(1200, 580, 'Regla: los atributos «solo …» se exigen según el tipo (una reducción necesita diámetro 2).', 12, color=SUAVE))
+    s.append(texto(800, 625, 'Comunes a las dos clases: material PPR · uso (agua fría/caliente) · norma de fabricación · código arancelario · «calza con» *', 12.5))
+    s.append(texto(40, 690, 'Debajo de cada clase: el modelo y sus variantes (lo que tiene precio)', 14, 'bold', ancla='start'))
+    s.append(caja(80, 720, 300, 56, ['Clase: Fitting PPR'], fondo='#fff7ed', borde='#b45309', tam=13))
+    s.append(flecha([(230, 776), (230, 800)]))
+    s.append(caja(80, 802, 300, 56, ['Modelo: Codo 90° PPR'], fondo='#f3f7fb', tam=13))
     for k, v in enumerate(['20 mm', '25 mm', '32 mm', '40 mm', '… 110 mm']):
-        x = 460 + k * 200
-        s.append(flecha([(380, 686), (x, 760)]))
-        s.append(caja(x, 762, 170, 50, [f'Variante {v}'], fondo='#ffffff', tam=12.5))
-    s.append(texto(1040, 850, 'Cada variante es un SKU: se cotiza, se compra y tiene precio. Se enlaza con el ítem de cada proveedor (equivalencias).', 12.5, color=SUAVE))
-    s.append(texto(W / 2, H - 70, 'Para buscar no se agregan niveles: se filtra por atributo (diámetro, PN, tipo) — clasificación por facetas.', 13))
-    s.append(texto(W / 2, H - 44, 'Una clase se parte cuando sus miembros necesitan atributos distintos, no cuando tiene muchos miembros.', 13, color=SUAVE))
+        x = 450 + k * 200
+        s.append(flecha([(380, 830), (x, 880)]))
+        s.append(caja(x, 882, 170, 46, [f'Variante {v}'], fondo='#ffffff', tam=12.5))
+    s.append(texto(1030, 955, 'Cada variante es un SKU con precio, enlazado con el ítem de cada proveedor (equivalencias). Para buscar: filtros por atributo.', 12, color=SUAVE))
     return guardar('clases-ppr', s, W, H)
 
 if __name__ == '__main__':

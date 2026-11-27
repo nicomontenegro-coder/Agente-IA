@@ -65,7 +65,7 @@ GESI. La revisión guiada del modelo (paso 1 de 5) queda pendiente y se retoma c
   fijos por clase), no su contenido: **Segmento → Familia → Clase → Producto**, cada clase con su lista de atributos.
 - La jerarquía, las clases, los atributos y las equivalencias (producto GESI ↔ producto de cada proveedor) son
   **datos en la base**. Solo las reglas (PN según norma, qué fitting calza con qué tubo) van a código o skills.
-- Se parte solo con la familia **Sistemas de cañerías PPR**. Una clase agrupa productos con los mismos atributos
-  (se parte por atributos distintos, no por cantidad): Tubo, Codo, Tee, Unión, Reducción, Terminal con inserto,
-  Válvula, Tapón. Debajo de cada clase, modelo y **variantes** (SKU con precio). Para buscar, filtros por atributo.
-  Borrador v2 en `lecciones/img/clases-ppr.png`, pendiente de aprobación.
+- Se parte solo con la familia **Sistemas de cañerías PPR**, con **dos clases: Tubo PPR y Fitting PPR**. Para Nico
+  los fittings son una sola clase: el tipo (codo, tee, copla, reducción, terminal, tapón) es un atributo, y los
+  atributos que dependen del tipo (diámetro 2, rosca, inserto) se exigen con una regla. Debajo de cada clase, modelo
+  y **variantes** (SKU con precio). Para buscar, filtros por atributo. Borrador v3 en `lecciones/img/clases-ppr.png`.
