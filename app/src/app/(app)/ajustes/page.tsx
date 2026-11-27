@@ -2,12 +2,15 @@ import { Encabezado } from '@/componentes/ui'
 import FormAccion from '@/componentes/form-accion'
 import { empresa, ultimoNumero } from '@/lib/compras-db'
 import { guardarEmpresa, guardarNumeracion } from '@/app/acciones/datos'
+import { agregarCanal } from '@/app/acciones/clientes'
+import { db } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
 export default async function PaginaAjustes() {
   const e = await empresa()
   const proximaOc = (await ultimoNumero('orden')) + 1
+  const canales = await db.canalVenta.findMany({ orderBy: [{ posicion: 'asc' }, { nombre: 'asc' }], include: { _count: { select: { clientes: true } } } })
   const campo = (name: string, etiqueta: string, valor: string | number | null, ayuda?: string) => (
     <label className="text-sm space-y-1">
       <span className="font-medium">{etiqueta}</span>
@@ -37,6 +40,23 @@ export default async function PaginaAjustes() {
           <span className="block text-xs text-[var(--texto-tenue)]">Solo puede aumentar, para no repetir números.</span>
         </label>
       </FormAccion>
+      <section className="panel p-5 space-y-3">
+        <h2 className="font-semibold text-sm">Canales de venta</h2>
+        <p className="text-xs text-[var(--texto-tenue)]">El canal de cada cliente decide con qué descuento se le cotiza. Cada lista de venta fija el descuento de cada canal.</p>
+        <ul className="text-sm space-y-1">
+          {canales.map((c) => (
+            <li key={c.id}>
+              {c.nombre} <span className="text-[var(--texto-tenue)]">· {c._count.clientes} clientes</span>
+            </li>
+          ))}
+        </ul>
+        <FormAccion accion={agregarCanal} etiqueta="Agregar canal" clase="flex flex-wrap items-end gap-3" limpiar>
+          <label className="text-sm space-y-1">
+            <span className="font-medium">Nuevo canal</span>
+            <input name="nombre" className="campo" placeholder="Salmoneras" />
+          </label>
+        </FormAccion>
+      </section>
     </div>
   )
 }

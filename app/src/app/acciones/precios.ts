@@ -95,14 +95,18 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
     }
     if (!f.unidadVenta && f.contenido != null) return { error: `${f.familia}: indica la unidad de venta (por ejemplo, tira de 4 m)` }
   }
-  const nombres = datos.getAll('canalNombre')
+  const canalIds = datos.getAll('canalId')
   const descuentos = datos.getAll('canalDescuento')
-  const canales: { nombre: string; descuentoPct: number; posicion: number }[] = []
-  for (let k = 0; k < nombres.length; k++) {
-    const nombre = texto(nombres[k] ?? null)
+  const todos = await db.canalVenta.findMany()
+  const canales: { canalId: string; descuentoPct: number; posicion: number }[] = []
+  for (let k = 0; k < canalIds.length; k++) {
+    const canalId = texto(canalIds[k] ?? null)
     const descuentoPct = numero(descuentos[k] ?? null)
-    if (!nombre && descuentoPct == null) continue
-    if (!nombre) return { error: 'Ingresa el nombre del canal' }
+    if (!canalId && descuentoPct == null) continue
+    const canal = todos.find((c) => c.id === canalId)
+    if (!canal) return { error: 'Selecciona el canal' }
+    if (canales.some((c) => c.canalId === canal.id)) return { error: `El canal ${canal.nombre} está dos veces` }
+    const nombre = canal.nombre
     if (descuentoPct == null || descuentoPct < 0 || descuentoPct >= 100) return { error: `Canal ${nombre}: el descuento debe estar entre 0 y 99%` }
     // El descuento de un canal no puede cruzar el margen mínimo en ninguna familia.
     for (const f of filas) {
@@ -112,7 +116,7 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
         return { error: `Canal ${nombre}: con ${descuentoPct}% de descuento, ${f.familia} queda con ${queda.toLocaleString('es-CL')}% de margen, bajo el mínimo de ${margenMinimoPct}%` }
       }
     }
-    canales.push({ nombre, descuentoPct, posicion: canales.length })
+    canales.push({ canalId: canal.id, descuentoPct, posicion: canales.length })
   }
   await db.$transaction([
     db.listaVentaCanal.deleteMany({ where: { listaVentaId: ventaId } }),

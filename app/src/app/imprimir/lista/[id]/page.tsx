@@ -20,7 +20,7 @@ export default async function ImprimirLista({ params, searchParams }: { params: 
   const { id } = await params
   const { canal: canalId } = await searchParams
   const [v, e] = await Promise.all([
-    db.listaVenta.findUnique({ where: { id }, include: { familias: true, canales: true, listaPrecios: { include: { items: { orderBy: { posicion: 'asc' } } } } } }),
+    db.listaVenta.findUnique({ where: { id }, include: { familias: true, canales: { include: { canal: true } }, listaPrecios: { include: { items: { orderBy: { posicion: 'asc' } } } } } }),
     empresa()
   ])
   if (!v) notFound()
@@ -34,7 +34,7 @@ export default async function ImprimirLista({ params, searchParams }: { params: 
 
   return (
     <>
-      <Botones id={v.id} canales={v.canales.map((c) => ({ id: c.id, nombre: c.nombre }))} actual={canal?.id ?? null} />
+      <Botones id={v.id} canales={v.canales.map((c) => ({ id: c.id, nombre: c.canal.nombre }))} actual={canal?.id ?? null} />
       <div className="hoja">
         <style>{`
           body { background: #e5e7eb; }

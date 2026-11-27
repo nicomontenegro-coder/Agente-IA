@@ -9,7 +9,7 @@
 export interface FilaCliente {
   nombre?: string | null
   rut?: string | null
-  tipo?: string | null
+  canal?: string | null
   ciudad?: string | null
   direccion?: string | null
   contacto?: string | null
@@ -24,7 +24,7 @@ const normal = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLower
 const ENCABEZADOS: Record<keyof FilaCliente, string[]> = {
   nombre: ['nombre', 'razon social', 'cliente', 'empresa'],
   rut: ['rut'],
-  tipo: ['tipo', 'canal', 'rubro'],
+  canal: ['tipo', 'canal', 'rubro', 'canal de venta'],
   ciudad: ['ciudad', 'comuna'],
   direccion: ['direccion'],
   contacto: ['contacto', 'persona de contacto'],
@@ -80,14 +80,21 @@ export function formatoRut(rut: string): string {
   return `${cuerpo}-${limpio.slice(-1)}`
 }
 
-/** Los tipos de cliente: son los canales de venta (deciden el precio). */
-export const TIPOS_CLIENTE = ['ferretería', 'instalador', 'constructora', 'otro'] as const
-const TIPO_POR_TEXTO: [string, RegExp][] = [
-  ['ferretería', /ferreter/],
-  ['instalador', /instala|gasfiter|contratista/],
-  ['constructora', /constru/],
-  ['otro', /^otro/]
-]
+/**
+ * El canal que corresponde a lo escrito en la tabla, buscado entre los
+ * canales guardados (son datos: se agregan sin programar). Compara sin tildes
+ * ni mayúsculas, y en singular o plural: «ferretería» es el canal «Ferreterías».
+ */
+export function canalDe(texto: string, canales: Canal[]): Canal | null {
+  const raiz = (x: string) => normal(x).replace(/(es|s)$/, '')
+  const t = raiz(texto)
+  return canales.find((c) => raiz(c.nombre) === t) ?? null
+}
+
+export interface Canal {
+  id: string
+  nombre: string
+}
 
 export interface ClienteExistente {
   id: string
@@ -98,11 +105,13 @@ export interface ClienteExistente {
 export interface ClientePreparado {
   estado: 'nuevo' | 'actualiza' | 'repetido' | 'sin nombre'
   existenteId: string | null
-  datos: Required<{ [K in keyof FilaCliente]: string | null }>
+  datos: Required<{ [K in Exclude<keyof FilaCliente, 'canal'>]: string | null }> & { canalId: string | null }
+  /** El nombre del canal reconocido, para mostrarlo. */
+  canal: string | null
   avisos: string[]
 }
 
-export function prepararClientes(filas: FilaCliente[], existentes: ClienteExistente[]): ClientePreparado[] {
+export function prepararClientes(filas: FilaCliente[], existentes: ClienteExistente[], canales: Canal[]): ClientePreparado[] {
   const vistos = new Set<string>()
   return filas.map((f) => {
     const avisos: string[] = []
@@ -112,22 +121,24 @@ export function prepararClientes(filas: FilaCliente[], existentes: ClienteExiste
       if (validarRut(f.rut)) rut = formatoRut(f.rut)
       else avisos.push(`RUT con dígito verificador incorrecto: ${f.rut}`)
     }
-    let tipo: string | null = null
-    if (f.tipo) {
-      tipo = TIPO_POR_TEXTO.find(([, re]) => re.test(normal(f.tipo!)))?.[0] ?? 'otro'
-      if (!TIPO_POR_TEXTO.some(([, re]) => re.test(normal(f.tipo!)))) avisos.push(`Tipo «${f.tipo}» no reconocido: queda como «otro»`)
+    let canal: Canal | null = null
+    if (f.canal) {
+      canal = canalDe(f.canal, canales)
+      if (!canal) avisos.push(`Canal «${f.canal}» no existe: queda sin canal (agrégalo en Ajustes si corresponde)`)
     }
     const datos = {
-      nombre, rut, tipo,
+      nombre, rut, canalId: canal?.id ?? null,
       ciudad: f.ciudad ?? null, direccion: f.direccion ?? null, contacto: f.contacto ?? null,
       telefono: f.telefono ?? null, email: f.email ?? null, notas: f.notas ?? null
     }
-    if (!nombre) return { estado: 'sin nombre' as const, existenteId: null, datos, avisos: [...avisos, 'Fila sin nombre: no se importa'] }
+    const extra = { canal: canal?.nombre ?? null }
+    if (!nombre) return { estado: 'sin nombre' as const, existenteId: null, datos, ...extra, avisos: [...avisos, 'Fila sin nombre: no se importa'] }
     // El mismo cliente se reconoce por RUT, o por nombre si no hay RUT.
     const claves = [rut && `rut:${rut}`, `nombre:${normal(nombre)}`].filter((x): x is string => !!x)
-    if (claves.some((c) => vistos.has(c))) return { estado: 'repetido' as const, existenteId: null, datos, avisos: [...avisos, 'Repetido en la tabla: se importa una vez'] }
+    if (claves.some((c) => vistos.has(c))) return { estado: 'repetido' as const, existenteId: null, datos, ...extra, avisos: [...avisos, 'Repetido en la tabla: se importa una vez'] }
     claves.forEach((c) => vistos.add(c))
-    const existente = existentes.find((e) => (rut && e.rut === rut) || normal(e.nombre) === normal(nombre))
-    return { estado: existente ? ('actualiza' as const) : ('nuevo' as const), existenteId: existente?.id ?? null, datos, avisos }
+    // El RUT identifica; el nombre solo cuando no hay RUT de ningún lado.
+    const existente = rut ? existentes.find((e) => e.rut === rut) : existentes.find((e) => !e.rut && normal(e.nombre) === normal(nombre))
+    return { estado: existente ? ('actualiza' as const) : ('nuevo' as const), existenteId: existente?.id ?? null, datos, ...extra, avisos }
   })
 }

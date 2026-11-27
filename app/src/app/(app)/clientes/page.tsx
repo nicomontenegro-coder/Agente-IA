@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function PaginaClientes({ searchParams }: { searchParams: Promise<{ importados?: string; actualizados?: string }> }) {
   const { importados, actualizados } = await searchParams
-  const clientes = await db.cliente.findMany({ orderBy: { nombre: 'asc' } })
+  const clientes = await db.cliente.findMany({ orderBy: { nombre: 'asc' }, include: { canal: true } })
   return (
     <div className="space-y-5">
       <Encabezado titulo="Clientes" descripcion="Clientes y prospectos, su canal de venta y en qué etapa están." />
@@ -32,11 +32,11 @@ export default async function PaginaClientes({ searchParams }: { searchParams: P
           <p className="p-4 text-sm text-[var(--texto-suave)]">Sin clientes todavía. Impórtalos desde una tabla o agrégalos uno por uno.</p>
         ) : (
           <TablaInteractiva
-            filtrarPor="tipo"
-            etiquetaFiltro="Tipo"
+            filtrarPor="canal"
+            etiquetaFiltro="Canal"
             columnas={[
               { clave: 'cliente', titulo: 'Cliente' },
-              { clave: 'tipo', titulo: 'Tipo' },
+              { clave: 'canal', titulo: 'Canal' },
               { clave: 'ciudad', titulo: 'Ciudad' },
               { clave: 'etapa', titulo: 'Etapa' },
               { clave: 'proxima', titulo: 'Próxima acción' }
@@ -45,7 +45,7 @@ export default async function PaginaClientes({ searchParams }: { searchParams: P
               id: c.id,
               celdas: {
                 cliente: { texto: c.nombre, valor: c.nombre, sub: [c.rut, c.contacto].filter(Boolean).join(' · ') || undefined },
-                tipo: { texto: c.tipo ?? '—', valor: c.tipo ?? 'Sin tipo' },
+                canal: { texto: c.canal?.nombre ?? '—', valor: c.canal?.nombre ?? 'Sin canal' },
                 ciudad: { texto: c.ciudad ?? '—', valor: c.ciudad },
                 etapa: { texto: esEtapa(c.etapa) ? ETIQUETA_ETAPA[c.etapa] : c.etapa, valor: c.etapa },
                 proxima: { texto: c.proximaAccion ?? '—', valor: c.proximaFecha ? c.proximaFecha.toISOString() : null, sub: c.proximaFecha ? fecha(c.proximaFecha) : undefined }

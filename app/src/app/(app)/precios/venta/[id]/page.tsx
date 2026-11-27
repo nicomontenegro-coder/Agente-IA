@@ -18,10 +18,11 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
   const { id } = await params
   const v = await db.listaVenta.findUnique({
     where: { id },
-    include: { familias: true, canales: { orderBy: { posicion: 'asc' } }, listaPrecios: { include: { proveedor: true, items: { orderBy: { posicion: 'asc' } } } } }
+    include: { familias: true, canales: { orderBy: { posicion: 'asc' }, include: { canal: true } }, listaPrecios: { include: { proveedor: true, items: { orderBy: { posicion: 'asc' } } } } }
   })
   if (!v) notFound()
   const l = v.listaPrecios
+  const todosLosCanales = await db.canalVenta.findMany({ orderBy: [{ posicion: 'asc' }, { nombre: 'asc' }] })
   // En el orden del documento del proveedor: la base no garantiza ninguno, y
   // con las filas cambiadas de lugar el factor de los tubos cae en los codos.
   const orden = familiasDe(l.items).map((f) => f.familia)
@@ -119,7 +120,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
         </section>
         <section className="panel scroll-x">
           <h2 className="font-semibold text-sm px-4 pt-3 pb-1">Canales de venta</h2>
-          <p className="px-4 pb-2 text-xs text-[var(--texto-tenue)]">Descuento sobre el precio de lista para cada canal. No puede dejar el margen bajo el mínimo en ninguna familia.</p>
+          <p className="px-4 pb-2 text-xs text-[var(--texto-tenue)]">Descuento sobre el precio de lista para cada canal. No puede dejar el margen bajo el mínimo en ninguna familia. Los canales se agregan en Ajustes.</p>
           <table className="tabla">
             <thead>
               <tr>
@@ -131,7 +132,14 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
               {[...v.canales, null, null].map((c, k) => (
                 <tr key={c?.id ?? `nuevo-${k}`}>
                   <td>
-                    <input name="canalNombre" className="campo" defaultValue={c?.nombre ?? ''} placeholder={k === 0 ? 'Ferreterías' : 'Instaladores'} aria-label={`Canal ${k + 1}`} />
+                    <select name="canalId" className="campo" defaultValue={c?.canalId ?? ''} aria-label={`Canal ${k + 1}`}>
+                      <option value="">—</option>
+                      {todosLosCanales.map((x) => (
+                        <option key={x.id} value={x.id}>
+                          {x.nombre}
+                        </option>
+                      ))}
+                    </select>
                   </td>
                   <td className="text-right">
                     <input name="canalDescuento" className="campo num w-24 ml-auto" inputMode="decimal" defaultValue={fmt(c?.descuentoPct)} placeholder={k === 0 ? '30' : '15'} aria-label={`Descuento del canal ${k + 1}`} />
@@ -156,7 +164,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
               </Link>
               {v.canales.map((c) => (
                 <Link key={c.id} href={`/imprimir/lista/${v.id}?canal=${c.id}`} className="btn btn-neutro">
-                  {c.nombre}
+                  {c.canal.nombre}
                 </Link>
               ))}
             </div>
@@ -178,7 +186,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
               { clave: 'fob', titulo: `FOB ${l.moneda}`, derecha: true },
               { clave: 'landed', titulo: 'Landed CLP', derecha: true },
               { clave: 'lista', titulo: 'Precio lista', derecha: true, destacada: true },
-              ...v.canales.map((c) => ({ clave: `canal-${c.id}`, titulo: `${c.nombre} −${numero(c.descuentoPct, c.descuentoPct % 1 ? 1 : 0)}%`, derecha: true })),
+              ...v.canales.map((c) => ({ clave: `canal-${c.id}`, titulo: `${c.canal.nombre} −${numero(c.descuentoPct, c.descuentoPct % 1 ? 1 : 0)}%`, derecha: true })),
               ...(v.margenMinimoPct != null
                 ? [
                     { clave: 'minimo', titulo: 'Precio mínimo', derecha: true },
@@ -214,7 +222,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
               Margen que deja cada canal:{' '}
               {familias
                 .filter((f) => f.margenPct != null)
-                .map((f) => `${f.familia} ${v.canales.map((c) => `${c.nombre} ${margenConDescuento(f.margenPct!, c.descuentoPct).toLocaleString('es-CL')}%`).join(', ')}`)
+                .map((f) => `${f.familia} ${v.canales.map((c) => `${c.canal.nombre} ${margenConDescuento(f.margenPct!, c.descuentoPct).toLocaleString('es-CL')}%`).join(', ')}`)
                 .join(' · ')}
             </p>
           )}

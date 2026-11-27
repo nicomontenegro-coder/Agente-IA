@@ -419,8 +419,11 @@ model ListaVentaCanal {
   listaVentaId String
   listaVenta   ListaVenta @relation(fields: [listaVentaId], references: [id], onDelete: Cascade)
   posicion     Int
-  nombre       String
+  canalId      String
+  canal        CanalVenta @relation(fields: [canalId], references: [id])
   descuentoPct Float
+
+  @@unique([listaVentaId, canalId])
 }
 
 model ListaVentaFamilia {
@@ -468,13 +471,25 @@ model Propuesta {
 
 // ───────────────────────────── Clientes ─────────────────────────────
 
-/// Un cliente o prospecto. El tipo es su canal de venta (ferretería,
-/// instalador…): decide con qué precio se le cotiza.
+/// Canal de venta: ferreterías, instaladores, constructoras… Es dato: se
+/// agrega o renombra sin programar. El cliente pertenece a un canal, y cada
+/// lista de venta fija el descuento de cada canal.
+model CanalVenta {
+  id        String            @id @default(cuid())
+  nombre    String            @unique
+  posicion  Int               @default(0)
+  clientes  Cliente[]
+  descuentos ListaVentaCanal[]
+}
+
+/// Un cliente o prospecto. Se identifica por su RUT (único); el nombre puede
+/// escribirse de muchas formas y no lo identifica.
 model Cliente {
-  id            String    @id @default(cuid())
-  nombre        String    @unique
-  rut           String?
-  tipo          String?
+  id            String      @id @default(cuid())
+  nombre        String
+  rut           String?     @unique
+  canalId       String?
+  canal         CanalVenta? @relation(fields: [canalId], references: [id], onDelete: SetNull)
   ciudad        String?
   direccion     String?
   contacto      String?
@@ -482,12 +497,28 @@ model Cliente {
   email         String?
   notas         String?
   /// Embudo (src/lib/embudo.ts): IDENTIFICADO … GANADO, PERDIDO.
-  etapa         String    @default("IDENTIFICADO")
-  /// Por qué se perdió o por qué se corrigió la etapa.
-  notaEtapa     String?
+  etapa         String      @default("IDENTIFICADO")
   /// Lo que hay que hacer con él, y cuándo. Sin esto un prospecto se enfría solo.
   proximaAccion String?
   proximaFecha  DateTime?
-  creadoEn      DateTime  @default(now())
-  actualizadoEn DateTime  @updatedAt
+  creadoEn      DateTime    @default(now())
+  actualizadoEn DateTime    @updatedAt
+  gestiones     Gestion[]
+}
+
+/// Lo que pasó con un cliente: una visita, una llamada, un cambio de etapa.
+/// El historial del embudo: cada cambio de etapa queda aquí con su motivo.
+model Gestion {
+  id        String   @id @default(cuid())
+  clienteId String
+  cliente   Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  fecha     DateTime @default(now())
+  /// VISITA, LLAMADA, WHATSAPP, CORREO, REUNION, NOTA (src/lib/embudo.ts).
+  medio     String
+  texto     String
+  etapaDe   String?
+  etapaA    String?
+  creadoEn  DateTime @default(now())
+
+  @@index([clienteId, fecha])
 }
