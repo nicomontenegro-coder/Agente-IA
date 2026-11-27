@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function PaginaClientes({ searchParams }: { searchParams: Promise<{ importados?: string; actualizados?: string }> }) {
   const { importados, actualizados } = await searchParams
-  const clientes = await db.cliente.findMany({ orderBy: { nombre: 'asc' }, include: { canal: true } })
+  const clientes = await db.cliente.findMany({ orderBy: { nombre: 'asc' }, include: { canal: true, sucursales: { orderBy: { creadoEn: 'asc' } } } })
   return (
     <div className="space-y-5">
       <Encabezado titulo="Clientes" descripcion="Clientes y prospectos, su canal de venta y en qué etapa están." />
@@ -37,7 +37,7 @@ export default async function PaginaClientes({ searchParams }: { searchParams: P
             columnas={[
               { clave: 'cliente', titulo: 'Cliente' },
               { clave: 'canal', titulo: 'Canal' },
-              { clave: 'ciudad', titulo: 'Ciudad' },
+              { clave: 'ciudad', titulo: 'Sucursales' },
               { clave: 'etapa', titulo: 'Etapa' },
               { clave: 'proxima', titulo: 'Próxima acción' }
             ]}
@@ -46,7 +46,7 @@ export default async function PaginaClientes({ searchParams }: { searchParams: P
               celdas: {
                 cliente: { texto: c.nombre, valor: c.nombre, sub: [c.rut, c.contacto].filter(Boolean).join(' · ') || undefined },
                 canal: { texto: c.canal?.nombre ?? '—', valor: c.canal?.nombre ?? 'Sin canal' },
-                ciudad: { texto: c.ciudad ?? '—', valor: c.ciudad },
+                ciudad: { texto: c.sucursales.map((x) => x.ciudad).join(', ') || '—', valor: c.sucursales[0]?.ciudad ?? null },
                 etapa: { texto: esEtapa(c.etapa) ? ETIQUETA_ETAPA[c.etapa] : c.etapa, valor: c.etapa },
                 proxima: { texto: c.proximaAccion ?? '—', valor: c.proximaFecha ? c.proximaFecha.toISOString() : null, sub: c.proximaFecha ? fecha(c.proximaFecha) : undefined }
               },

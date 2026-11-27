@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { leerTabla, prepararClientes, validarRut, formatoRut } from '@/lib/importar-clientes'
 import { validarCambio, tipoDeCambio, ETIQUETA_ETAPA, CANALES_GESTION, type EtapaCliente } from '@/lib/embudo'
-import { posiblesDuplicados, combinarClientes, CAMPOS_FUSION, type DatosCliente, type CampoFusion } from '@/lib/duplicados-clientes'
+import { posiblesDuplicados, combinarClientes, unirSucursales, CAMPOS_FUSION, type DatosCliente, type CampoFusion } from '@/lib/duplicados-clientes'
 import type { EstadoForm } from './compras'
 
 const texto = (v: FormDataEntryValue | null) => {
@@ -20,18 +20,33 @@ export async function importarClientes(_e: EstadoForm, datos: FormData): Promise
   const filas = leerTabla(tabla)
   if (filas.length === 0) return { error: 'No se encontró una tabla: pega el encabezado y al menos una fila' }
   if (!filas.some((f) => f.nombre !== undefined)) return { error: 'La tabla no tiene columna «Nombre»' }
-  const [existentes, canales] = await Promise.all([db.cliente.findMany({ select: { id: true, nombre: true, rut: true } }), db.canalVenta.findMany()])
+  const [filasExistentes, canales] = await Promise.all([
+    db.cliente.findMany({ select: { id: true, nombre: true, rut: true, sucursales: { select: { id: true, ciudad: true, direccion: true } } } }),
+    db.canalVenta.findMany()
+  ])
+  const existentes = filasExistentes.map((c) => ({ id: c.id, nombre: c.nombre, rut: c.rut, ciudades: c.sucursales.map((x) => x.ciudad) }))
   const listos = prepararClientes(filas, existentes, canales)
   let creados = 0
   let actualizados = 0
   for (const c of listos) {
+    const { ciudad, direccion, ...cliente } = c.datos
+    const local = ciudad || direccion ? { ciudad: ciudad ?? 'Sin ciudad', direccion } : null
     if (c.estado === 'nuevo') {
-      await db.cliente.create({ data: { ...c.datos, nombre: c.datos.nombre!, etapa: c.datos.etapa ?? 'IDENTIFICADO' } })
+      await db.cliente.create({
+        data: { ...cliente, nombre: cliente.nombre!, etapa: cliente.etapa ?? 'IDENTIFICADO', ...(local ? { sucursales: { create: local } } : {}) }
+      })
       creados++
     } else if (c.estado === 'actualiza') {
       // Solo completa lo que viene: un dato vacío en la tabla no borra lo que ya había.
-      const completar = Object.fromEntries(Object.entries(c.datos).filter(([k, v]) => v != null && k !== 'nombre'))
+      const completar = Object.fromEntries(Object.entries(cliente).filter(([k, v]) => v != null && k !== 'nombre'))
       await db.cliente.update({ where: { id: c.existenteId! }, data: completar })
+      if (local && c.sucursalNueva) {
+        await db.sucursal.create({ data: { ...local, clienteId: c.existenteId! } })
+      } else if (local?.direccion) {
+        // Misma ciudad: completa la dirección si el local no la tenía.
+        const mismo = filasExistentes.find((x) => x.id === c.existenteId)?.sucursales.find((x) => x.ciudad.toLowerCase() === local.ciudad.toLowerCase() && !x.direccion)
+        if (mismo) await db.sucursal.update({ where: { id: mismo.id }, data: { direccion: local.direccion } })
+      }
       actualizados++
     }
   }
@@ -71,8 +86,6 @@ export async function guardarCliente(id: string | null, _e: EstadoForm, datos: F
     nombre,
     rut,
     canalId,
-    ciudad: texto(datos.get('ciudad')),
-    direccion: texto(datos.get('direccion')),
     contacto: texto(datos.get('contacto')),
     telefono: texto(datos.get('telefono')),
     email: texto(datos.get('email')),
@@ -104,7 +117,9 @@ export async function registrarGestion(clienteId: string, _e: EstadoForm, datos:
   const contenido = texto(datos.get('texto'))
   if (!contenido) return { error: 'Escribe qué pasó' }
   const f = texto(datos.get('fecha'))
-  await db.gestion.create({ data: { clienteId, medio, texto: contenido, fecha: f ? new Date(`${f}T12:00:00`) : new Date() } })
+  const sucursalId = texto(datos.get('sucursalId'))
+  if (sucursalId && !(await db.sucursal.findFirst({ where: { id: sucursalId, clienteId } }))) return { error: 'Esa sucursal no es de este cliente' }
+  await db.gestion.create({ data: { clienteId, sucursalId, medio, texto: contenido, fecha: f ? new Date(`${f}T12:00:00`) : new Date() } })
   revalidatePath(`/clientes/${clienteId}`)
   return { ok: 'Gestión registrada' }
 }
@@ -129,12 +144,23 @@ const datosDe = (c: Record<string, unknown>): DatosCliente => Object.fromEntries
  */
 export async function fusionarClientes(destinoId: string, origenId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
   if (destinoId === origenId) return { error: 'Selecciona otro cliente' }
-  const [destino, origen] = await Promise.all([db.cliente.findUnique({ where: { id: destinoId } }), db.cliente.findUnique({ where: { id: origenId } })])
+  const [destino, origen] = await Promise.all([
+    db.cliente.findUnique({ where: { id: destinoId }, include: { sucursales: true } }),
+    db.cliente.findUnique({ where: { id: origenId }, include: { sucursales: true } })
+  ])
   if (!destino || !origen) return { error: 'Uno de los clientes ya no existe' }
   if (destino.rut && origen.rut && destino.rut !== origen.rut) return { error: 'Tienen RUT distintos: son empresas distintas y no se fusionan' }
   const { resultado, conflictos } = combinarClientes(datosDe(destino), datosDe(origen))
   for (const k of conflictos) if (datos.get(`elegir-${k}`) === 'origen') resultado[k as CampoFusion] = datosDe(origen)[k]
+  const locales = unirSucursales(destino.sucursales, origen.sucursales)
   await db.$transaction([
+    // Las sucursales no compiten: las nuevas pasan a la ficha que queda, y un mismo local se junta en uno.
+    db.sucursal.updateMany({ where: { id: { in: locales.mover } }, data: { clienteId: destino.id } }),
+    ...locales.completar.flatMap((x) => [
+      db.sucursal.update({ where: { id: x.queda }, data: x.datos }),
+      db.gestion.updateMany({ where: { sucursalId: x.sale }, data: { sucursalId: x.queda } }),
+      db.sucursal.delete({ where: { id: x.sale } })
+    ]),
     // El RUT es único: se suelta del origen antes de pasarlo al destino.
     db.cliente.update({ where: { id: origen.id }, data: { rut: null } }),
     db.gestion.updateMany({ where: { clienteId: origen.id }, data: { clienteId: destino.id } }),
@@ -144,4 +170,27 @@ export async function fusionarClientes(destinoId: string, origenId: string, _e: 
   ])
   revalidatePath('/clientes')
   redirect(`/clientes/${destino.id}`)
+}
+
+/** Agrega o corrige una sucursal del cliente. */
+export async function guardarSucursal(clienteId: string, sucursalId: string | null, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const ciudad = texto(datos.get('ciudad'))
+  if (!ciudad) return { error: 'Ingresa la ciudad de la sucursal' }
+  const data = { ciudad, direccion: texto(datos.get('direccion')), contacto: texto(datos.get('contacto')), telefono: texto(datos.get('telefono')) }
+  if (sucursalId) {
+    const r = await db.sucursal.updateMany({ where: { id: sucursalId, clienteId }, data })
+    if (!r.count) return { error: 'Esa sucursal no es de este cliente' }
+  } else {
+    await db.sucursal.create({ data: { ...data, clienteId } })
+  }
+  revalidatePath(`/clientes/${clienteId}`)
+  revalidatePath('/clientes')
+  return { ok: sucursalId ? 'Sucursal guardada' : 'Sucursal agregada' }
+}
+
+/** Quita una sucursal. Sus gestiones quedan en el cliente, sin local. */
+export async function quitarSucursal(clienteId: string, sucursalId: string): Promise<void> {
+  await db.sucursal.deleteMany({ where: { id: sucursalId, clienteId } })
+  revalidatePath(`/clientes/${clienteId}`)
+  revalidatePath('/clientes')
 }

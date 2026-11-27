@@ -63,4 +63,10 @@ igual(
   ['Posible duplicado de Ferretería Austral Ltda.: si es el mismo, fusiónalos después en su ficha']
 )
 
+grupo('Sucursales al importar')
+const conLocal = [{ id: 'c1', nombre: 'Austral', rut: '76.123.456-0', ciudades: ['Punta Arenas'] }]
+const otraCiudad = prepararClientes(leerTabla('Nombre;RUT;Ciudad\nAustral;76.123.456-0;Puerto Natales'), conLocal, CANALES)[0]
+igual('mismo RUT con otra ciudad: el cliente se completa y se agrega la sucursal', [otraCiudad.estado, otraCiudad.sucursalNueva, otraCiudad.avisos], ['actualiza', true, ['Se agrega la sucursal Puerto Natales']])
+igual('mismo RUT y misma ciudad: no se agrega nada', prepararClientes(leerTabla('Nombre;RUT;Ciudad\nAustral;76.123.456-0;PUNTA ARENAS'), conLocal, CANALES)[0].sucursalNueva, false)
+
 terminar()

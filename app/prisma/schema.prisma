@@ -490,8 +490,7 @@ model Cliente {
   rut           String?     @unique
   canalId       String?
   canal         CanalVenta? @relation(fields: [canalId], references: [id], onDelete: SetNull)
-  ciudad        String?
-  direccion     String?
+  /// Contacto principal de la empresa; cada sucursal tiene además el suyo.
   contacto      String?
   telefono      String?
   email         String?
@@ -504,6 +503,21 @@ model Cliente {
   creadoEn      DateTime    @default(now())
   actualizadoEn DateTime    @updatedAt
   gestiones     Gestion[]
+  sucursales    Sucursal[]
+}
+
+/// Un local del cliente: dónde se entrega y con quién se habla ahí. La empresa
+/// (el cliente) decide la compra; la sucursal es el lugar.
+model Sucursal {
+  id        String    @id @default(cuid())
+  clienteId String
+  cliente   Cliente   @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  ciudad    String
+  direccion String?
+  contacto  String?
+  telefono  String?
+  creadoEn  DateTime  @default(now())
+  gestiones Gestion[]
 }
 
 /// Lo que pasó con un cliente: una visita, una llamada, un cambio de etapa.
@@ -512,6 +526,9 @@ model Gestion {
   id        String   @id @default(cuid())
   clienteId String
   cliente   Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  /// En qué local fue, si fue en uno.
+  sucursalId String?
+  sucursal   Sucursal? @relation(fields: [sucursalId], references: [id], onDelete: SetNull)
   fecha     DateTime @default(now())
   /// VISITA, LLAMADA, WHATSAPP, CORREO, REUNION, NOTA (src/lib/embudo.ts).
   medio     String

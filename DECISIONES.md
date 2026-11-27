@@ -88,3 +88,11 @@ Lo que viene de Importa **se trae y se adapta**; no se copia tal cual. Antes de 
 Origen: Clientes se trajo con el tipo como texto (no conversaba con los canales de la lista de venta), los
 tipos escritos en el programa, el nombre como clave en vez del RUT, y un comentario que prometía un historial
 de gestiones que no existía.
+
+## 2026-11-28 — Cliente y sucursales
+
+- **Quién compra se separa de dónde se entrega** (en SAP: solicitante y destinatario). El **cliente** (RUT,
+  canal, embudo, gestiones, cotizaciones) tiene **sucursales** (ciudad, dirección, contacto y teléfono del local).
+- **La compra la decide la empresa:** un solo embudo por cliente. Una gestión puede decir en qué local fue.
+- Mismo RUT = mismo cliente con sus sucursales; RUT distinto (franquicia) = otro cliente. Al fusionar o importar,
+  una ciudad nueva se agrega como sucursal: no hay que elegir entre ciudades. Ver `lecciones/img/cliente-sucursales.png`.

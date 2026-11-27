@@ -3,14 +3,14 @@ import { notFound } from 'next/navigation'
 import { Encabezado, Volver } from '@/componentes/ui'
 import FormAccion from '@/componentes/form-accion'
 import { db } from '@/lib/db'
-import { combinarClientes, CAMPOS_FUSION, type DatosCliente } from '@/lib/duplicados-clientes'
+import { combinarClientes, unirSucursales, CAMPOS_FUSION, type DatosCliente } from '@/lib/duplicados-clientes'
 import { ETIQUETA_ETAPA, type EtapaCliente } from '@/lib/embudo'
 import { fusionarClientes } from '@/app/acciones/clientes'
 
 export const dynamic = 'force-dynamic'
 
 const NOMBRE_CAMPO: Record<string, string> = {
-  nombre: 'Nombre', rut: 'RUT', canalId: 'Canal', ciudad: 'Ciudad', direccion: 'Dirección', contacto: 'Contacto',
+  nombre: 'Nombre', rut: 'RUT', canalId: 'Canal', contacto: 'Contacto',
   telefono: 'Teléfono', email: 'Correo', notas: 'Notas', etapa: 'Etapa', proximaAccion: 'Próxima acción'
 }
 const datosDe = (c: Record<string, unknown>): DatosCliente => Object.fromEntries(CAMPOS_FUSION.map((k) => [k, (c[k] as string | null) ?? null])) as DatosCliente
@@ -20,12 +20,12 @@ export default async function PaginaFusionar({ params, searchParams }: { params:
   const { id } = await params
   const { con } = await searchParams
   const [destino, todos, canales] = await Promise.all([
-    db.cliente.findUnique({ where: { id }, include: { _count: { select: { gestiones: true } } } }),
+    db.cliente.findUnique({ where: { id }, include: { _count: { select: { gestiones: true } }, sucursales: true } }),
     db.cliente.findMany({ where: { id: { not: id } }, orderBy: { nombre: 'asc' }, select: { id: true, nombre: true, rut: true } }),
     db.canalVenta.findMany()
   ])
   if (!destino) notFound()
-  const origen = con ? await db.cliente.findUnique({ where: { id: con }, include: { _count: { select: { gestiones: true } } } }) : null
+  const origen = con ? await db.cliente.findUnique({ where: { id: con }, include: { _count: { select: { gestiones: true } }, sucursales: true } }) : null
   const mostrar = (k: string, v: string | null) => {
     if (v == null || v === '') return '—'
     if (k === 'canalId') return canales.find((c) => c.id === v)?.nombre ?? v
@@ -95,6 +95,18 @@ export default async function PaginaFusionar({ params, searchParams }: { params:
                     </tr>
                   )
                 })}
+                <tr>
+                  <td className="font-medium">Sucursales</td>
+                  <td>{destino.sucursales.map((x) => x.ciudad).join(', ') || '—'}</td>
+                  <td>{origen.sucursales.map((x) => x.ciudad).join(', ') || '—'}</td>
+                  <td>
+                    {(() => {
+                      const u = unirSucursales(destino.sucursales, origen.sucursales)
+                      const quedan = [...destino.sucursales, ...origen.sucursales.filter((x) => u.mover.includes(x.id))].map((x) => x.ciudad)
+                      return `${quedan.join(', ') || '—'}${u.completar.length ? ` (${u.completar.length} se junta${u.completar.length > 1 ? 'n' : ''} por ser el mismo local)` : ''}`
+                    })()}
+                  </td>
+                </tr>
                 <tr>
                   <td className="font-medium">Gestiones</td>
                   <td>{destino._count.gestiones}</td>

@@ -43,7 +43,7 @@ export function posiblesDuplicados(c: { id?: string | null; nombre: string; rut:
   })
 }
 
-export const CAMPOS_FUSION = ['nombre', 'rut', 'canalId', 'ciudad', 'direccion', 'contacto', 'telefono', 'email', 'notas', 'etapa', 'proximaAccion'] as const
+export const CAMPOS_FUSION = ['nombre', 'rut', 'canalId', 'contacto', 'telefono', 'email', 'notas', 'etapa', 'proximaAccion'] as const
 export type CampoFusion = (typeof CAMPOS_FUSION)[number]
 export type DatosCliente = Record<CampoFusion, string | null>
 
@@ -65,4 +65,33 @@ export function combinarClientes(destino: DatosCliente, origen: DatosCliente): {
     else conflictos.push(k)
   }
   return { resultado, conflictos }
+}
+
+export interface SucursalResumen {
+  id: string
+  ciudad: string
+  direccion: string | null
+  contacto: string | null
+  telefono: string | null
+}
+
+/**
+ * Al fusionar, las sucursales no compiten: se juntan. Dos sucursales son el
+ * mismo local si están en la misma ciudad y no tienen direcciones distintas;
+ * entonces la de la ficha que queda se completa con la otra.
+ */
+export function unirSucursales(destino: SucursalResumen[], origen: SucursalResumen[]): { mover: string[]; completar: { queda: string; sale: string; datos: Partial<SucursalResumen> }[] } {
+  const mover: string[] = []
+  const completar: { queda: string; sale: string; datos: Partial<SucursalResumen> }[] = []
+  for (const o of origen) {
+    const igual = destino.find((d) => normal(d.ciudad) === normal(o.ciudad) && (!d.direccion || !o.direccion || normal(d.direccion) === normal(o.direccion)))
+    if (!igual) {
+      mover.push(o.id)
+      continue
+    }
+    const datos: Partial<SucursalResumen> = {}
+    for (const k of ['direccion', 'contacto', 'telefono'] as const) if (!igual[k] && o[k]) datos[k] = o[k]
+    completar.push({ queda: igual.id, sale: o.id, datos })
+  }
+  return { mover, completar }
 }

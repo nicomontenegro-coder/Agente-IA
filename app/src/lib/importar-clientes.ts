@@ -107,6 +107,8 @@ export interface ClienteExistente {
   id: string
   nombre: string
   rut: string | null
+  /** Las ciudades de sus sucursales, para saber si la fila trae un local nuevo. */
+  ciudades?: string[]
 }
 
 export interface ClientePreparado {
@@ -115,6 +117,8 @@ export interface ClientePreparado {
   datos: Required<{ [K in Exclude<keyof FilaCliente, 'canal' | 'etapa'>]: string | null }> & { canalId: string | null; etapa: string | null }
   /** El nombre del canal reconocido, para mostrarlo. */
   canal: string | null
+  /** La ciudad de la fila es un local que el cliente aún no tiene: se agrega como sucursal. */
+  sucursalNueva: boolean
   avisos: string[]
 }
 
@@ -144,7 +148,7 @@ export function prepararClientes(filas: FilaCliente[], existentes: ClienteExiste
       ciudad: f.ciudad ?? null, direccion: f.direccion ?? null, contacto: f.contacto ?? null,
       telefono: f.telefono ?? null, email: f.email ?? null, notas: f.notas ?? null
     }
-    const extra = { canal: canal?.nombre ?? null }
+    const extra = { canal: canal?.nombre ?? null, sucursalNueva: false }
     if (!nombre) return { estado: 'sin nombre' as const, existenteId: null, datos, ...extra, avisos: [...avisos, 'Fila sin nombre: no se importa'] }
     // El mismo cliente se reconoce por RUT, o por nombre si no hay RUT.
     const claves = [rut && `rut:${rut}`, `nombre:${normal(nombre)}`].filter((x): x is string => !!x)
@@ -152,6 +156,10 @@ export function prepararClientes(filas: FilaCliente[], existentes: ClienteExiste
     claves.forEach((c) => vistos.add(c))
     // El RUT identifica; el nombre solo cuando no hay RUT de ningún lado.
     const existente = rut ? existentes.find((e) => e.rut === rut) : existentes.find((e) => !e.rut && normal(e.nombre) === normal(nombre))
+    if (existente && datos.ciudad && !(existente.ciudades ?? []).some((c) => normal(c) === normal(datos.ciudad!))) {
+      extra.sucursalNueva = true
+      avisos.push(`Se agrega la sucursal ${datos.ciudad}`)
+    }
     if (!existente) {
       // Sin RUT que lo identifique, un nombre parecido puede ser el mismo cliente.
       const parecidos = posiblesDuplicados({ nombre, rut }, existentes)
