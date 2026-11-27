@@ -20,6 +20,7 @@ export default async function PaginaProductos() {
         <TablaInteractiva
           filtrarPor="modelo"
           etiquetaFiltro="Modelo"
+          archivo="Productos GESI"
           columnas={[
             { clave: 'producto', titulo: 'Producto' },
             { clave: 'atributos', titulo: 'Atributos' },

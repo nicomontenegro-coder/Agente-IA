@@ -38,12 +38,13 @@ export default async function PaginaProductosDeLista({ params }: { params: Promi
           </form>
         )}
       </section>
-      {reconocidos.length > 0 && (
+      {propuestas.length > 0 && (
         <section className="panel">
           <h2 className="font-semibold text-sm px-4 pt-3">Propuesta</h2>
           <TablaInteractiva
             filtrarPor="modelo"
             etiquetaFiltro="Modelo"
+            archivo={`Enlace productos ${l.proveedor.nombre}`}
             columnas={[
               { clave: 'item', titulo: 'Ítem del proveedor' },
               { clave: 'medida', titulo: 'Medida' },
@@ -51,14 +52,14 @@ export default async function PaginaProductosDeLista({ params }: { params: Promi
               { clave: 'modelo', titulo: 'Modelo' },
               { clave: 'estado', titulo: 'Estado' }
             ]}
-            filas={reconocidos.map(({ item: i, p }) => ({
+            filas={propuestas.map(({ item: i, p }) => ({
               id: i.id,
               celdas: {
-                item: { texto: i.descripcion, valor: i.descripcion, sub: i.grupo ?? undefined },
+                item: { texto: i.descripcion, valor: i.descripcion, sub: [i.familia, i.grupo].filter(Boolean).join(' · ') || undefined },
                 medida: { texto: i.especificacion ?? '—', valor: i.especificacion },
-                producto: { texto: p!.nombre, valor: p!.nombre, sub: `Clase ${p!.clase}` },
-                modelo: { texto: p!.modelo, valor: p!.modelo },
-                estado: { texto: nombres.has(p!.nombre) ? 'ya existe: se enlaza' : 'nuevo', valor: nombres.has(p!.nombre) ? 1 : 0 }
+                producto: { texto: p ? p.nombre : '—', valor: p?.nombre ?? null, sub: p ? `Clase ${p.clase}` : undefined },
+                modelo: { texto: p ? p.modelo : 'Sin clasificar', valor: p ? p.modelo : 'Sin clasificar' },
+                estado: { texto: !p ? 'sin clasificar' : nombres.has(p.nombre) ? 'ya existe: se enlaza' : 'nuevo', valor: !p ? 2 : nombres.has(p.nombre) ? 1 : 0 }
               }
             }))}
           />

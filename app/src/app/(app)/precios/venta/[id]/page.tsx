@@ -179,6 +179,7 @@ export default async function PaginaListaVenta({ params }: { params: Promise<{ i
           <TablaInteractiva
             filtrarPor="seccion"
             etiquetaFiltro="Sección"
+            archivo={`Lista de venta ${v.titulo}`}
             columnas={[
               { clave: 'producto', titulo: 'Producto' },
               { clave: 'medida', titulo: 'Medida' },

@@ -150,6 +150,7 @@ export default async function PaginaLista({ params }: { params: Promise<{ id: st
         <TablaInteractiva
           filtrarPor="familia"
           etiquetaFiltro="Familia"
+          archivo={`Lista ${l.proveedor.nombre} ${l.fecha.toISOString().slice(0, 10)}`}
           columnas={[
             { clave: 'familia', titulo: 'Familia' },
             { clave: 'producto', titulo: 'Producto' },

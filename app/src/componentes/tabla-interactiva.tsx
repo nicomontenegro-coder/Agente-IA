@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useMemo, useState } from 'react'
 
 import { ordenar, coincide, type Valor } from '@/lib/ordenar'
+import { aCsv, BOM, nombreArchivo, type Celda } from '@/lib/exportar'
 
 export interface Columna {
   clave: string
@@ -27,7 +28,7 @@ export interface Fila {
  * ordena (otro clic invierte), un buscador y un filtro por grupo. Ordena y
  * filtra lo que ya calculó el servidor: no calcula nada.
  */
-export default function TablaInteractiva({ columnas, filas, filtrarPor, etiquetaFiltro }: { columnas: Columna[]; filas: Fila[]; filtrarPor: string; etiquetaFiltro: string }) {
+export default function TablaInteractiva({ columnas, filas, filtrarPor, etiquetaFiltro, archivo = 'tabla' }: { columnas: Columna[]; filas: Fila[]; filtrarPor: string; etiquetaFiltro: string; archivo?: string }) {
   const [orden, setOrden] = useState<{ clave: string; desc: boolean } | null>(null)
   const [busqueda, setBusqueda] = useState('')
   const [grupo, setGrupo] = useState('')
@@ -48,11 +49,36 @@ export default function TablaInteractiva({ columnas, filas, filtrarPor, etiqueta
     return [...m]
   }, [visibles])
 
+  /**
+   * Exporta lo que se está viendo (con el orden y el filtro aplicados). Los
+   * números van como números para que Excel los sume; la línea secundaria de
+   * una celda va en su propia columna.
+   */
+  function exportar() {
+    const conSub = columnas.filter((c) => filas.some((f) => f.celdas[c.clave]?.sub))
+    const conSeccion = filas.some((f) => f.seccion)
+    const encabezados = [...(conSeccion ? ['Sección'] : []), ...columnas.flatMap((c) => (conSub.includes(c) ? [c.titulo, `${c.titulo} (detalle)`] : [c.titulo]))]
+    const datos: Celda[][] = visibles.map((f) => [
+      ...(conSeccion ? [f.seccion ?? ''] : []),
+      ...columnas.flatMap((c) => {
+        const celda = f.celdas[c.clave]
+        const valor: Celda = c.derecha && typeof celda?.valor === 'number' ? celda.valor : celda?.texto
+        return conSub.includes(c) ? [valor, celda?.sub ?? ''] : [valor]
+      })
+    ])
+    const blob = new Blob([BOM + aCsv(encabezados, datos)], { type: 'text/csv;charset=utf-8' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = nombreArchivo(grupo ? `${archivo} ${grupo}` : archivo)
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+
   const clic = (clave: string) => setOrden((o) => (o?.clave !== clave ? { clave, desc: false } : o.desc ? null : { clave, desc: true }))
 
   return (
     <div>
-      <div className="flex flex-wrap items-end gap-3 px-4 py-3">
+      <div className="flex flex-wrap items-end gap-3 px-4 py-3 no-imprimir">
         <label className="text-sm space-y-1 grow min-w-40">
           <span className="font-medium">Buscar</span>
           <input className="campo" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="codo 20, PN16, tira…" />
@@ -68,8 +94,16 @@ export default function TablaInteractiva({ columnas, filas, filtrarPor, etiqueta
             ))}
           </select>
         </label>
+        <div className="flex gap-2">
+          <button type="button" className="btn btn-neutro" onClick={exportar}>
+            Exportar a Excel
+          </button>
+          <button type="button" className="btn btn-neutro" onClick={() => window.print()}>
+            Imprimir
+          </button>
+        </div>
         <p className="text-xs text-[var(--texto-tenue)] basis-full">
-          {visibles.length} de {filas.length} filas · clic en un encabezado para ordenar
+          {visibles.length} de {filas.length} filas · clic en un encabezado para ordenar · se exporta lo que ves
         </p>
       </div>
       <div className="scroll-x">

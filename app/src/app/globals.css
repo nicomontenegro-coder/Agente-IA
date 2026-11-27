@@ -386,3 +386,29 @@ details[open] > summary:hover {
     animation: none;
   }
 }
+
+/*
+  Imprimir una pantalla: sin menú, sin botones ni filtros, y las tablas
+  anchas completas en vez de con barra de desplazamiento.
+*/
+@media print {
+  body {
+    background: #fff;
+  }
+  header,
+  .no-imprimir,
+  form button,
+  .btn {
+    display: none !important;
+  }
+  .scroll-x {
+    overflow: visible !important;
+  }
+  .panel {
+    box-shadow: none;
+    break-inside: auto;
+  }
+  .tabla tr {
+    break-inside: avoid;
+  }
+}

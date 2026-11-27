@@ -34,6 +34,7 @@ export default async function PaginaClientes({ searchParams }: { searchParams: P
           <TablaInteractiva
             filtrarPor="canal"
             etiquetaFiltro="Canal"
+            archivo="Clientes"
             columnas={[
               { clave: 'cliente', titulo: 'Cliente' },
               { clave: 'canal', titulo: 'Canal' },
