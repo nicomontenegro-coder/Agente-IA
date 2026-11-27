@@ -65,7 +65,9 @@ GESI. La revisión guiada del modelo (paso 1 de 5) queda pendiente y se retoma c
   fijos por clase), no su contenido: **Segmento → Familia → Clase → Producto**, cada clase con su lista de atributos.
 - La jerarquía, las clases, los atributos y las equivalencias (producto GESI ↔ producto de cada proveedor) son
   **datos en la base**. Solo las reglas (PN según norma, qué fitting calza con qué tubo) van a código o skills.
-- Se parte solo con la familia **Sistemas de cañerías PPR**, con **dos clases: Tubo PPR y Fitting PPR**. Para Nico
-  los fittings son una sola clase: el tipo (codo, tee, copla, reducción, terminal, tapón) es un atributo, y los
-  atributos que dependen del tipo (diámetro 2, rosca, inserto) se exigen con una regla. Debajo de cada clase, modelo
-  y **variantes** (SKU con precio). Para buscar, filtros por atributo. Borrador v3 en `lecciones/img/clases-ppr.png`.
+- **Decidido (Nico delegó: «el estándar de la industria a nuestra escala»):** se sigue UNSPSC. Segmento 40
+  (Sistemas de distribución y acondicionamiento) → Familia 4017 (Tuberías y fittings) → Clases **Tubo** y
+  **Fitting**. El estándar tiene una clase por tipo de fitting; a nuestra escala el **tipo es un atributo**.
+  El **material** (PPR, PVC, bronce, galvanizado) y la **unión** (termofusión, cementado, rosca) también son
+  atributos: sumar PVC o bronce no agrega clases. Debajo: modelo y **variantes** (SKU con precio).
+- Se parte con lo que hay en la lista de Lvzhou: tubos y fittings PPR.
