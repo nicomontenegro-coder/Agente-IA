@@ -7,6 +7,7 @@
  */
 
 import { ETAPAS_CLIENTE, ETIQUETA_ETAPA } from './embudo'
+import { posiblesDuplicados } from './duplicados-clientes'
 
 export interface FilaCliente {
   nombre?: string | null
@@ -151,6 +152,11 @@ export function prepararClientes(filas: FilaCliente[], existentes: ClienteExiste
     claves.forEach((c) => vistos.add(c))
     // El RUT identifica; el nombre solo cuando no hay RUT de ningún lado.
     const existente = rut ? existentes.find((e) => e.rut === rut) : existentes.find((e) => !e.rut && normal(e.nombre) === normal(nombre))
+    if (!existente) {
+      // Sin RUT que lo identifique, un nombre parecido puede ser el mismo cliente.
+      const parecidos = posiblesDuplicados({ nombre, rut }, existentes)
+      if (parecidos.length) avisos.push(`Posible duplicado de ${parecidos.map((x) => x.nombre).join(', ')}: si es el mismo, fusiónalos después en su ficha`)
+    }
     return { estado: existente ? ('actualiza' as const) : ('nuevo' as const), existenteId: existente?.id ?? null, datos, ...extra, avisos }
   })
 }

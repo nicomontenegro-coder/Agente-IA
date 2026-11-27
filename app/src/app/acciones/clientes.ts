@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { leerTabla, prepararClientes, validarRut, formatoRut } from '@/lib/importar-clientes'
 import { validarCambio, tipoDeCambio, ETIQUETA_ETAPA, CANALES_GESTION, type EtapaCliente } from '@/lib/embudo'
+import { posiblesDuplicados, combinarClientes, CAMPOS_FUSION, type DatosCliente, type CampoFusion } from '@/lib/duplicados-clientes'
 import type { EstadoForm } from './compras'
 
 const texto = (v: FormDataEntryValue | null) => {
@@ -53,6 +54,11 @@ export async function guardarCliente(id: string | null, _e: EstadoForm, datos: F
   if (canalId && !(await db.canalVenta.findUnique({ where: { id: canalId } }))) return { error: 'Selecciona un canal de venta' }
 
   const actual = id ? await db.cliente.findUnique({ where: { id } }) : null
+  if (!actual && datos.get('distinto') !== 'on') {
+    // Avisar antes es mejor que fusionar después.
+    const parecidos = posiblesDuplicados({ nombre, rut }, await db.cliente.findMany({ select: { id: true, nombre: true, rut: true } }))
+    if (parecidos.length) return { error: `Puede ser el mismo cliente que ${parecidos.map((x) => x.nombre).join(', ')}. Si es otro, marca «Es un cliente distinto» y guarda.` }
+  }
   const etapa = texto(datos.get('etapa')) ?? actual?.etapa ?? 'IDENTIFICADO'
   const motivo = texto(datos.get('motivo'))
   const cambio = actual ? tipoDeCambio(actual.etapa, etapa) : 'NINGUNO'
@@ -112,4 +118,30 @@ export async function agregarCanal(_e: EstadoForm, datos: FormData): Promise<Est
   await db.canalVenta.create({ data: { nombre, posicion: (ultimo._max.posicion ?? 0) + 1 } })
   revalidatePath('/ajustes')
   return { ok: 'Canal agregado' }
+}
+
+const datosDe = (c: Record<string, unknown>): DatosCliente => Object.fromEntries(CAMPOS_FUSION.map((k) => [k, (c[k] as string | null) ?? null])) as DatosCliente
+
+/**
+ * Fusiona «origen» en «destino»: la ficha que queda toma lo que le falta,
+ * en los conflictos gana lo que se eligió, las gestiones se mueven y la
+ * fusión queda anotada. La ficha de origen se borra.
+ */
+export async function fusionarClientes(destinoId: string, origenId: string, _e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  if (destinoId === origenId) return { error: 'Selecciona otro cliente' }
+  const [destino, origen] = await Promise.all([db.cliente.findUnique({ where: { id: destinoId } }), db.cliente.findUnique({ where: { id: origenId } })])
+  if (!destino || !origen) return { error: 'Uno de los clientes ya no existe' }
+  if (destino.rut && origen.rut && destino.rut !== origen.rut) return { error: 'Tienen RUT distintos: son empresas distintas y no se fusionan' }
+  const { resultado, conflictos } = combinarClientes(datosDe(destino), datosDe(origen))
+  for (const k of conflictos) if (datos.get(`elegir-${k}`) === 'origen') resultado[k as CampoFusion] = datosDe(origen)[k]
+  await db.$transaction([
+    // El RUT es único: se suelta del origen antes de pasarlo al destino.
+    db.cliente.update({ where: { id: origen.id }, data: { rut: null } }),
+    db.gestion.updateMany({ where: { clienteId: origen.id }, data: { clienteId: destino.id } }),
+    db.cliente.update({ where: { id: destino.id }, data: { ...resultado, nombre: resultado.nombre ?? destino.nombre, etapa: resultado.etapa ?? destino.etapa } }),
+    db.gestion.create({ data: { clienteId: destino.id, medio: 'NOTA', texto: `Fusionado con «${origen.nombre}»${origen.rut ? ` (RUT ${origen.rut})` : ''}: sus datos y gestiones quedaron en esta ficha` } }),
+    db.cliente.delete({ where: { id: origen.id } })
+  ])
+  revalidatePath('/clientes')
+  redirect(`/clientes/${destino.id}`)
 }

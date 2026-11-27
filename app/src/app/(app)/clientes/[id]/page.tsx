@@ -6,6 +6,8 @@ import { db } from '@/lib/db'
 import { fecha, fechaInput } from '@/lib/formato'
 import { ETAPAS_CLIENTE, ETIQUETA_ETAPA, AYUDA_ETAPA, CANALES_GESTION } from '@/lib/embudo'
 import { guardarCliente, registrarGestion } from '@/app/acciones/clientes'
+import Link from 'next/link'
+import { posiblesDuplicados } from '@/lib/duplicados-clientes'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +21,7 @@ export default async function PaginaCliente({ params }: { params: Promise<{ id: 
     db.canalVenta.findMany({ orderBy: [{ posicion: 'asc' }, { nombre: 'asc' }] })
   ])
   if (id !== 'nuevo' && !c) notFound()
+  const duplicados = c ? posiblesDuplicados(c, await db.cliente.findMany({ select: { id: true, nombre: true, rut: true } })) : []
   const campo = (name: string, etiqueta: string, valor: string | null | undefined, extra?: { tipo?: string; placeholder?: string; ancho?: boolean }) => (
     <label className={`text-sm space-y-1 ${extra?.ancho ? 'sm:col-span-2' : ''}`}>
       <span className="font-medium">{etiqueta}</span>
@@ -29,6 +32,19 @@ export default async function PaginaCliente({ params }: { params: Promise<{ id: 
     <div className="space-y-5 max-w-3xl">
       <Volver href="/clientes">Clientes</Volver>
       <Encabezado titulo={c?.nombre ?? 'Nuevo cliente'} descripcion={c ? [c.canal?.nombre, c.ciudad, c.rut].filter(Boolean).join(' · ') : 'El canal de venta decide con qué precio se le cotiza.'} />
+      {duplicados.length > 0 && (
+        <section className="panel p-4 text-sm space-y-1" aria-label="Posibles duplicados">
+          <p className="text-[var(--alerta)] font-medium">Posible duplicado</p>
+          {duplicados.map((d) => (
+            <p key={d.id}>
+              «{d.nombre}»{d.rut ? ` · ${d.rut}` : ''} podría ser el mismo cliente ·{' '}
+              <Link href={`/clientes/${c!.id}/fusionar?con=${d.id}`} className="text-[var(--acento)] underline">
+                Comparar y fusionar
+              </Link>
+            </p>
+          ))}
+        </section>
+      )}
       <FormAccion accion={guardarCliente.bind(null, c?.id ?? null)} etiqueta="Guardar cliente" clase="space-y-4">
         <section className="panel p-5 grid gap-3 sm:grid-cols-2">
           {campo('nombre', 'Nombre o razón social', c?.nombre, { ancho: true })}
@@ -50,6 +66,11 @@ export default async function PaginaCliente({ params }: { params: Promise<{ id: 
           {campo('telefono', 'Teléfono o WhatsApp', c?.telefono)}
           {campo('email', 'Correo', c?.email, { tipo: 'email' })}
           {campo('notas', 'Notas', c?.notas, { ancho: true })}
+          {!c && (
+            <label className="text-sm flex items-center gap-2 sm:col-span-2">
+              <input type="checkbox" name="distinto" /> Es un cliente distinto (aunque se llame parecido a otro)
+            </label>
+          )}
         </section>
         <section className="panel p-5 grid gap-3 sm:grid-cols-2">
           <label className="text-sm space-y-1">
@@ -70,7 +91,12 @@ export default async function PaginaCliente({ params }: { params: Promise<{ id: 
 
       {c && (
         <section className="panel p-4 space-y-3" aria-label="Gestiones">
-          <h2 className="font-semibold text-sm">Gestiones</h2>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-semibold text-sm">Gestiones</h2>
+            <Link href={`/clientes/${c.id}/fusionar`} className="text-xs text-[var(--texto-suave)] underline">
+              Fusionar con otro cliente…
+            </Link>
+          </div>
           <FormAccion accion={registrarGestion.bind(null, c.id)} etiqueta="Registrar gestión" clase="grid gap-3 sm:grid-cols-4 items-end" limpiar>
             <label className="text-sm space-y-1">
               <span className="font-medium">Medio</span>

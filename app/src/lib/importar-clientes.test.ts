@@ -56,4 +56,11 @@ igual('la etapa se lee por su código o por su nombre', deImporta.map((x) => x.d
 igual('una etapa desconocida se avisa y no se inventa', deImporta[2].avisos, ['Etapa «ganadísimo» no existe: queda en Identificado'])
 igual('la próxima acción viaja con el cliente', deImporta[0].datos.proximaAccion, 'Llevar muestras')
 
+grupo('Posibles duplicados al importar')
+igual(
+  '«Austral» sin RUT, con «Ferretería Austral Ltda.» guardado: se importa, con aviso',
+  prepararClientes(leerTabla('Nombre\nAustral'), [{ id: 'a', nombre: 'Ferretería Austral Ltda.', rut: null }], CANALES)[0].avisos,
+  ['Posible duplicado de Ferretería Austral Ltda.: si es el mismo, fusiónalos después en su ficha']
+)
+
 terminar()
