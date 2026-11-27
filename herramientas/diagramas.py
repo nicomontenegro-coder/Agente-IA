@@ -798,11 +798,40 @@ def clases_ppr():
     s.append(texto(1030, 955, 'Cada variante es un SKU con precio, enlazado con el ítem de cada proveedor (equivalencias). Para buscar: filtros por atributo.', 12, color=SUAVE))
     return guardar('clases-ppr', s, W, H)
 
+def familias_opciones():
+    W, H = 1700, 860
+    s = lienzo(W, H, 'Al sumar PVC, bronce o galvanizado: ¿qué agrupa una familia?', 'Dos formas habituales · la diferencia está en qué queda junto')
+    # Opción A
+    s.append(texto(420, 115, 'A. Familia por sistema (material + forma de unir)', 15, 'bold'))
+    fams = [('Sistemas PPR', 'termofusión', ['Tubo PPR', 'Fitting PPR']), ('Sistemas PVC', 'cementado', ['Tubo PVC', 'Fitting PVC']), ('Roscados bronce', 'rosca', ['Fitting bronce']), ('Roscados galvanizado', 'rosca', ['Tubo galv.', 'Fitting galv.'])]
+    for k, (f, union, clases) in enumerate(fams):
+        y = 150 + k * 150
+        s.append(caja(60, y, 260, 64, [f, union], fondo='#f3f7fb', tam=13))
+        for m, c in enumerate(clases):
+            cy = y + 32 + (m - (len(clases) - 1) / 2) * 46
+            s.append(flecha([(320, y + 32), (418, cy)]))
+            s.append(caja(420, cy - 19, 200, 38, [c], fondo='#fff7ed', borde='#b45309', tam=12.5))
+    s.append(texto(420, 770, 'Junto queda lo que se instala junto: un fitting PPR solo sirve con tubo PPR.', 12.5, color=SUAVE))
+    # Opción B
+    s.append(texto(1290, 115, 'B. Familia por función', 15, 'bold'))
+    s.append(caja(980, 150, 240, 64, ['Tuberías'], fondo='#f3f7fb', tam=13))
+    s.append(caja(980, 300, 240, 64, ['Fittings'], fondo='#f3f7fb', tam=13))
+    for m, c in enumerate(['Tubo PPR', 'Tubo PVC', 'Tubo galv.']):
+        s.append(flecha([(1220, 182), (1280, 160 + m * 45)]))
+        s.append(caja(1282, 140 + m * 45, 170, 38, [c], fondo='#fff7ed', borde='#b45309', tam=12.5))
+    for m, c in enumerate(['Fitting PPR', 'Fitting PVC', 'Fitting bronce', 'Fitting galv.']):
+        s.append(flecha([(1220, 332), (1280, 300 + m * 45)]))
+        s.append(caja(1282, 280 + m * 45, 170, 38, [c], fondo='#fff7ed', borde='#b45309', tam=12.5))
+    s.append(texto(1290, 520, 'Junto queda lo que cumple la misma función:', 12.5, color=SUAVE))
+    s.append(texto(1290, 540, 'todos los codos, de cualquier material.', 12.5, color=SUAVE))
+    s.append(caja(330, 800 - 0, 1040, 44, ['En las dos, la clase es material + función (Fitting PVC) y el tipo (codo, tee…) es un atributo, como decidiste para PPR.'], fondo='#ffffff', borde='#1d4ed8', tam=13))
+    return guardar('familias-opciones', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr()]
+              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr(), familias_opciones()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)
