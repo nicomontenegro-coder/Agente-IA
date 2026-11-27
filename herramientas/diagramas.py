@@ -854,11 +854,42 @@ def modelo_clientes():
     s.append(texto(W / 2, 680, 'UK = clave única natural (el RUT identifica a la empresa; el nombre puede escribirse de muchas formas). PK y FK, como en la Lección 2.', 12.5, color=SUAVE))
     return guardar('modelo-clientes', s, W, H)
 
+def bpmn_vender():
+    W, H = 1900, 800
+    s = lienzo(W, H, 'BPMN — Vender (O2C), parte 1: del prospecto a la cotización aceptada', 'Borrador · verde: ya existe en la app · naranjo: lo que sigue')
+    carriles = [('Nico', 80, 230, '#f3f7fb'), ('Agente GESI', 230, 360, '#ffffff'), ('Cliente', 360, 490, '#f3f7fb')]
+    s += pool(20, 1880, carriles, 'Vender (O2C)')
+    n, a, c = 155, 295, 425
+    hecho = '#ecfdf5'
+    s += [inicio(110, n, ['Prospecto', 'identificado']),
+          flecha([(126, n), (166, n)]), caja(168, n - 30, 150, 60, ['Traer o registrar', 'cliente y su canal'], fondo=hecho, borde='#0f766e'),
+          flecha([(318, n), (358, n)]), caja(360, n - 30, 150, 60, ['Contactar o visitar', '(gestión)'], fondo=hecho, borde='#0f766e'),
+          flecha([(510, n), (552, n)]), compuerta(578, n, '¿Pide precio?'),
+          flecha([(578, n - 26), (578, 98), (435, 98), (435, n - 30)]), texto(506, 92, 'No: próxima acción', 11, 'bold', color=SUAVE),
+          flecha([(578, n + 26), (578, a - 30)], 'Sí', 14, 40), caja(500, a - 30, 160, 60, ['Preparar cotización', 'precio de su canal'], fondo='#fff7ed', borde='#b45309'),
+          flecha([(660, a), (720, a), (720, n), (738, n)]), caja(740, n - 30, 150, 60, ['Aprobar y', 'enviar cotización'], fondo='#fff7ed', borde='#b45309'),
+          flecha([(890, n), (930, n), (930, c), (968, c)]), caja(970, c - 30, 150, 60, ['Evaluar', 'cotización'], fondo='#ffffff'),
+          flecha([(1120, c), (1160, c), (1160, n), (1202, n)]), compuerta(1228, n, '¿Acepta?'),
+          flecha([(1254, n), (1320, n)], 'Sí', 0, -12), fin(1340, n, ['Ganado', '→ pedido']),
+          flecha([(1228, n + 26), (1228, a - 30)], 'Pide descuento', -62, 8), caja(1150, a - 30, 160, 60, ['Negociar dentro', 'del margen mínimo'], fondo='#fff7ed', borde='#b45309'),
+          flecha([(1310, a), (1450, a)]), compuerta(1476, a, '¿Cabe?'),
+          flecha([(1476, a - 26), (1476, n + 30), (900, n + 30), (815, n + 30)], 'Sí: nueva versión', 0, -10),
+          flecha([(1502, a), (1580, a)], 'No', 0, -12), fin(1600, a, ['Perdido', 'con motivo'])]
+    s.append(texto(40, 535, 'Datos que usa cada paso', 14, 'bold', ancla='start'))
+    notas = ['Traer o registrar cliente: Clientes (canal de venta como tabla, RUT único). Ya existe. Lo de Importa se trae y se adapta, no se copia.',
+             'Contactar o visitar: cada gestión queda en el historial del cliente; el cambio de etapa del embudo también, con su motivo. Ya existe.',
+             'Preparar cotización: el precio sale de la lista de venta (Precios) según el canal del cliente. El agente la arma; Nico la aprueba. Lo que sigue.',
+             'Negociar: el descuento no puede cruzar el margen mínimo de la lista de venta (descuento máximo por producto). Lo que sigue.',
+             'Etapas del embudo que se marcan solas: Cotizado al enviar la cotización, Ganado al aceptarla.']
+    for k, tx in enumerate(notas):
+        s.append(texto(40, 565 + k * 24, '• ' + tx, 12.5, ancla='start'))
+    return guardar('bpmn-vender', s, W, H)
+
 if __name__ == '__main__':
     hechos = [agente_gesi(), ciclos_gesi(), scor_procesos(), scor_metricas(), niveles_bpmn(),
               contextos_gesi(), ids_relacion(), modelo_abastecimiento(), estados_cotizacion(), estados_importacion(),
               hacia_donde_vamos(), bpmn_p2p_1(), bpmn_p2p_2(), modelo_p2p(), estados_compra(),
-              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr(), familias_opciones(), modelo_clientes()]
+              tabla_intermedia(), formato_oc(), bpmn_precios(), costo_estimado(), base_productos(), clases_ppr(), familias_opciones(), modelo_clientes(), bpmn_vender()]
     import json
     with open(os.path.join(SALIDA, 'diagramas.json'), 'w') as f:
         json.dump(hechos, f)

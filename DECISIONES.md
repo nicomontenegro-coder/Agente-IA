@@ -71,3 +71,20 @@ GESI. La revisión guiada del modelo (paso 1 de 5) queda pendiente y se retoma c
   El **material** (PPR, PVC, bronce, galvanizado) y la **unión** (termofusión, cementado, rosca) también son
   atributos: sumar PVC o bronce no agrega clases. Debajo: modelo y **variantes** (SKU con precio).
 - Se parte con lo que hay en la lista de Lvzhou: tubos y fittings PPR.
+
+## 2026-11-27 — Regla: traer y adaptar
+
+Lo que viene de Importa **se trae y se adapta**; no se copia tal cual. Antes de usarlo en la app nueva:
+
+1. **Se homologa con las directivas de la app nueva:** modelo con PK y FK (nada de relaciones por texto
+   que hay que adivinar), clave natural única donde la hay (el RUT de un cliente), plantillas y listas como
+   datos editables (no escritas en el programa), tono estándar de aplicación de negocios y la jerarquía de
+   productos.
+2. **Entra al BPMN:** el módulo traído se ubica en su proceso (P2P, Vender, Importación) para que se vea
+   cómo conversa con los demás. Clientes quedó en `lecciones/img/bpmn-vender.png`.
+3. **Se trae completo, con sus datos, y se apaga en Importa** (regla de migración por valor).
+4. **Comentarios que prometen algo que el código no hace se corrigen o se borran.**
+
+Origen: Clientes se trajo con el tipo como texto (no conversaba con los canales de la lista de venta), los
+tipos escritos en el programa, el nombre como clave en vez del RUT, y un comentario que prometía un historial
+de gestiones que no existía.
