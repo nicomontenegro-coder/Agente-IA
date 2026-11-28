@@ -33,6 +33,10 @@ Cada regla dice de qué error salió: así se entiende por qué existe.
 | El tipo de fitting, el material y la unión son atributos: sumar PVC o bronce no agrega clases. | Nico: «los fittings son los fittings». |
 | Un ítem de proveedor solo se clasifica si se puede afirmar (tubo con diámetro×espesor, fitting de tipo conocido con su medida). Lo demás queda sin clasificar: no se adivina. | 94 fittings metálicos y 27 válvulas sin clase todavía. |
 | El mismo producto de dos proveedores apunta al mismo producto GESI (equivalencia): así se comparan. | Lección 2: tabla intermedia. |
+| Los nombres de cada tipo (sinónimos) son datos editables, en orden de prioridad: lo específico primero («tee reductora» antes que «reducción»). | Primera propuesta con la lista real: tees reductoras tomadas como reducciones. |
+| Un segundo número que no es un diámetro PPR es rosca en pulgadas: «32×1» es 32 mm con rosca de 1", no 32×1 mm. | Primera propuesta: «Tee PPR 32×1». |
+| Válvulas y llaves no son fittings, aunque digan «unión» («válvula de bola doble unión»). | Primera propuesta: válvulas tomadas como coplas. |
+| Si dos ítems de una lista caen en el mismo producto, es un error de reconocimiento: se revisan, no se enlazan. | Primera propuesta: «Tapa» y «Tapón» en el mismo producto. |
 
 ## Skill: Costo landed y precio de venta
 

@@ -8,7 +8,7 @@ import { leerNumero } from '@/lib/numeros'
 import { guardarPdf, esPdf, MAXIMO_PDF } from '@/lib/archivos'
 import { leerLista } from '@/lib/leer-lista'
 import { familiasDe, margenConDescuento } from '@/lib/lista-venta'
-import { proponerProducto, validarAtributos } from '@/lib/clases'
+import { proponerProducto, validarAtributos, nombresRepetidos, type Sinonimo } from '@/lib/clases'
 import type { EstadoForm } from './compras'
 
 const texto = (v: FormDataEntryValue | null) => {
@@ -148,10 +148,14 @@ export async function guardarListaVenta(ventaId: string, _e: EstadoForm, datos: 
  */
 export async function crearProductosDesdeLista(listaId: string): Promise<void> {
   const items = await db.listaPreciosItem.findMany({ where: { listaId, productoId: null } })
-  const clases = await db.clase.findMany({ include: { atributos: true, familia: true } })
-  for (const i of items) {
-    const p = proponerProducto(i)
-    if (!p) continue
+  const clases = await db.clase.findMany({ include: { atributos: true, familia: true, sinonimos: true } })
+  const sinonimos: Sinonimo[] = clases.flatMap((c) => c.sinonimos)
+  const propuestas = items.map((i) => proponerProducto(i, sinonimos))
+  // Dos ítems de la lista en el mismo producto es un error de reconocimiento: no se enlaza ninguno.
+  const repetidos = nombresRepetidos(propuestas)
+  for (const [k, i] of items.entries()) {
+    const p = propuestas[k]
+    if (!p || repetidos.has(p.nombre)) continue
     const clase = clases.find((c) => c.nombre === p.clase)
     if (!clase || validarAtributos(clase.atributos, p.atributos).length) continue
     const existente = await db.producto.findFirst({ where: { nombre: p.nombre } })
@@ -172,4 +176,43 @@ export async function crearProductosDesdeLista(listaId: string): Promise<void> {
   revalidatePath(`/precios/${listaId}`)
   revalidatePath('/productos')
   redirect(`/precios/${listaId}`)
+}
+
+/**
+ * Deshace el enlace de un ítem con su producto GESI. Si el producto queda sin
+ * ítems de proveedor ni líneas de compra, se borra: lo creó la app al enlazar
+ * y no lo usa nadie.
+ */
+export async function desenlazarItem(listaId: string, itemId: string): Promise<void> {
+  const item = await db.listaPreciosItem.findFirst({ where: { id: itemId, listaId } })
+  if (!item?.productoId) return
+  await db.listaPreciosItem.update({ where: { id: item.id }, data: { productoId: null } })
+  const producto = await db.producto.findUnique({ where: { id: item.productoId }, include: { _count: { select: { ofertas: true, lineas: true } } } })
+  if (producto && producto.claseId && producto._count.ofertas === 0 && producto._count.lineas === 0) await db.producto.delete({ where: { id: producto.id } })
+  revalidatePath(`/precios/${listaId}/productos`)
+  revalidatePath(`/precios/${listaId}`)
+  revalidatePath('/productos')
+}
+
+/** Agrega un sinónimo de tipo de fitting. Las palabras se separan con «|». */
+export async function agregarSinonimo(_e: EstadoForm, datos: FormData): Promise<EstadoForm> {
+  const valor = texto(datos.get('valor')) ?? ''
+  const patron = texto(datos.get('patron'))
+  if (!patron) return { error: 'Ingresa cómo lo escribe el proveedor' }
+  try {
+    new RegExp(patron, 'i')
+  } catch {
+    return { error: 'El texto tiene un símbolo que no se puede usar: escribe palabras separadas por «|»' }
+  }
+  const clase = await db.clase.findFirst({ where: { nombre: 'Fitting' } })
+  if (!clase) return { error: 'No existe la clase Fitting' }
+  const prioridad = numero(datos.get('prioridad')) ?? 25
+  await db.claseSinonimo.create({ data: { claseId: clase.id, valor, patron, prioridad: Math.round(prioridad) } })
+  revalidatePath('/ajustes')
+  return { ok: 'Sinónimo agregado' }
+}
+
+export async function quitarSinonimo(id: string): Promise<void> {
+  await db.claseSinonimo.delete({ where: { id } })
+  revalidatePath('/ajustes')
 }

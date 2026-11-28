@@ -48,8 +48,22 @@ model Clase {
   nombre    String
   atributos ClaseAtributo[]
   productos Producto[]
+  sinonimos ClaseSinonimo[]
 
   @@unique([familiaId, nombre])
+}
+
+/// Cómo escriben los proveedores cada tipo («Elbow reducer» = codo 90° con
+/// diámetro 2). Es dato: se agrega sin programar. Valor vacío = no es de esta
+/// clase (válvulas, llaves). Se prueban en orden de prioridad.
+model ClaseSinonimo {
+  id        String @id @default(cuid())
+  claseId   String
+  clase     Clase  @relation(fields: [claseId], references: [id], onDelete: Cascade)
+  valor     String
+  /// Expresión regular, sin distinguir mayúsculas.
+  patron    String
+  prioridad Int
 }
 
 model ClaseAtributo {
